@@ -2,42 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a1066a31-cc86-40ea-a57d-33efbd0d1f70" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/Readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/bin/console" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bin/console" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/packages/cache.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/packages/cache.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/packages/doctrine.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/packages/doctrine.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/packages/doctrine_migrations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/packages/doctrine_migrations.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/packages/framework.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/packages/framework.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/packages/lexik_jwt_authentication.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/packages/lexik_jwt_authentication.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/packages/routing.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/packages/routing.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/preload.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/preload.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/routes.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/routes/framework.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/routes/framework.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/services.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/docs/php_cli.png" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docs/php_cli.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/docs/php_servers.png" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docs/php_servers.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/docs/php_xdebug.png" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docs/php_xdebug.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/migrations/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/migrations/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/migrations/Version20220802210452.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/migrations/Version20220802210452.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/public/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/public/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/src/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/src/Shared/Helper/Slugify.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/Shared/Helper/Slugify.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/src/User/Command/UserCreateCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/User/Command/UserCreateCommand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/src/User/Controller/UserGetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/User/Controller/UserGetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/src/User/Entity/UserEntity.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/User/Entity/UserEntity.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/src/User/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/User/Repository/UserRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/src/User/Service/UserCreateService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/User/Service/UserCreateService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony/symfony.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/services.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +99,7 @@
       <workItem from="1659462032630" duration="12085000" />
       <workItem from="1659538390215" duration="3066000" />
       <workItem from="1661286556426" duration="9790000" />
-      <workItem from="1661296972323" duration="784000" />
+      <workItem from="1661296972323" duration="1345000" />
     </task>
     <servers />
   </component>

@@ -17,5 +17,5 @@ services:
         resource: '../src/Shared/{Service}'
 
     App\User\:
-        resource: '../src/User/{Service}'
-#        resource: '../src/User/{Service,Command}'
+        resource: '../src/User/*'
+        exclude: '../src/User/{DependencyInjection,Entity,Tests,Kernel.php}'
