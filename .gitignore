@@ -1,5 +1,6 @@
-/.idea
+/.idea/
 .env.local
+/vue/node_modules
 
 ###> symfony/framework-bundle ###
 /backend/.env.local
