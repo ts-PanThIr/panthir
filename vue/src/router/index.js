@@ -1,34 +1,99 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import { useAuthStore, useAlertStore } from '@/stores';
-import { Home } from '@/views';
-import accountRoutes from './account.routes';
-import usersRoutes from './users.routes';
+import { Home } from '~/views';
+import {TheEmptyLayout, TheMainLayout} from "~/components";
+import guest from "~/router/middleware/guest"
+import auth from "~/router/middleware/auth"
+import middlewarePipeline from "~/router/middleware/middlewarePipeline"
+import {Login, Register} from "~/views/account";
+import {AddEdit, List} from "~/views/users";
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     linkActiveClass: 'active',
     routes: [
-        { path: '/', component: Home },
-        { ...accountRoutes },
-        { ...usersRoutes },
+        {
+            path: '/users',
+            component: TheMainLayout,
+            meta: {
+                middleware: [
+                    auth
+                ]
+            },
+            children: [
+                {
+                    path: '',
+                    name: 'usersList',
+                    component: List
+                },
+                {
+                    path: 'add',
+                    name: 'usersAdd',
+                    component: AddEdit,
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'usersEdit',
+                    component: AddEdit
+                }
+            ]
+        },
+        {
+            path: '/account',
+            component: TheEmptyLayout,
+            meta: {
+                middleware: [
+                    guest
+                ]
+            },
+            children: [
+                {
+                    path: '',
+                    redirect: 'login'
+                },
+                {
+                    path: 'login',
+                    name: 'login',
+                    component: Login
+                },
+                {
+                    path: 'register',
+                    name: 'register',
+                    component: Register
+                }
+            ]
+        },
+        {
+            path: '/',
+            component: TheMainLayout,
+            children: [
+                {
+                    path: '',
+                    name: 'home',
+                    component: Home
+                },
+            ]
+        },
         // catch all redirect to home page
         { path: '/:pathMatch(.*)*', redirect: '/' }
     ]
 });
 
-router.beforeEach(async (to) => {
-    // clear alert on route change
-    const alertStore = useAlertStore();
-    alertStore.clear();
-
-    // redirect to login page if not logged in and trying to access a restricted page 
-    const publicPages = ['/account/login', '/account/register'];
-    const authRequired = !publicPages.includes(to.path);
-    const authStore = useAuthStore();
-
-    if (authRequired && !authStore.user) {
-        authStore.returnUrl = to.fullPath;
-        return '/account/login';
+router.beforeEach((to, from) => {
+    /** Navigate to next if middleware is not applied */
+    if (!to.meta.middleware) {
+        return true
     }
-});
+
+    const middleware = to.meta.middleware;
+    const context = {
+        to,
+        from
+        //   store  | You can also pass store as an argument
+    }
+
+    return middleware[0]({
+        ...context,
+        next:middlewarePipeline(context, middleware,1)
+    })
+})

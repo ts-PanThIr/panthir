@@ -1,7 +1,7 @@
 <script setup>
 import { storeToRefs } from 'pinia';
-
-import { useUsersStore } from '@/stores';
+import { BaseGrid } from "~/components";
+import { useUsersStore } from '~/stores';
 
 const usersStore = useUsersStore();
 const { users } = storeToRefs(usersStore);
@@ -12,6 +12,7 @@ usersStore.getAll();
 <template>
     <h1>Users</h1>
     <router-link to="/users/add" class="btn btn-sm btn-success mb-2">Add User</router-link>
+    <base-grid></base-grid>
     <table class="table table-striped">
         <thead>
             <tr>

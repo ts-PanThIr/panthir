@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxslt1-dev \
     libpq-dev \
+    tesseract-ocr\
     acl \
     curl \
     && echo 'alias sf="php bin/console"' >> ~/.bashrc

@@ -1,13 +1,5 @@
 <script setup>
-import { Form, Field } from 'vee-validate';
-import * as Yup from 'yup';
-
-import { useAuthStore } from '@/stores';
-
-const schema = Yup.object().shape({
-    username: Yup.string().required('Username is required'),
-    password: Yup.string().required('Password is required')
-});
+import { useAuthStore } from '~/stores';
 
 async function onSubmit(values) {
     const authStore = useAuthStore();
@@ -17,28 +9,67 @@ async function onSubmit(values) {
 </script>
 
 <template>
-    <div class="card m-3">
-        <h4 class="card-header">Login</h4>
-        <div class="card-body">
-            <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-                <div class="form-group">
-                    <label>Username</label>
-                    <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" />
-                    <div class="invalid-feedback">{{ errors.username }}</div>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
-                    <div class="invalid-feedback">{{ errors.password }}</div>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary" :disabled="isSubmitting">
-                        <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
-                        Login
-                    </button>
-                    <router-link to="register" class="btn btn-link">Register</router-link>
-                </div>
-            </Form>
-        </div>
-    </div>
+  <v-container fluid>
+      <v-card class="w-75 mx-auto" elevation="15">
+        <v-card-title class="text-center">
+          <h1 class="pa-3">Welcome back!</h1>
+        </v-card-title>
+        <v-card-text>
+          <v-form
+              v-model="form"
+              @submit.prevent="onSubmit"
+          >
+            <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                class="mb-2"
+                clearable
+                label="Email"
+            ></v-text-field>
+
+            <v-text-field
+                v-model="password"
+                :rules="passwordRules"
+                type="password"
+                clearable
+                label="Password"
+                placeholder="Enter your password"
+            ></v-text-field>
+
+            <br>
+
+            <v-btn
+                :disabled="!form"
+                block
+                color="success"
+                size="large"
+                type="submit"
+                variant="elevated"
+            >
+              Sign In
+            </v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+  </v-container>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      valid: false,
+      form: false,
+      password: '',
+      passwordRules: [
+        (v) => !!v || 'Password is required',
+      ],
+      email: '',
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+      ],
+    }
+  }
+}
+</script>
