@@ -10,9 +10,9 @@ async function onSubmit(values) {
 
 <template>
   <v-container fluid>
-      <v-card class="w-75 mx-auto" elevation="15">
+      <v-card class="mx-auto mt-16" elevation="15" max-width="400px">
         <v-card-title class="text-center">
-          <h1 class="pa-3">Welcome back!</h1>
+          <h3 class="pa-3">Welcome back!</h3>
         </v-card-title>
         <v-card-text>
           <v-form
@@ -25,6 +25,7 @@ async function onSubmit(values) {
                 class="mb-2"
                 clearable
                 label="Email"
+                variant="underlined"
             ></v-text-field>
 
             <v-text-field
@@ -34,19 +35,18 @@ async function onSubmit(values) {
                 clearable
                 label="Password"
                 placeholder="Enter your password"
+                variant="underlined"
             ></v-text-field>
 
-            <br>
+            <router-link class="text-decoration-none d-block pa-3 text-center" :to="{ name: 'register'}">Register</router-link>
 
             <v-btn
                 :disabled="!form"
                 block
                 color="success"
-                size="large"
-                type="submit"
                 variant="elevated"
             >
-              Sign In
+              Sign in
             </v-btn>
           </v-form>
         </v-card-text>

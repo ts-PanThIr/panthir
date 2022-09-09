@@ -1,68 +1,87 @@
-<script setup>
-import { Form, Field } from 'vee-validate';
-import * as Yup from 'yup';
+<template>
+  <v-container fluid>
+    <v-card
+        class="mx-auto mt-16"
+        elevation="15"
+        max-width="400"
+    >
+      <v-card-title class="text-center">
+        <h3 class="pa-3">User Registration</h3>
+      </v-card-title>
+      <v-card-text>
+        <v-text-field
+            v-model="first"
+            color="primary"
+            label="First name"
+            variant="underlined"
+        ></v-text-field>
 
-import { useUsersStore, useAlertStore } from '~/stores';
-import { router } from '~/router';
+        <v-text-field
+            v-model="last"
+            color="primary"
+            label="Last name"
+            variant="underlined"
+        ></v-text-field>
 
-const schema = Yup.object().shape({
-    firstName: Yup.string()
-        .required('First Name is required'),
-    lastName: Yup.string()
-        .required('Last Name is required'),
-    username: Yup.string()
-        .required('Username is required'),
-    password: Yup.string()
-        .required('Password is required')
-        .min(6, 'Password must be at least 6 characters')
-});
+        <v-text-field
+            v-model="email"
+            :rules="emailRules"
+            color="primary"
+            label="Email"
+            variant="underlined"
+        ></v-text-field>
 
-async function onSubmit(values) {
-    const usersStore = useUsersStore();
-    const alertStore = useAlertStore();
-    try {
-        await usersStore.register(values);
-        await router.push('/account/login');
-        alertStore.success('Registration successful');
-    } catch (error) { 
-        alertStore.error(error);
-    }
+        <v-text-field
+            v-model="password"
+            :rules="passwordRules"
+            color="primary"
+            label="Password"
+            placeholder="Enter your password"
+            variant="underlined"
+        ></v-text-field>
+
+        <v-checkbox
+            v-model="terms"
+            color="secondary"
+            label="I agree to site terms and conditions"
+        ></v-checkbox>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <router-link class="text-decoration-none d-block pa-3 text-center" :to="{ name: 'login'}">Sign in</router-link>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn
+          block
+          color="success"
+          variant="elevated"
+        >
+          Complete Registration
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
+</template>
+
+<script>
+export default {
+  data: () => ({
+    first: null,
+    last: null,
+    email: null,
+    password: null,
+    terms: false,
+    passwordRules: [
+      (v) => !!v || 'Password is required',
+    ],
+    emailRules: [
+      (v) => !!v || 'E-mail is required',
+      (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+    ],
+    form: false
+  }),
 }
 </script>
-
-<template>
-    <div class="card m-3">
-        <h4 class="card-header">Register</h4>
-        <div class="card-body">
-            <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-                <div class="form-group">
-                    <label>First Name</label>
-                    <Field name="firstName" type="text" class="form-control" :class="{ 'is-invalid': errors.firstName }" />
-                    <div class="invalid-feedback">{{ errors.firstName }}</div>
-                </div>
-                <div class="form-group">
-                    <label>Last Name</label>
-                    <Field name="lastName" type="text" class="form-control" :class="{ 'is-invalid': errors.lastName }" />
-                    <div class="invalid-feedback">{{ errors.lastName }}</div>
-                </div>
-                <div class="form-group">
-                    <label>Username</label>
-                    <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" />
-                    <div class="invalid-feedback">{{ errors.username }}</div>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
-                    <div class="invalid-feedback">{{ errors.password }}</div>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary" :disabled="isSubmitting">
-                        <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
-                        Register
-                    </button>
-                    <router-link to="login" class="btn btn-link">Cancel</router-link>
-                </div>
-            </Form>
-        </div>
-    </div>
-</template>

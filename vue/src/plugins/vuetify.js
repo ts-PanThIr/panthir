@@ -9,8 +9,8 @@ const myCustomLightTheme = {
     dark: true,
     colors: {
         background: '#161d31',
-        surface: '#283046',
-        primary: '#ff0000',
+        surface: colors.indigo.darken4,
+        primary: colors.indigo.darken1,
         secondary: '#03DAC6',
         error: colors.red.lighten3,
         info: '#2196F3',
