@@ -9,14 +9,15 @@ services:
       args:
         - INSTALL_XDEBUG=${INSTALL_XDEBUG}
     environment:
-      PHP_IDE_CONFIG: "serverName=Docker"
+      PHP_IDE_CONFIG: "serverName=localhost"
     expose:
       - 9000
     volumes:
-#      - /var/www/vendor/
       - ./backend:/var/www/
     networks:
       - postgres
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   nginx:
     container_name: nginx

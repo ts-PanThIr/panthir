@@ -28,10 +28,6 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; \
       pecl install xdebug && docker-php-ext-enable xdebug; \
     fi;
 
-COPY ./.docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-#COPY ./.docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-COPY ./.docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/error_reporting.ini
-
 RUN docker-php-ext-configure gd --with-jpeg --with-freetype
 
 RUN docker-php-ext-install \
@@ -39,13 +35,8 @@ RUN docker-php-ext-install \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-## Source code
-#RUN chown www-data:www-data /var/www
-#COPY --chown=www-data:www-data ./ /var/www
-#WORKDIR /var/www
-#
-#USER www-data
+COPY ./.docker/php-fpm/xdebug.ini "${PHP_INI_DIR}/conf.d"
+COPY ./.docker/php-fpm/error_reporting.ini "${PHP_INI_DIR}/conf.d"
 
 WORKDIR /var/www
 CMD php-fpm
-#EXPOSE 9000

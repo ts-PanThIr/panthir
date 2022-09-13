@@ -1,4 +1,3 @@
-export { default as Alert } from './Alert.vue';
 export { default as TheMainAppBar } from "~/components/layout/TheMainAppBar.vue";
 export { default as TheMainFooter } from "~/components/layout/TheMainFooter.vue";
 export { default as TheMainMenu } from "~/components/layout/TheMainMenu.vue";
