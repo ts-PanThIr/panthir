@@ -7,6 +7,7 @@ import auth from "~/router/middleware/auth";
 import middlewarePipeline from "~/router/middleware/middlewarePipeline";
 import { Login, Register } from "~/views/account";
 import { AddEdit, List } from "~/views/users";
+import { useAuthStore } from '~/stores';
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,7 +62,7 @@ export const router = createRouter({
     },
     {
       path: "/",
-      component: TheMainLayout,
+      component: TheEmptyLayout,
       children: [
         {
           path: "",
@@ -75,17 +76,18 @@ export const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from) => {
+router.beforeEach(async(to, from) => {
   /** Navigate to next if middleware is not applied */
   if (!to.meta.middleware) {
     return true;
   }
 
+  const auth = useAuthStore();
   const middleware = to.meta.middleware;
   const context = {
     to,
     from,
-    //   store  | You can also pass store as an argument
+    auth
   };
 
   return middleware[0]({

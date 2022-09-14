@@ -1,18 +1,13 @@
 <script setup>
 import { useAuthStore } from "~/stores";
-
-async function onSubmit(values) {
-  const authStore = useAuthStore();
-  const { username, password } = values;
-  await authStore.login(username, password);
-}
+const authstore = useAuthStore()
 </script>
 
 <template>
   <v-container fluid>
     <v-card class="mx-auto mt-16" elevation="15" max-width="400px">
       <v-card-title class="text-center">
-        <h3 class="pa-3 text-primary">Welcome back!</h3>
+        <h3 class="pa-3">Welcome back!</h3>
       </v-card-title>
       <v-card-text>
         <v-form v-model="form" @submit.prevent="onSubmit">
@@ -43,7 +38,7 @@ async function onSubmit(values) {
             >Register</router-link
           >
 
-          <v-btn :disabled="!form" block color="success" variant="elevated">
+          <v-btn type="submit" :disabled="!form" block color="success" variant="elevated">
             Sign in
           </v-btn>
         </v-form>
@@ -69,5 +64,10 @@ export default {
       ],
     };
   },
+  methods: {
+    onSubmit: async function () {
+      await this.authstore.login(this.email, this.password);
+    }
+  }
 };
 </script>

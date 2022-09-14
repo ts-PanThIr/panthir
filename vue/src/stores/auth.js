@@ -1,43 +1,37 @@
-import { defineStore } from "pinia";
-
-import { fetchWrapper } from "~/helpers";
-import { router } from "~/router";
-import { useAlertStore } from "~/stores";
-
-const baseUrl = `${import.meta.env.VITE_API_URL}/users`;
+import { defineStore } from 'pinia';
+import { FormHelper } from '~/helpers'
 
 export const useAuthStore = defineStore({
-  id: "auth",
-  state: () => ({
-    // initialize state from local storage to enable user to stay logged in
-    user: JSON.parse(localStorage.getItem("user")),
-    returnUrl: null,
-  }),
-  actions: {
-    async login(username, password) {
-      try {
-        const user = await fetchWrapper.post(`${baseUrl}/authenticate`, {
-          username,
-          password,
-        });
+    id: 'auth',
+    state: () => ({
+        // initialize state from local storage to enable user to stay logged in
+        user: JSON.parse(localStorage.getItem('user')),
+        returnUrl: null
+    }),
+    actions: {
+        async login(username, password) {
+            try {
+                const data = {
+                    username: username,
+                    password: password
+                }
+                // const formData = FormHelper.jsonToFormData(data)
+                const user = await this.$http.post(`${this.$apiUrl}/api/login_check`, JSON.stringify(data), {
+                    headers: {'Content-Type': 'application/json'}
+                });
 
-        // update pinia state
-        this.user = user;
-
-        // store user details and jwt in local storage to keep user logged in between page refreshes
-        localStorage.setItem("user", JSON.stringify(user));
-
-        // redirect to previous url or default to home page
-        router.push(this.returnUrl || "/");
-      } catch (error) {
-        const alertStore = useAlertStore();
-        alertStore.error(error);
-      }
-    },
-    logout() {
-      this.user = null;
-      localStorage.removeItem("user");
-      router.push("/account/login");
-    },
-  },
+                this.user = user.data;
+                localStorage.setItem('user', JSON.stringify(user.data));
+                this.$router.push('/');
+            } catch (error) {
+                // const alertStore = useAlertStore();
+                // alertStore.error(error);
+            }
+        },
+        logout() {
+            this.user = null;
+            localStorage.removeItem('user');
+            this.$router.push('/account/login');
+        }
+    }
 });

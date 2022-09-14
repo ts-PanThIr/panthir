@@ -1,5 +1,5 @@
-export default function guest() {
-  let isLoggedIn = false; // Can be calculated through store
+export default function guest({auth}) {
+  let isLoggedIn = auth.user; // Can be calculated through store
   if (isLoggedIn) {
     return { name: "home" };
   }
