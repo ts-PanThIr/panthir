@@ -9,6 +9,7 @@
     "preview": "vite preview --port 5050"
   },
   "dependencies": {
+    "@johmun/vue-tags-input": "^2.1.0",
     "@mdi/font": "5.9.55",
     "axios": "^0.27.2",
     "eslint-plugin-prettier": "^4.2.1",

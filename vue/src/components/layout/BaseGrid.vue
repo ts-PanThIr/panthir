@@ -1,75 +1,203 @@
 <template>
-  <div
-    v-if="$store.state.search.table.length > 0"
-    class="card-body"
-    style="overflow: hidden"
-  >
-    <div class="table-responsive" style="width: 100%">
-      <v-table class="table table-striped mb-1">
+  <div>
+    <v-row class="justify-content-between">
+      <v-col class="tags-search" cols="6" md="4">
+        <vue-tags-input
+            v-model="tag"
+            :tags="internalTags"
+            placeholder="Search"
+            @tags-changed="(newTags) => (internalTags = newTags)"
+        />
+      </v-col>
+      <v-col cols="3" md="2">
+        <v-select
+            v-model="internalLimit"
+            label="Page limit"
+            item-text="text"
+            item-value="value"
+            required
+            :items="profiles"
+            :rules="[(v) => !!v || 'Le type doit être renseignée']"
+            @input="$emit('update:limit', $event)"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <table
+        v-if="getCleanedMatrix.length"
+        class="mdl-data-table mdl-table-custom sm-2"
+    >
+      <slot name="thead">
         <thead>
-          <tr>
-            <th>&nbsp;</th>
-            <th v-for="(header, index) in getHeader" :key="index">
-              <strong>{{ header }}</strong>
-            </th>
-          </tr>
+        <tr>
+          <th v-for="item in getHeader" :key="item">{{ item }}</th>
+        </tr>
         </thead>
+      </slot>
+      <slot name="tbody">
         <tbody>
-          <tr v-for="(tr, i) in $store.state.search.table" :key="i">
-            <td>
-              <div
-                class="btn btn-warning btn-round btn-sm m-0 btn-fab"
-                @click="editItem(tr)"
-              >
-                <i class="fa fa-pencil" />
-              </div>
-            </td>
-            <td v-for="(td, ii) in getTr(tr)" :key="ii" v-html="td"></td>
-          </tr>
+        <tr v-for="(item, index) in getCleanedMatrix" :key="index">
+          <template v-for="(r, i) in item">
+            <slot
+                :item="item"
+                :index="index"
+                :element="item"
+                :text="r"
+                :name="i"
+            >
+              <td :key="i">{{ r ? r : "-" }}</td>
+            </slot>
+          </template>
+        </tr>
         </tbody>
-      </v-table>
+      </slot>
+    </table>
+    <div v-else>
+      <div class="subtitle-bread text-center mt-15">
+        Vous n'avez actuellement aucun élément à lister. Vous pouvez modifier le
+        filtre ou la page.
+      </div>
     </div>
-  </div>
-  <div v-else class="col-md-12">
-    <h3 class="text-center border py-2">{{ $t("nothing_found") }}</h3>
+    <v-row>
+      <div class="text-center mt-4">
+        <v-pagination
+            v-model="internalPage"
+            :length="page + 6"
+            :total-visible="7"
+        ></v-pagination>
+      </div>
+    </v-row>
   </div>
 </template>
 
 <script>
+import VueTagsInput from "@johmun/vue-tags-input";
+
 export default {
   name: "BaseGrid",
+  components: { VueTagsInput },
   props: {
-    target: {
-      type: String,
-      description: "Link to redirect when edit btn is clicked",
+    matrix: {
+      type: Array,
+      description: "Multidimensional array to be rendered",
+    },
+    // this order the columns in the table, you can switch with the given array
+    header: {
+      type: Object,
+      description: "array to render as the header",
+    },
+    formatter: {
+      type: Object,
+      description:
+          "array with column names to formatter in any type, like date, bools",
+    },
+    tags: {
+      description: "array of tags used in search",
+    },
+    page: {
+      description: "number of page used in search",
+    },
+    limit: {
+      description: "limit of items per page",
     },
   },
+  data: () => ({
+    profiles: [10, 50, 100, "tout"],
+    tag: "",
+  }),
   computed: {
-    getHeader: function () {
-      if (this.$store.state.search.table[0]) {
-        return Object.keys(this.$store.state.search.table[0]);
+    internalPage: {
+      get() {
+        return this.page;
+      },
+      set(e) {
+        this.$emit("update:page", e);
+        this.$emit("updateSearch");
+      },
+    },
+    internalLimit: {
+      get() {
+        return this.limit;
+      },
+      set(e) {
+        this.$emit("update:limit", e);
+        this.$emit("updateSearch");
+      },
+    },
+    internalTags: {
+      get() {
+        return this.tags.map((e) => {
+          return { text: e };
+        });
+      },
+      set(e) {
+        this.$emit(
+            "update:tags",
+            e.map((ee) => {
+              return ee.text;
+            })
+        );
+        this.$emit("updateSearch");
+      },
+    },
+    getCleanedMatrix: function () {
+      const array = [];
+      const formatter = this.formatter;
+      const header = this.header;
+      for (const element of this.matrix) {
+        const temp = {};
+        for (var headerKey in header) {
+          temp[headerKey] = element[headerKey];
+        }
+        // formatter
+        for (var formatterKey in formatter) {
+          temp[formatterKey] = this.doFormat(
+              formatter[formatterKey],
+              temp[formatterKey]
+          );
+        }
+        array.push(temp);
       }
-      return [];
+      return array;
+    },
+    getHeader: function () {
+      if (this.header) {
+        return this.header;
+      }
+      if (this.matrix.length) {
+        return Object.keys(this.matrix[0]);
+      }
+      return 0;
     },
   },
   methods: {
-    editItem(tr) {
-      this.$helper.redirect(this.target + "/" + tr.id);
-    },
-    getTr(row) {
-      let td = [];
-      for (let r in row) {
-        td.push(this.getTd(row[r]));
+    doFormat: function (type, value) {
+      if (!value) {
+        return value;
       }
-      return td;
-    },
-    getTd: function (data) {
-      if (data === true) {
-        data = "<i class='fa fa-check' style='color: green;'></i>";
-      } else if (data === false) {
-        data = "<i class='fa fa-times' style='color: red;'></i>";
+
+      switch (type) {
+        case "date":
+          return this.formatDate(value);
+        default:
+          return value;
       }
-      return data;
+    },
+    formatDate(currentDate) {
+      const timestamp = Date.parse(currentDate);
+      const date = new Date(timestamp);
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let hour = date.getHours();
+      let min = date.getMinutes();
+
+      day = (day < 10 ? "0" : "") + day;
+      month = (month < 10 ? "0" : "") + month;
+      hour = (hour < 10 ? "0" : "") + hour;
+      min = (min < 10 ? "0" : "") + min;
+
+      return (
+          day + "/" + month + "/" + date.getFullYear() + " " + hour + ":" + min
+      );
     },
   },
 };

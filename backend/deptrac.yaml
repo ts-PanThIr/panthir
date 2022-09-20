@@ -1,0 +1,40 @@
+deptrac:
+  paths:
+    - ./src
+  layers:
+    - name: Controller
+      collectors:
+        - type: className
+          regex: .*App\\.*Controller.*
+
+    - name: Repository
+      collectors:
+        - type: className
+          regex: .*App\\.*Repository.*
+
+    - name: Manager
+      collectors:
+        - type: className
+          regex: .*App\\.*Manager.*
+
+    - name: DTO
+      collectors:
+        - type: className
+          regex: .*App\\.*DTO.*
+
+    - name: Entity
+      collectors:
+        - type: className
+          regex: .*App\\.*Entity.*
+
+  ruleset:
+    Controller:
+      - Repository
+      - Manager
+    Manager:
+      - Repository
+      - Entity
+    Repository:
+      - Entity
+    Entity:
+      - Repository

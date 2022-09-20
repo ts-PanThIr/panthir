@@ -1,12 +1,12 @@
 <?php
 
-namespace App\User\Service;
+namespace App\User\Manager;
 
 use App\User\Entity\UserEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserCreateService
+class UserManager implements UserManagerInterface
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
@@ -18,13 +18,13 @@ class UserCreateService
     public function create
     (
         string $email,
-        string $plainPassword
+        string $password
     ): void
     {
         $user = new UserEntity();
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
-            $plainPassword
+            $password
         );
 
         $user->setEmail($email)
@@ -32,5 +32,9 @@ class UserCreateService
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+    }
+
+    public function search () {
+        
     }
 }

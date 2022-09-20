@@ -2,7 +2,7 @@
 
 namespace App\User\Command;
 
-use App\User\Service\UserCreateService;
+use App\User\Manager\UserManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Question\Question;
 )]
 class UserCreateCommand extends Command
 {
-    public function __construct(private readonly UserCreateService $userManager)
+    public function __construct(private readonly UserManager $userManager)
     {
         parent::__construct();
     }
@@ -54,7 +54,7 @@ class UserCreateCommand extends Command
 
         $this->userManager->create(
             email: $email,
-            plainPassword: $password
+            password: $password
         );
 
         // this method must return an integer number with the "exit status code"

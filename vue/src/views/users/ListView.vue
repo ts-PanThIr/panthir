@@ -1,21 +1,36 @@
 <script setup>
-import { storeToRefs } from "pinia";
-import { BaseGrid } from "~/components";
 import { useUsersStore } from "~/stores";
 
 const usersStore = useUsersStore();
-const { users } = storeToRefs(usersStore);
-
-usersStore.getAll();
+const users = await usersStore.getAll();
+console.log(users)
 </script>
 
 <template>
   <h1>Users</h1>
-  <router-link to="/users/add" class="btn btn-sm btn-success mb-2"
-    >Add User</router-link
+  <router-link to="/users/add" class="btn btn-sm btn-success mb-2">Add User</router-link>
+
+  <base-grid
+      class="collaborators-table"
+      :matrix="users"
+      :formatter="formatter"
+      :header="headers"
+      :tags.sync="tags"
+      :page.sync="page"
+      :limit.sync="limit"
+      @updateSearch="getVaultUsers"
   >
-  <base-grid></base-grid>
-  
+    <template v-slot:action="{ element, index }">
+      <td class="actions to-none pa-lg-3" data-label="Actions :">
+        <button title="Détails" @click="clicked(element, index)"><i class="fas fa-search"></i></button>
+      </td>
+    </template>
+
+    <template v-slot:[slotName]="{ text }" v-for="slotName in ['budgetCodes', 'lastName', 'firstName']">
+      <td :key="slotName"><span class="font-weight-bold">{{ text ? text : '-' }}</span></td>
+    </template>
+  </base-grid>
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -64,3 +79,30 @@ usersStore.getAll();
     </tbody>
   </table>
 </template>
+
+<script>
+import {BaseGrid} from "~/components";
+
+export default {
+  components: { BaseGrid },
+  data: () => ({
+    limit: 'tout',
+    page: 1,
+    tags: [],
+    formatter: {
+      createdAt: 'date',
+      lastLoginAt: 'date'
+    },
+    headers: {
+      budgetCodes: 'Code budgets',
+      lastName: 'Nom',
+      firstName: 'Prénom',
+      employeeId: 'Matricule',
+      email: 'Email',
+      createdAt: 'Date de création',
+      lastLoginAt: 'Dernière connexion',
+      action: 'Actions'
+    }
+  }),
+}
+</script>

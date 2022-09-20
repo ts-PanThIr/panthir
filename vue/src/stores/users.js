@@ -1,8 +1,5 @@
 import { defineStore } from "pinia";
-
 import { useAuthStore } from "~/stores";
-
-const baseUrl = `${import.meta.env.VITE_API_URL}/users`;
 
 export const useUsersStore = defineStore({
   id: "users",
@@ -17,7 +14,9 @@ export const useUsersStore = defineStore({
     async getAll() {
       this.users = { loading: true };
       try {
-        this.users = await fetchWrapper.get(baseUrl);
+        // const formData = FormHelper.jsonToFormData(data)
+        this.users = await this.$http.get(`${this.$apiUrl}/api/users`);
+
       } catch (error) {
         this.users = { error };
       }

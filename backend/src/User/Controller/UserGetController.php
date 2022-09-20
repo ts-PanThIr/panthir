@@ -25,4 +25,10 @@ class UserGetController
 
         return JsonResponse::fromJsonString($txt);
     }
+
+    #[Route(path: "/users", name: "app_users_getAll", methods: 'GET')]
+    public function get(Request $request): JsonResponse
+    {
+
+    }
 }
