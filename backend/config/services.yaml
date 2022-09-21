@@ -13,9 +13,15 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
+    Doctrine\ORM\EntityManagerInterface: '@doctrine.orm.entity_manager'
+
     App\Shared\:
         resource: '../src/Shared/{Service}'
 
     App\User\:
         resource: '../src/User/*'
         exclude: '../src/User/{DependencyInjection,Entity,Tests,Kernel.php}'
+
+    App\Shared\Notify\NotifyInterface:
+        class: 'App\Shared\Notify\Notify'
+        public: true

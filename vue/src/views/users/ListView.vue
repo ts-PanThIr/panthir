@@ -2,7 +2,7 @@
 import { useUsersStore } from "~/stores";
 
 const usersStore = useUsersStore();
-const users = await usersStore.getAll();
+const users = usersStore.getAll();
 console.log(users)
 </script>
 
