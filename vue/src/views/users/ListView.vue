@@ -5,12 +5,10 @@
   </router-link>
 
   <base-grid
-    :tags="tags"
-    :page="page"
-    :limit="limit"
+    v-model:page="page"
+    v-model:limit="limit"
     class="collaborators-table"
     :matrix="users"
-    :formatter="formatter"
     :header="headers"
   >
     <template #action="{ element, index }">
@@ -46,22 +44,11 @@ export default {
   },
   components: { BaseGrid },
   data: () => ({
-    limit: "tout",
+    limit: "All",
     page: 1,
-    tags: [],
-    formatter: {
-      createdAt: "date",
-      lastLoginAt: "date",
-    },
     headers: {
-      budgetCodes: "Code budgets",
-      lastName: "Nom",
-      firstName: "Prénom",
-      employeeId: "Matricule",
+      id: "Id",
       email: "Email",
-      createdAt: "Date de création",
-      lastLoginAt: "Dernière connexion",
-      action: "Actions",
     },
     search: null,
   }),

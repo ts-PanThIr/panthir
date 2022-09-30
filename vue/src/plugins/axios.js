@@ -42,13 +42,10 @@ function authHeader(url, headers) {
 }
 
 async function handleResponse(response) {
-  const isJson = response.headers
-    ?.get("content-type")
-    ?.includes("application/json");
-  const data = isJson ? await response.json() : null;
+  const data = response.data;
 
   // check for error response
-  if (!response.ok) {
+  if (! (response && response.status === 200 && response.statusText === 'OK')) {
     const { user, logout } = useAuthStore();
     if ([401, 403].includes(response.status) && user) {
       // auto logout if 401 Unauthorized or 403 Forbidden response returned from api

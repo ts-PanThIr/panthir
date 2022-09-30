@@ -1,3 +1,6 @@
+# https://github.com/qossmic/deptrac
+# https://qossmic.github.io/deptrac/
+
 deptrac:
   paths:
     - ./src
@@ -29,7 +32,6 @@ deptrac:
 
   ruleset:
     Controller:
-      - Repository
       - Manager
     Manager:
       - Repository
@@ -37,4 +39,3 @@ deptrac:
     Repository:
       - Entity
     Entity:
-      - Repository

@@ -34,7 +34,8 @@ class UserManager implements UserManagerInterface
         $this->entityManager->flush();
     }
 
-    public function search () {
-        
+    public function search (): array
+    {
+        return $this->entityManager->getRepository(UserEntity::class)->findAll();
     }
 }

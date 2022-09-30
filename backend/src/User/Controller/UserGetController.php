@@ -5,8 +5,7 @@ namespace App\User\Controller;
 use App\Shared\ApiController;
 use App\Shared\Notify\NotifyInterface;
 use App\Shared\OCR\TesseractOCR;
-use App\User\Entity\UserEntity;
-use Doctrine\ORM\EntityManagerInterface;
+use App\User\Manager\UserManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,10 +30,10 @@ class UserGetController extends ApiController
     }
 
     #[Route(path: "/users", name: "app_users_getAll", methods: 'GET')]
-    public function get(EntityManagerInterface $entityManager, NotifyInterface $notify): JsonResponse
+    public function get(UserManagerInterface $userManager, NotifyInterface $notify): JsonResponse
     {
         $notify->addMessage($notify::WARNING, "teste de warning");
-        $users = $entityManager->getRepository(UserEntity::class)->findAll();
+        $users = $userManager->search();
         return $this->response(items: $users, groups:['user']);
     }
 }

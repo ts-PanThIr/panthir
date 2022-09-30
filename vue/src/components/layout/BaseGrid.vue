@@ -1,14 +1,6 @@
 <template>
   <div>
     <v-row class="justify-content-between">
-      <v-col v-if="tags !== false" class="tags-search" cols="6" md="4">
-        <vue-tags-input
-          v-model="tag"
-          :tags="internalTags"
-          placeholder="Search"
-          @tags-changed="(newTags) => (internalTags = newTags)"
-        />
-      </v-col>
       <v-col cols="3" md="2">
         <v-select
           v-model="internalLimit"
@@ -22,10 +14,7 @@
         ></v-select>
       </v-col>
     </v-row>
-    <table
-      v-if="getCleanedMatrix.length"
-      class="mdl-data-table mdl-table-custom sm-2"
-    >
+    <v-table v-if="getCleanedMatrix.length">
       <slot name="thead">
         <thead>
           <tr>
@@ -50,7 +39,7 @@
           </tr>
         </tbody>
       </slot>
-    </table>
+    </v-table>
     <div v-else>
       <div class="subtitle-bread text-center mt-15">
         Vous n'avez actuellement aucun élément à lister. Vous pouvez modifier le
@@ -70,11 +59,8 @@
 </template>
 
 <script>
-import VueTagsInput from "@johmun/vue-tags-input";
-
 export default {
   name: "BaseGrid",
-  components: { VueTagsInput },
   props: {
     matrix: {
       type: Array,
@@ -90,10 +76,6 @@ export default {
       description:
         "array with column names to formatter in any type, like date, bools",
     },
-    tags: {
-      description: "array of tags used in search",
-      default: false,
-    },
     page: {
       description: "number of page used in search",
     },
@@ -101,14 +83,10 @@ export default {
       description: "limit of items per page",
     },
   },
-  emits: ["update:page", "updateSearch", "update:limit", "update:tags"],
+  emits: ["update:page", "updateSearch", "update:limit"],
   data: () => ({
     profiles: [10, 50, 100, "all"],
-    tag: "",
   }),
-  created() {
-    console.log(this.matrix, "aee");
-  },
   computed: {
     internalPage: {
       get() {
@@ -125,24 +103,6 @@ export default {
       },
       set(e) {
         this.$emit("update:limit", e);
-        this.$emit("updateSearch");
-      },
-    },
-    internalTags: {
-      get() {
-        return !this.tags
-          ? []
-          : this.tags.map((e) => {
-              return { text: e };
-            });
-      },
-      set(e) {
-        this.$emit(
-          "update:tags",
-          e.map((ee) => {
-            return ee.text;
-          })
-        );
         this.$emit("updateSearch");
       },
     },

@@ -21,6 +21,12 @@ doctrine:
                 prefix: 'App\User\Entity'
                 alias: User
 
+            App\Person:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Person/Entity'
+                prefix: 'App\Person\Entity'
+                alias: Person
+
 when@test:
     doctrine:
         dbal:
