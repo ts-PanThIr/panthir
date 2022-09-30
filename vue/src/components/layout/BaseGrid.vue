@@ -1,53 +1,53 @@
 <template>
   <div>
     <v-row class="justify-content-between">
-      <v-col class="tags-search" cols="6" md="4">
+      <v-col v-if="tags !== false" class="tags-search" cols="6" md="4">
         <vue-tags-input
-            v-model="tag"
-            :tags="internalTags"
-            placeholder="Search"
-            @tags-changed="(newTags) => (internalTags = newTags)"
+          v-model="tag"
+          :tags="internalTags"
+          placeholder="Search"
+          @tags-changed="(newTags) => (internalTags = newTags)"
         />
       </v-col>
       <v-col cols="3" md="2">
         <v-select
-            v-model="internalLimit"
-            label="Page limit"
-            item-text="text"
-            item-value="value"
-            required
-            :items="profiles"
-            :rules="[(v) => !!v || 'Le type doit être renseignée']"
-            @input="$emit('update:limit', $event)"
+          v-model="internalLimit"
+          label="Page limit"
+          item-text="text"
+          item-value="value"
+          required
+          :items="profiles"
+          :rules="[(v) => !!v || 'Le type doit être renseignée']"
+          @input="$emit('update:limit', $event)"
         ></v-select>
       </v-col>
     </v-row>
     <table
-        v-if="getCleanedMatrix.length"
-        class="mdl-data-table mdl-table-custom sm-2"
+      v-if="getCleanedMatrix.length"
+      class="mdl-data-table mdl-table-custom sm-2"
     >
       <slot name="thead">
         <thead>
-        <tr>
-          <th v-for="item in getHeader" :key="item">{{ item }}</th>
-        </tr>
+          <tr>
+            <th v-for="item in getHeader" :key="item">{{ item }}</th>
+          </tr>
         </thead>
       </slot>
       <slot name="tbody">
         <tbody>
-        <tr v-for="(item, index) in getCleanedMatrix" :key="index">
-          <template v-for="(r, i) in item">
-            <slot
+          <tr v-for="(item, index) in getCleanedMatrix" :key="index">
+            <template v-for="(r, i) in item">
+              <slot
                 :item="item"
                 :index="index"
                 :element="item"
                 :text="r"
                 :name="i"
-            >
-              <td :key="i">{{ r ? r : "-" }}</td>
-            </slot>
-          </template>
-        </tr>
+              >
+                <td :key="i">{{ r ? r : "-" }}</td>
+              </slot>
+            </template>
+          </tr>
         </tbody>
       </slot>
     </table>
@@ -60,9 +60,9 @@
     <v-row>
       <div class="text-center mt-4">
         <v-pagination
-            v-model="internalPage"
-            :length="page + 6"
-            :total-visible="7"
+          v-model="internalPage"
+          :length="page + 6"
+          :total-visible="7"
         ></v-pagination>
       </div>
     </v-row>
@@ -88,10 +88,11 @@ export default {
     formatter: {
       type: Object,
       description:
-          "array with column names to formatter in any type, like date, bools",
+        "array with column names to formatter in any type, like date, bools",
     },
     tags: {
       description: "array of tags used in search",
+      default: false,
     },
     page: {
       description: "number of page used in search",
@@ -100,10 +101,14 @@ export default {
       description: "limit of items per page",
     },
   },
+  emits: ["update:page", "updateSearch", "update:limit", "update:tags"],
   data: () => ({
-    profiles: [10, 50, 100, "tout"],
+    profiles: [10, 50, 100, "all"],
     tag: "",
   }),
+  created() {
+    console.log(this.matrix, "aee");
+  },
   computed: {
     internalPage: {
       get() {
@@ -125,16 +130,18 @@ export default {
     },
     internalTags: {
       get() {
-        return this.tags.map((e) => {
-          return { text: e };
-        });
+        return !this.tags
+          ? []
+          : this.tags.map((e) => {
+              return { text: e };
+            });
       },
       set(e) {
         this.$emit(
-            "update:tags",
-            e.map((ee) => {
-              return ee.text;
-            })
+          "update:tags",
+          e.map((ee) => {
+            return ee.text;
+          })
         );
         this.$emit("updateSearch");
       },
@@ -151,8 +158,8 @@ export default {
         // formatter
         for (var formatterKey in formatter) {
           temp[formatterKey] = this.doFormat(
-              formatter[formatterKey],
-              temp[formatterKey]
+            formatter[formatterKey],
+            temp[formatterKey]
           );
         }
         array.push(temp);
@@ -196,7 +203,7 @@ export default {
       min = (min < 10 ? "0" : "") + min;
 
       return (
-          day + "/" + month + "/" + date.getFullYear() + " " + hour + ":" + min
+        day + "/" + month + "/" + date.getFullYear() + " " + hour + ":" + min
       );
     },
   },

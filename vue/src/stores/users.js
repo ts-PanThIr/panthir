@@ -12,11 +12,12 @@ export const useUsersStore = defineStore({
       await fetchWrapper.post(`${baseUrl}/register`, user);
     },
     async getAll() {
-      this.users = { loading: true };
       try {
-        // const formData = FormHelper.jsonToFormData(data)
-        this.users = await this.$http.get(`${this.$apiUrl}/api/users`);
-
+        this.users = await this.$http
+          .get(`${this.$apiUrl}/api/users`)
+          .then((d) => {
+            return d.data.data;
+          });
       } catch (error) {
         this.users = { error };
       }

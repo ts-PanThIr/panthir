@@ -7,7 +7,12 @@ const authStore = useAuthStore();
     <router-link to="/" class="nav-item nav-link">Home</router-link>
     <router-link to="/users" class="nav-item nav-link">Users</router-link>
     <v-spacer></v-spacer>
-    <v-btn class="fas fa-sign-out" icon @click="authStore.logout()" title="Logout"></v-btn>
+    <v-btn
+      class="fas fa-sign-out"
+      icon
+      title="Logout"
+      @click="authStore.logout()"
+    ></v-btn>
   </v-app-bar>
 </template>
 

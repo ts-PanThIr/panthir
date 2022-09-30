@@ -1,7 +1,7 @@
 // Styles
 
 // import colors from "vuetify/lib/util/colors";
-import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
+import "@fortawesome/fontawesome-free/css/all.css"; // Ensure you are using css-loader
 import "~/assets/base.sass";
 // import "@mdi/font/css/materialdesignicons.css";
 import "vuetify/styles";
@@ -38,7 +38,7 @@ export default createVuetify({
   //     defaultTheme: 'dark'
   // }
   icons: {
-    iconfont: 'fa',
+    iconfont: "fa",
   },
   theme: {
     defaultTheme: "myCustomLightTheme",

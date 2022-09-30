@@ -9,7 +9,14 @@ import { TheMainAppBar, TheMainFooter, TheMainMenu } from "~/components";
 
   <v-main>
     <v-container fluid>
-      <router-view />
+      <Suspense>
+        <template #default>
+          <router-view />
+        </template>
+        <template #fallback>
+          <div>Loading...</div>
+        </template>
+      </Suspense>
     </v-container>
   </v-main>
 

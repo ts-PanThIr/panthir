@@ -1,4 +1,4 @@
-import { createApp, provide, markRaw } from "vue";
+import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import { router } from "./router";
@@ -13,10 +13,10 @@ const app = createApp(App);
 // app.config.globalProperties.$apiUrl = import.meta.env.VITE_API_URL
 
 const pinia = createPinia();
-piniaPlugins.setContext(pinia)
-piniaPlugins.setAxios(axios)
-piniaPlugins.setRouter(router)
-piniaPlugins.setApiUrl(import.meta.env.VITE_API_URL)
+piniaPlugins.setContext(pinia);
+piniaPlugins.setAxios(axios);
+piniaPlugins.setRouter(router);
+piniaPlugins.setApiUrl(import.meta.env.VITE_API_URL);
 
 app.use(piniaPlugins.getContext());
 app.use(router);

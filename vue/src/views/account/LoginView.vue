@@ -1,8 +1,3 @@
-<script setup>
-import { useAuthStore } from "~/stores";
-const authstore = useAuthStore()
-</script>
-
 <template>
   <v-container fluid>
     <v-card class="mx-auto mt-16" elevation="15" max-width="400px">
@@ -38,7 +33,13 @@ const authstore = useAuthStore()
             >Register</router-link
           >
 
-          <v-btn type="submit" :disabled="!form" block color="success" variant="elevated">
+          <v-btn
+            type="submit"
+            :disabled="!form"
+            block
+            color="success"
+            variant="elevated"
+          >
             Sign in
           </v-btn>
         </v-form>
@@ -48,7 +49,12 @@ const authstore = useAuthStore()
 </template>
 
 <script>
+import { useAuthStore } from "~/stores";
 export default {
+  setup() {
+    const authstore = useAuthStore();
+    return { authstore };
+  },
   data() {
     return {
       valid: false,
@@ -67,7 +73,7 @@ export default {
   methods: {
     onSubmit: async function () {
       await this.authstore.login(this.email, this.password);
-    }
-  }
+    },
+  },
 };
 </script>
