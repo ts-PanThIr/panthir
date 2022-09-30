@@ -39,3 +39,4 @@ deptrac:
     Repository:
       - Entity
     Entity:
+      - Repository

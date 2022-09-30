@@ -12,7 +12,7 @@ trait ContactTrait
     #[ORM\Column]
     #[Groups(['person'])]
     private ?int $id = null;
-
+    
     #[ORM\Column]
     #[Groups(['person'])]
     private string $contactName;

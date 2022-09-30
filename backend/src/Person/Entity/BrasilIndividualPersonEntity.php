@@ -2,13 +2,15 @@
 
 namespace App\Person\Entity;
 
+use App\Person\Repository\BrasilIndividualPersonRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ORM\Entity(repositoryClass: BrasilIndividualPersonRepository::class)]
 #[ORM\Table(name: 'person_individual_brasil')]
-class BrasilIndividualPerson
+class BrasilIndividualPersonEntity
 {
     use BlameableEntity;
     use TimestampableEntity;

@@ -2,12 +2,14 @@
 
 namespace App\Person\Entity;
 
+use App\Person\Repository\PersonContactRepository;
 use App\Shared\EntityTraits\ContactTrait;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ORM\Entity(repositoryClass: PersonContactRepository::class)]
 #[ORM\Table(name: 'person_contact')]
 class PersonContactEntity
 {

@@ -2,12 +2,14 @@
 
 namespace App\Person\Entity;
 
+use App\Person\Repository\PersonAddressRepository;
 use App\Shared\EntityTraits\AddressTrait;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ORM\Entity(repositoryClass: PersonAddressRepository::class)]
 #[ORM\Table(name: 'person_address')]
 class PersonAddressEntity
 {

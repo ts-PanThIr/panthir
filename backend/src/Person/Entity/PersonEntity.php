@@ -2,10 +2,12 @@
 
 namespace App\Person\Entity;
 
+use App\Person\Repository\PersonRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ORM\Entity(repositoryClass: PersonRepository::class)]
 #[ORM\Table(name: 'person')]
 class PersonEntity
 {

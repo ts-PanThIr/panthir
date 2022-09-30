@@ -2,14 +2,16 @@
 
 namespace App\Person\Entity;
 
+use App\Person\Repository\IndividualPersonRepository;
 use DateTimeInterface;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity(repositoryClass: IndividualPersonRepository::class)]
 #[ORM\Table(name: 'person_individual')]
-class IndividualPersonEntity extends PersonEntity
+class IndividualPersonEntity
 {
     use BlameableEntity;
     use TimestampableEntity;

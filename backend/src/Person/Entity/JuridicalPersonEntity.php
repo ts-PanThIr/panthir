@@ -2,11 +2,13 @@
 
 namespace App\Person\Entity;
 
+use App\Person\Repository\JuridicalPersonRepository;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity(repositoryClass: JuridicalPersonRepository::class)]
 #[ORM\Table(name: 'person_juridical')]
 class JuridicalPersonEntity
 {

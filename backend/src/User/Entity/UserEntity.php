@@ -20,7 +20,7 @@ class UserEntity implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user', 'group2'])]
+    #[Groups(['user'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]

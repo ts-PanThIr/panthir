@@ -20,22 +20,4 @@ class JuridicalPersonRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, JuridicalPersonEntity::class);
     }
-
-    public function add(JuridicalPersonEntity $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(JuridicalPersonEntity $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
 }
