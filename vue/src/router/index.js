@@ -5,9 +5,14 @@ import { TheEmptyLayout, TheMainLayout } from "~/components";
 import guest from "~/router/middleware/guest";
 import auth from "~/router/middleware/auth";
 import middlewarePipeline from "~/router/middleware/middlewarePipeline";
-import { Login, Register } from "~/views/account";
-import { AddEdit, List } from "~/views/users";
 import { useAuthStore } from "~/stores";
+
+import PersonEditView from "~/views/person/PersonEditView.vue";
+import PersonListView from "~/views/person/PersonListView.vue";
+import UserListView from "~/views/user/UserListView.vue";
+import UserEditView from "~/views/user/UserEditView.vue";
+import LoginView from "~/views/common/LoginView.vue";
+import RegisterView from "~/views/common/RegisterView.vue";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,17 +28,41 @@ export const router = createRouter({
         {
           path: "",
           name: "usersList",
-          component: List,
+          component: UserListView,
         },
         {
           path: "add",
           name: "usersAdd",
-          component: AddEdit,
+          component: UserEditView ,
         },
         {
           path: "edit/:id",
           name: "usersEdit",
-          component: AddEdit,
+          component: UserEditView,
+        },
+      ],
+    },
+    {
+      path: "/person",
+      component: TheMainLayout,
+      meta: {
+        middleware: [auth],
+      },
+      children: [
+        {
+          path: "",
+          name: "PersonList",
+          component: PersonListView,
+        },
+        {
+          path: "edit/:id",
+          name: "PersonEdit",
+          component: PersonEditView,
+        },
+        {
+          path: "new",
+          name: "PersonNew",
+          component: PersonEditView,
         },
       ],
     },
@@ -51,12 +80,12 @@ export const router = createRouter({
         {
           path: "login",
           name: "login",
-          component: Login,
+          component: LoginView,
         },
         {
           path: "register",
           name: "register",
-          component: Register,
+          component: RegisterView,
         },
       ],
     },

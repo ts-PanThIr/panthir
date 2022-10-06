@@ -1,5 +1,5 @@
 // Styles
-
+// https://mycolor.space/?hex=%23D0EA59&sub=1
 // import colors from "vuetify/lib/util/colors";
 import "@fortawesome/fontawesome-free/css/all.css"; // Ensure you are using css-loader
 import "~/assets/base.sass";
@@ -21,8 +21,8 @@ import { aliases, fa } from "vuetify/iconsets/fa";
 const myCustomLightTheme = {
   dark: true,
   colors: {
-    background: "#161d31",
-    surface: "#303044",
+    background: "#252e42",
+    surface: "#2f3b52",
     primary: "#d0ea59", //"#b189fa",
     secondary: "#b189fa",
     error: "#e06457",
@@ -30,7 +30,7 @@ const myCustomLightTheme = {
     success: "#d0ea59",
     warning: "#EDD64E",
     color: "#d0ea59",
-    accent: "#82B1FF",
+    accent: "#9DB924",
   },
 };
 
