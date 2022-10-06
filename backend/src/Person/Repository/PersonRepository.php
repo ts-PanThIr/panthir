@@ -21,21 +21,4 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, PersonEntity::class);
     }
 
-    public function add(PersonEntity $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(PersonEntity $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
 }

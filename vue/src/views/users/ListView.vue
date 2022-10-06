@@ -36,13 +36,13 @@ import { BaseGrid } from "~/components";
 import { useUsersStore } from "~/stores";
 
 export default {
+  components: { BaseGrid },
   async setup() {
     const usersStore = useUsersStore();
     await usersStore.getAll();
     const users = usersStore.users;
     return { users };
   },
-  components: { BaseGrid },
   data: () => ({
     limit: "All",
     page: 1,

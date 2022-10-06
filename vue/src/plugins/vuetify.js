@@ -6,7 +6,7 @@ import "~/assets/base.sass";
 // import "@mdi/font/css/materialdesignicons.css";
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
-import { aliases, fa } from 'vuetify/iconsets/fa'
+import { aliases, fa } from "vuetify/iconsets/fa";
 
 /**
  * main
@@ -39,7 +39,7 @@ export default createVuetify({
   //     defaultTheme: 'dark'
   // }
   icons: {
-    defaultSet: 'fa',
+    defaultSet: "fa",
     aliases,
     sets: {
       fa,

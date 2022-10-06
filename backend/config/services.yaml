@@ -22,6 +22,14 @@ services:
         resource: '../src/User/*'
         exclude: '../src/User/{DependencyInjection,Entity,Tests,Kernel.php}'
 
+    App\Person\:
+        resource: '../src/Person/*'
+        exclude: '../src/Person/{DependencyInjection,Entity,Tests,Kernel.php}'
+
+    App\Financial\:
+        resource: '../src/Financial/*'
+        exclude: '../src/Financial/{DependencyInjection,Entity,Tests,Kernel.php}'
+
     App\Shared\Notify\NotifyInterface:
         class: 'App\Shared\Notify\Notify'
         public: true
