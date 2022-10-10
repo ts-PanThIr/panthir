@@ -1,9 +1,7 @@
-<template>
-
-</template>
+<template></template>
 
 <script>
 export default {
-  name: "PersonListView"
-}
+  name: "PersonListView",
+};
 </script>

@@ -33,7 +33,7 @@ export const router = createRouter({
         {
           path: "add",
           name: "usersAdd",
-          component: UserEditView ,
+          component: UserEditView,
         },
         {
           path: "edit/:id",

@@ -1,12 +1,6 @@
 <template>
   <v-card>
-    <v-tabs
-        v-model="tab"
-        class="bg-accent mb-3"
-        stacked
-        color="white"
-        grow
-    >
+    <v-tabs v-model="tab" class="bg-accent mb-3" stacked color="white" grow>
       <v-tab value="one">
         <em class="fas fa-person"></em>
         <small class="pt-1">Who</small>
@@ -23,18 +17,20 @@
     <v-window v-model="tab">
       <v-window-item value="one">
         <v-card-text>
-          <PortugalIndividualPersonForm v-model:valid="valid" ></PortugalIndividualPersonForm>
+          <PortugalIndividualPersonForm
+            v-model:valid="valid"
+          ></PortugalIndividualPersonForm>
         </v-card-text>
       </v-window-item>
     </v-window>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn
-          :disabled="!valid"
-          color="success"
-          class="mr-4"
-          @click="validate"
-          align="right"
+        :disabled="!valid"
+        color="success"
+        class="mr-4"
+        align="right"
+        @click="validate"
       >
         Validate
       </v-btn>
@@ -45,7 +41,7 @@
 <script>
 import PortugalIndividualPersonForm from "~/views/person/PortugalIndividualPersonForm.vue";
 import { usePersonStore } from "~/stores";
-import { useRoute } from 'vue-router'
+import { useRoute } from "vue-router";
 
 export default {
   name: "PersonEditView",
@@ -53,7 +49,7 @@ export default {
   async setup() {
     const route = useRoute();
     const personStore = usePersonStore();
-    if(route.name !== "PersonNew") {
+    if (route.name !== "PersonNew") {
       await personStore.getAll();
     }
     const person = personStore.person;
@@ -62,14 +58,14 @@ export default {
   data: () => ({
     valid: true,
     tab: null,
-    name: '',
+    name: "",
     checkbox: false,
   }),
 
   methods: {
     validate() {
-      this.$refs.form.validate()
+      this.$refs.form.validate();
     },
   },
-}
+};
 </script>
