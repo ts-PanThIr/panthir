@@ -5,6 +5,7 @@ export const usePersonStore = defineStore({
   id: "person",
   state: () => ({
     person: {},
+    addresses: []
   }),
   actions: {
     async register(person) {

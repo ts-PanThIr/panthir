@@ -6,7 +6,7 @@ import vuetify from "./plugins/vuetify";
 // import { loadFonts } from "./plugins/webfontloader";
 import axios from "axios";
 import "~/plugins/axios";
-import { piniaPlugins } from "~/stores/plugins";
+import { piniaPlugins } from "~/stores/pluginsStore";
 
 const app = createApp(App);
 // app.config.globalProperties.$http = axios

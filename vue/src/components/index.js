@@ -5,3 +5,4 @@ export { default as TheMainLayout } from "~/components/layout/TheMainLayout.vue"
 export { default as TheEmptyLayout } from "~/components/layout/TheEmptyLayout.vue";
 export { default as BaseGrid } from "~/components/layout/BaseGrid.vue";
 export { default as TheDatepicker } from "~/components/TheDatepicker.vue";
+export { default as TheAddressAddList } from "~/components/TheAddressAddList.vue";
