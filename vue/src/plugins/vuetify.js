@@ -23,6 +23,7 @@ const myCustomLightTheme = {
   colors: {
     background: "#252e42",
     surface: "#2f3b52",
+    surfaceLighten: "#49556C",
     primary: "#d0ea59", //"#b189fa",
     secondary: "#b189fa",
     error: "#e06457",

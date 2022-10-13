@@ -59,7 +59,7 @@ export default {
       await personStore.getAll();
     }
     const person = personStore.person;
-    return { person };
+    return { person, personStore };
   },
   data: () => ({
     tab: null,
