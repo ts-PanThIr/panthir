@@ -19,11 +19,11 @@ trait ContactTrait
 
     #[ORM\Column]
     #[Groups(['person'])]
-    private ?string $phone;
+    private string $phone;
 
     #[ORM\Column]
     #[Groups(['person'])]
-    private ?string $email;
+    private string $email;
 
     public function getId(): ?int
     {
@@ -41,23 +41,23 @@ trait ContactTrait
         return $this;
     }
 
-    public function getPhone(): ?string
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
-    public function setPhone(?string $phone): self
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail(?string $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;

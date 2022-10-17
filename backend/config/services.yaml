@@ -16,7 +16,7 @@ services:
     Doctrine\ORM\EntityManagerInterface: '@doctrine.orm.entity_manager'
 
     App\Shared\:
-        resource: '../src/Shared/{Service}'
+        resource: '../src/Shared/{Service,Notify}'
 
     App\User\:
         resource: '../src/User/*'
@@ -29,7 +29,3 @@ services:
     App\Financial\:
         resource: '../src/Financial/*'
         exclude: '../src/Financial/{DependencyInjection,Entity,Tests,Kernel.php}'
-
-    App\Shared\Notify\NotifyInterface:
-        class: 'App\Shared\Notify\Notify'
-        public: true

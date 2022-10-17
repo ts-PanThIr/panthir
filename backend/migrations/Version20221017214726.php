@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20221006154458 extends AbstractMigration
+final class Version20221017214726 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -28,8 +28,6 @@ final class Version20221006154458 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE person_address_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE person_contact_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE person_individual_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE person_individual_brasil_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE person_individual_portugal_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE person_juridical_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE financial_account (id INT NOT NULL, code VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
@@ -39,7 +37,7 @@ final class Version20221006154458 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_59E8DEF334503CD4 ON financial_movement (installment_financial_id)');
         $this->addSql('CREATE INDEX IDX_59E8DEF396ABA05F ON financial_movement (account_financial_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_59E8DEF3606374F2 ON financial_movement (counterpart_id)');
-        $this->addSql('CREATE TABLE financial_title (id INT NOT NULL, person_id INT DEFAULT NULL, account_financial_id INT DEFAULT NULL, counterpart_account_financial_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, entry_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE financial_title (id INT NOT NULL, person_id INT DEFAULT NULL, account_financial_id INT DEFAULT NULL, counterpart_account_financial_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, entry_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, is_individual_person BOOLEAN NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_5A579244217BBB47 ON financial_title (person_id)');
         $this->addSql('CREATE INDEX IDX_5A57924496ABA05F ON financial_title (account_financial_id)');
         $this->addSql('CREATE INDEX IDX_5A5792448CE5F2C8 ON financial_title (counterpart_account_financial_id)');
@@ -50,14 +48,10 @@ final class Version20221006154458 extends AbstractMigration
         $this->addSql('CREATE TABLE person_contact (id INT NOT NULL, individual_person_id INT DEFAULT NULL, juridical_person_id INT DEFAULT NULL, contact_name VARCHAR(255) NOT NULL, phone VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_6EFC55B135E9D72B ON person_contact (individual_person_id)');
         $this->addSql('CREATE INDEX IDX_6EFC55B18A15D0A8 ON person_contact (juridical_person_id)');
-        $this->addSql('CREATE TABLE person_individual (id INT NOT NULL, person_id INT DEFAULT NULL, main_address_id INT DEFAULT NULL, main_contact_id INT DEFAULT NULL, birth_date VARCHAR(255) NOT NULL, surname VARCHAR(255) NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE person_individual (id INT NOT NULL, person_id INT DEFAULT NULL, main_address_id INT DEFAULT NULL, main_contact_id INT DEFAULT NULL, birth_date VARCHAR(255) NOT NULL, surname VARCHAR(255) NOT NULL, document VARCHAR(255) NOT NULL, secondary_document VARCHAR(255) NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_B1289F02217BBB47 ON person_individual (person_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_B1289F02CD4FDB16 ON person_individual (main_address_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_B1289F02DF595129 ON person_individual (main_contact_id)');
-        $this->addSql('CREATE TABLE person_individual_brasil (id INT NOT NULL, individual_person_id INT DEFAULT NULL, cpf VARCHAR(255) NOT NULL, rg VARCHAR(255) NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_841918A935E9D72B ON person_individual_brasil (individual_person_id)');
-        $this->addSql('CREATE TABLE person_individual_portugal (id INT NOT NULL, individual_person_id INT DEFAULT NULL, nif VARCHAR(255) NOT NULL, niss VARCHAR(255) NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_CFD1E3E35E9D72B ON person_individual_portugal (individual_person_id)');
         $this->addSql('CREATE TABLE person_juridical (id INT NOT NULL, person_id INT DEFAULT NULL, main_address_id INT DEFAULT NULL, main_contact_id INT DEFAULT NULL, nickname VARCHAR(255) NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_7F3E97B2217BBB47 ON person_juridical (person_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_7F3E97B2CD4FDB16 ON person_juridical (main_address_id)');
@@ -78,8 +72,6 @@ final class Version20221006154458 extends AbstractMigration
         $this->addSql('ALTER TABLE person_individual ADD CONSTRAINT FK_B1289F02217BBB47 FOREIGN KEY (person_id) REFERENCES person (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE person_individual ADD CONSTRAINT FK_B1289F02CD4FDB16 FOREIGN KEY (main_address_id) REFERENCES person_address (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE person_individual ADD CONSTRAINT FK_B1289F02DF595129 FOREIGN KEY (main_contact_id) REFERENCES person_contact (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE person_individual_brasil ADD CONSTRAINT FK_841918A935E9D72B FOREIGN KEY (individual_person_id) REFERENCES person_individual (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE person_individual_portugal ADD CONSTRAINT FK_CFD1E3E35E9D72B FOREIGN KEY (individual_person_id) REFERENCES person_individual (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE person_juridical ADD CONSTRAINT FK_7F3E97B2217BBB47 FOREIGN KEY (person_id) REFERENCES person (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE person_juridical ADD CONSTRAINT FK_7F3E97B2CD4FDB16 FOREIGN KEY (main_address_id) REFERENCES person_address (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE person_juridical ADD CONSTRAINT FK_7F3E97B2DF595129 FOREIGN KEY (main_contact_id) REFERENCES person_contact (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -104,8 +96,6 @@ final class Version20221006154458 extends AbstractMigration
         $this->addSql('ALTER TABLE person_juridical DROP CONSTRAINT FK_7F3E97B2DF595129');
         $this->addSql('ALTER TABLE person_address DROP CONSTRAINT FK_2FD0DC0835E9D72B');
         $this->addSql('ALTER TABLE person_contact DROP CONSTRAINT FK_6EFC55B135E9D72B');
-        $this->addSql('ALTER TABLE person_individual_brasil DROP CONSTRAINT FK_841918A935E9D72B');
-        $this->addSql('ALTER TABLE person_individual_portugal DROP CONSTRAINT FK_CFD1E3E35E9D72B');
         $this->addSql('ALTER TABLE person_address DROP CONSTRAINT FK_2FD0DC088A15D0A8');
         $this->addSql('ALTER TABLE person_contact DROP CONSTRAINT FK_6EFC55B18A15D0A8');
         $this->addSql('DROP SEQUENCE financial_account_id_seq CASCADE');
@@ -116,8 +106,6 @@ final class Version20221006154458 extends AbstractMigration
         $this->addSql('DROP SEQUENCE person_address_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE person_contact_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE person_individual_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE person_individual_brasil_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE person_individual_portugal_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE person_juridical_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE "user_id_seq" CASCADE');
         $this->addSql('DROP TABLE financial_account');
@@ -128,8 +116,6 @@ final class Version20221006154458 extends AbstractMigration
         $this->addSql('DROP TABLE person_address');
         $this->addSql('DROP TABLE person_contact');
         $this->addSql('DROP TABLE person_individual');
-        $this->addSql('DROP TABLE person_individual_brasil');
-        $this->addSql('DROP TABLE person_individual_portugal');
         $this->addSql('DROP TABLE person_juridical');
         $this->addSql('DROP TABLE "user"');
     }

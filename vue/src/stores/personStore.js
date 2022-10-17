@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import { useAddressStore } from "~/stores";
+import {useAddressStore, useContactStore} from "~/stores";
+import { FormHelper } from "~/helpers";
 
 export const usePersonStore = defineStore({
   id: "person",
   state: () => ({
     person: {},
-    addresses: useAddressStore(),
   }),
   actions: {
     async getAll() {
@@ -21,13 +21,17 @@ export const usePersonStore = defineStore({
     },
     async send() {
       try {
+        this.person.addresses = useAddressStore().list
+        this.person.contacts = useContactStore().list
+        const formData = FormHelper.jsonToFormData(this.person)
+
         this.person = await this.$http
-          .get(`${this.$apiUrl}/api/person`)
+          .post(`${this.$apiUrl}/api/person/`, formData)
           .then((d) => {
             return d.data.data;
           });
       } catch (error) {
-        this.person = { error };
+        console.log(error)
       }
     },
   },

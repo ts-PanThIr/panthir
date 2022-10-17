@@ -26,7 +26,7 @@
       </v-col>
       <v-col cols="4">
         <v-text-field
-          v-model="person.nif"
+          v-model="person.document"
           v-mask="'###.###.###'"
           :rules="[(v) => !!v || 'Item is required']"
           label="NIF"
@@ -35,7 +35,7 @@
       </v-col>
       <v-col cols="4">
         <v-text-field
-          v-model="person.niss"
+          v-model="person.secondaryDocument"
           :rules="[(v) => !!v || 'Item is required']"
           label="NISS"
           required

@@ -30,6 +30,14 @@ class IndividualPersonEntity
     #[Groups(['person'])]
     private string $surname;
 
+    #[ORM\Column]
+    #[Groups(['person'])]
+    private string $document;
+
+    #[ORM\Column]
+    #[Groups(['person'])]
+    private string $secondaryDocument;
+
     #[ORM\OneToOne(targetEntity: PersonEntity::class)]
     #[ORM\JoinColumn(name: "person_id", referencedColumnName: "id")]
     #[Groups(['person'])]
@@ -103,6 +111,27 @@ class IndividualPersonEntity
     public function setMainContact(?PersonContactEntity $mainContact): static
     {
         $this->mainContact = $mainContact;
+        return $this;
+    }
+
+    public function getDocument(): string
+    {
+        return $this->document;
+    }
+    public function setDocument(string $document): static
+    {
+        $this->document = $document;
+        return $this;
+    }
+
+    public function getSecondaryDocument(): string
+    {
+        return $this->secondaryDocument;
+    }
+
+    public function setSecondaryDocument(string $secondaryDocument): static
+    {
+        $this->secondaryDocument = $secondaryDocument;
         return $this;
     }
 }

@@ -14,27 +14,25 @@
         <small class="pt-1">Contact</small>
       </v-tab>
     </v-tabs>
-    <KeepAlive>
-      <v-window v-model="tab">
-        <v-window-item value="1" eager>
-          <v-card-text>
-            <PortugalIndividualPersonForm
-              ref="personIndividual"
-            ></PortugalIndividualPersonForm>
-          </v-card-text>
-        </v-window-item>
-        <v-window-item value="2" eager>
-          <v-card-text>
-            <TheAddressAddList ref="address"></TheAddressAddList>
-          </v-card-text>
-        </v-window-item>
-        <v-window-item value="3" eager>
-          <v-card-text>
-            <TheContactAddList ref="contact"></TheContactAddList>
-          </v-card-text>
-        </v-window-item>
-      </v-window>
-    </KeepAlive>
+    <v-window v-model="tab">
+      <v-window-item value="1" eager>
+        <v-card-text>
+          <PortugalIndividualPersonForm
+            ref="personIndividual"
+          ></PortugalIndividualPersonForm>
+        </v-card-text>
+      </v-window-item>
+      <v-window-item value="2" eager>
+        <v-card-text>
+          <TheAddressAddList ref="address"></TheAddressAddList>
+        </v-card-text>
+      </v-window-item>
+      <v-window-item value="3" eager>
+        <v-card-text>
+          <TheContactAddList ref="contact"></TheContactAddList>
+        </v-card-text>
+      </v-window-item>
+    </v-window>
     <v-container fluid class="justify-end d-flex">
       <v-btn color="success" @click="validate"> Send </v-btn>
     </v-container>

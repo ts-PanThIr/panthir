@@ -6,5 +6,9 @@ user:
     resource: '../src/User/Controller/'
     type: annotation
 
+person:
+    resource: '../src/Person/Controller/'
+    type: annotation
+
 api_login_check:
     path: /api/login_check

@@ -21,7 +21,7 @@
         </v-col>
         <v-col cols="10">
           <v-row>
-            <v-col cols="6" sm="3">
+            <v-col cols="4" sm="4">
               <v-text-field
                 v-model="item.name"
                 :rules="[(v) => !!v || 'Item is required']"
@@ -30,7 +30,7 @@
                 density="compact"
               ></v-text-field>
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col cols="4" sm="4">
               <v-text-field
                 v-model="item.email"
                 :rules="emailRules"
@@ -38,7 +38,7 @@
                 density="compact"
               ></v-text-field>
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col cols="6" sm="3" v-if="false">
               <v-autocomplete
                 v-model="item.ddi"
                 :items="ddiList"
@@ -68,7 +68,7 @@
                 </template>
               </v-autocomplete>
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col cols="4" sm="4">
               <v-text-field
                 v-model="item.phone"
                 :rules="[(v) => !!v || 'Item is required']"

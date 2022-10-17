@@ -46,6 +46,10 @@ class TitleFinancialEntity
     #[Groups(['financial'])]
     private PersonEntity $person;
 
+    #[ORM\Column]
+    #[Groups(['financial'])]
+    private ?bool $isIndividualPerson;
+
     #[ManyToOne(targetEntity: AccountsFinancialEntity::class)]
     #[JoinColumn(name: "account_financial_id", referencedColumnName: "id")]
     #[Groups(['financial'])]
@@ -113,6 +117,17 @@ class TitleFinancialEntity
     public function setPerson(PersonEntity $person): self
     {
         $this->person = $person;
+        return $this;
+    }
+
+    public function getIsIndividualPerson(): ?bool
+    {
+        return $this->isIndividualPerson;
+    }
+
+    public function setIsIndividualPerson(?bool $isIndividualPerson): self
+    {
+        $this->isIndividualPerson = $isIndividualPerson;
         return $this;
     }
 

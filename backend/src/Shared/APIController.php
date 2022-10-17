@@ -3,10 +3,15 @@
 namespace App\Shared;
 
 use App\Shared\Notify\NotifyInterface;
+use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class ApiController extends AbstractController
@@ -56,4 +61,20 @@ abstract class ApiController extends AbstractController
 
         return array_merge($data, $request->query->all());
     }
+
+//    /**
+//     * @param array $data
+//     * @param Object $object
+//     * @return Object
+//     */
+//    protected function arrayToObject(array $data, string $objectName): Object
+//    {
+////        $entityAsArray = $serializer->normalize($entity, null);
+////        $serializer = new Serializer(
+////            [new GetSetMethodNormalizer(), new ArrayDenormalizer()],
+////            [new JsonEncoder()]
+////        );
+////
+////        return $serializer->deserialize($data, $objectName);
+//    }
 }
