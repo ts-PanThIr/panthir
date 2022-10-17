@@ -4,78 +4,88 @@
       <v-row class="justify-center">
         <v-btn size="large" color="info" @click="addAddress()">New</v-btn>
       </v-row>
-      <v-row v-for="(item, index) in addresses" :key="index" :class="(index %2 !== 0)? 'bg-surfaceLighten': ''" class="py-4">
+      <v-row
+        v-for="(item, index) in addresses"
+        :key="index"
+        :class="index % 2 !== 0 ? 'bg-surfaceLighten' : ''"
+        class="py-4"
+      >
         <v-col cols="2" class="d-flex justify-center align-center flex-column">
-          <v-btn size="small" icon="fa fa-times" color="error" @click="deleteAddress(index)"></v-btn>
+          <v-btn
+            size="small"
+            icon="fa fa-times"
+            color="error"
+            @click="deleteAddress(index)"
+          ></v-btn>
           <v-radio label="Primary" :value="index"></v-radio>
         </v-col>
         <v-col cols="10">
           <v-row>
             <v-col cols="6" sm="3">
               <v-text-field
-                  v-model="item.name"
-                  :rules="[(v) => !!v || 'Item is required']"
-                  label="Name"
-                  required
-                  density="compact"
+                v-model="item.name"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Name"
+                required
+                density="compact"
               ></v-text-field>
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
-                  v-model="item.zip"
-                  label="Zip"
-                  density="compact"
-                  v-mask="'#####-###'"
+                v-model="item.zip"
+                v-mask="'#####-###'"
+                label="Zip"
+                density="compact"
               ></v-text-field>
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
-                  v-model="item.contry"
-                  :rules="[(v) => !!v || 'Item is required']"
-                  label="Country"
-                  density="compact"
-                  required
+                v-model="item.country"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Country"
+                density="compact"
+                required
               ></v-text-field>
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
-                  v-model="item.district"
-                  :rules="[(v) => !!v || 'Item is required']"
-                  label="District"
-                  required
-                  density="compact"
+                v-model="item.district"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="District"
+                required
+                density="compact"
               ></v-text-field>
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
-                  v-model="item.city"
-                  :rules="[(v) => !!v || 'Item is required']"
-                  label="City"
-                  required
-                  density="compact"
+                v-model="item.city"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="City"
+                required
+                density="compact"
               ></v-text-field>
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
-                  v-model="item.address"
-                  :rules="[(v) => !!v || 'Item is required']"
-                  label="Address"
-                  required
-                  density="compact"
+                v-model="item.address"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Address"
+                required
+                density="compact"
               ></v-text-field>
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
-                  v-model="item.complement"
-                  label="Complement"
-                  density="compact"
+                v-model="item.complement"
+                label="Complement"
+                density="compact"
               ></v-text-field>
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
-                  v-model="item.number"
-                  label="Number"
-                  density="compact"
+                v-model="item.number"
+                label="Number"
+                density="compact"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -87,7 +97,7 @@
 
 <script>
 import { mask } from "vue-the-mask";
-import {useAddressStore} from "~/stores";
+import { useAddressStore } from "~/stores";
 
 export default {
   name: "TheAddressAddList",
@@ -95,9 +105,9 @@ export default {
   setup: async function () {
     const addressStore = useAddressStore();
     const addresses = addressStore.list;
-    const deleteAddress = addressStore.delete
-    const addAddress = addressStore.add
+    const deleteAddress = addressStore.delete;
+    const addAddress = addressStore.createNewItem;
     return { addresses, deleteAddress, addAddress };
   },
-}
+};
 </script>

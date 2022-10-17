@@ -11,7 +11,7 @@
       </v-tab>
       <v-tab value="3">
         <em class="fas fa-mobile-alt"></em>
-        <small class="pt-1">Phone</small>
+        <small class="pt-1">Contact</small>
       </v-tab>
     </v-tabs>
     <KeepAlive>
@@ -25,20 +25,18 @@
         </v-window-item>
         <v-window-item value="2" eager>
           <v-card-text>
-            <TheAddressAddList
-                ref="address"
-            ></TheAddressAddList>
+            <TheAddressAddList ref="address"></TheAddressAddList>
+          </v-card-text>
+        </v-window-item>
+        <v-window-item value="3" eager>
+          <v-card-text>
+            <TheContactAddList ref="contact"></TheContactAddList>
           </v-card-text>
         </v-window-item>
       </v-window>
     </KeepAlive>
     <v-container fluid class="justify-end d-flex">
-      <v-btn
-        color="success"
-        @click="validate"
-      >
-        Validate
-      </v-btn>
+      <v-btn color="success" @click="validate"> Send </v-btn>
     </v-container>
   </v-card>
 </template>
@@ -47,11 +45,20 @@
 import PortugalIndividualPersonForm from "~/views/person/PortugalIndividualPersonForm.vue";
 import { usePersonStore } from "~/stores";
 import { useRoute } from "vue-router";
-import {TheAddressAddList} from "~/components";
+import {
+  TheAddressAddList,
+  TheDatepicker,
+  TheContactAddList,
+} from "~/components";
 
 export default {
   name: "PersonEditView",
-  components: { PortugalIndividualPersonForm, TheAddressAddList },
+  components: {
+    TheContactAddList,
+    PortugalIndividualPersonForm,
+    TheAddressAddList,
+    TheDatepicker,
+  },
   async setup() {
     const route = useRoute();
     const personStore = usePersonStore();
@@ -59,7 +66,8 @@ export default {
       await personStore.getAll();
     }
     const person = personStore.person;
-    return { person, personStore };
+    const personSend = personStore.send;
+    return { person, personStore, personSend };
   },
   data: () => ({
     tab: null,
@@ -69,7 +77,7 @@ export default {
 
   methods: {
     validate: async function () {
-      if (!(await this.$refs.personIndividual.$refs.form.validate()).valid){
+      if (!(await this.$refs.personIndividual.$refs.form.validate()).valid) {
         this.tab = "1";
         return;
       }
@@ -77,12 +85,13 @@ export default {
         this.tab = "2";
         return;
       }
+      if (!(await this.$refs.contact.$refs.form.validate()).valid) {
+        this.tab = "3";
+        return;
+      }
 
-      this.send()
+      this.personSend();
     },
-    send: function() {
-      console.log("aee")
-    }
   },
 };
 </script>

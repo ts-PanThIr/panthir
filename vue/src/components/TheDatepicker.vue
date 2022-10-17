@@ -3,10 +3,10 @@
     v-model="model"
     auto-apply
     text-input
-    modelType="dd/MM/yyyy"
+    model-type="dd/MM/yyyy"
     dark
     :required="required"
-    :enableTimePicker="!hours"
+    :enable-time-picker="!hours"
   >
     <template #dp-input>
       <v-text-field
