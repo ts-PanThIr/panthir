@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { FormHelper } from "~/helpers";
 
 export const useAuthStore = defineStore({
   id: "auth",
@@ -15,7 +14,6 @@ export const useAuthStore = defineStore({
           username: username,
           password: password,
         };
-        // const formData = FormHelper.jsonToFormData(data)
         const user = await this.$http.post(
           `${this.$apiUrl}/api/login_check`,
           JSON.stringify(data),

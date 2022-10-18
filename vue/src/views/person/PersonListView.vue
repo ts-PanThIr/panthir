@@ -1,4 +1,6 @@
-<template></template>
+<template>
+  <div>aee</div>
+</template>
 
 <script>
 export default {

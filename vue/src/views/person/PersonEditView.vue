@@ -34,7 +34,7 @@
       </v-window-item>
     </v-window>
     <v-container fluid class="justify-end d-flex">
-      <v-btn color="success" @click="validate"> Send </v-btn>
+      <v-btn color="success" @click="validate"> Send</v-btn>
     </v-container>
   </v-card>
 </template>
@@ -43,11 +43,7 @@
 import PortugalIndividualPersonForm from "~/views/person/PortugalIndividualPersonForm.vue";
 import { usePersonStore } from "~/stores";
 import { useRoute } from "vue-router";
-import {
-  TheAddressAddList,
-  TheDatepicker,
-  TheContactAddList,
-} from "~/components";
+import { TheAddressAddList, TheContactAddList } from "~/components";
 
 export default {
   name: "PersonEditView",
@@ -55,7 +51,6 @@ export default {
     TheContactAddList,
     PortugalIndividualPersonForm,
     TheAddressAddList,
-    TheDatepicker,
   },
   async setup() {
     const route = useRoute();

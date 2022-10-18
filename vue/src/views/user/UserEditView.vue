@@ -1,5 +1,4 @@
 <script setup>
-import { Form, Field } from "vee-validate";
 import * as Yup from "yup";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -8,7 +7,6 @@ import { useUsersStore } from "~/stores";
 import { router } from "~/router";
 
 const usersStore = useUsersStore();
-const alertStore = useAlertStore();
 const route = useRoute();
 const id = route.params.id;
 
@@ -43,9 +41,9 @@ async function onSubmit(values) {
       message = "User added";
     }
     await router.push("/users");
-    alertStore.success(message);
+    console.log(message);
   } catch (error) {
-    alertStore.error(error);
+    console.log(error);
   }
 }
 </script>

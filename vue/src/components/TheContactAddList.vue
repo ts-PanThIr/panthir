@@ -5,7 +5,7 @@
         <v-btn size="large" color="info" @click="addContact()">New</v-btn>
       </v-row>
       <v-row
-        v-for="(item, index) in contacts"
+        v-for="(row, index) in contacts"
         :key="index"
         :class="index % 2 !== 0 ? 'bg-surfaceLighten' : ''"
         class="py-4"
@@ -23,7 +23,7 @@
           <v-row>
             <v-col cols="4" sm="4">
               <v-text-field
-                v-model="item.name"
+                v-model="row.name"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Name"
                 required
@@ -32,15 +32,15 @@
             </v-col>
             <v-col cols="4" sm="4">
               <v-text-field
-                v-model="item.email"
+                v-model="row.email"
                 :rules="emailRules"
                 label="E-mail"
                 density="compact"
               ></v-text-field>
             </v-col>
-            <v-col cols="6" sm="3" v-if="false">
+            <v-col v-if="false" cols="6" sm="3">
               <v-autocomplete
-                v-model="item.ddi"
+                v-model="row.ddi"
                 :items="ddiList"
                 :menu-props="{ maxHeight: 300 }"
                 :rules="[(v) => !!v || 'Item is required']"
@@ -70,7 +70,7 @@
             </v-col>
             <v-col cols="4" sm="4">
               <v-text-field
-                v-model="item.phone"
+                v-model="row.phone"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Phone"
                 required
