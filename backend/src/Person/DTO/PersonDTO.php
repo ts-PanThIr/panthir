@@ -2,9 +2,8 @@
 
 namespace App\Person\DTO;
 
-use App\Person\Entity\PersonAddressEntity;
-use App\Person\Entity\PersonContactEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class PersonDTO
@@ -17,13 +16,13 @@ class PersonDTO
 
     private bool $isIndividual;
 
-    private PersonAddressEntity $mainAddress;
+    private PersonAddressDTO $mainAddress;
 
-    private PersonContactEntity $mainContact;
+    private PersonContactDTO $mainContact;
 
-    private ArrayCollection $addresses;
+    private Collection $addresses;
 
-    private ArrayCollection $contacts;
+    private Collection $contacts;
 
     private \DateTime $birthDate;
 
@@ -38,6 +37,12 @@ class PersonDTO
     private \DateTime $createdAt;
 
     private UserInterface $createdBy;
+
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -96,7 +101,7 @@ class PersonDTO
     /**
      * @return bool
      */
-    public function isIndividual(): bool
+    public function getIsIndividual(): bool
     {
         return $this->isIndividual;
     }
@@ -112,75 +117,139 @@ class PersonDTO
     }
 
     /**
-     * @return PersonAddressEntity
+     * @return PersonAddressDTO
      */
-    public function getMainAddress(): PersonAddressEntity
+    public function getMainAddress(): PersonAddressDTO
     {
         return $this->mainAddress;
     }
 
     /**
-     * @param PersonAddressEntity $mainAddress
+     * @param PersonAddressDTO $mainAddress
      * @return PersonDTO
      */
-    public function setMainAddress(PersonAddressEntity $mainAddress): PersonDTO
+    public function setMainAddress(PersonAddressDTO $mainAddress): PersonDTO
     {
         $this->mainAddress = $mainAddress;
         return $this;
     }
 
     /**
-     * @return PersonContactEntity
+     * @return PersonContactDTO
      */
-    public function getMainContact(): PersonContactEntity
+    public function getMainContact(): PersonContactDTO
     {
         return $this->mainContact;
     }
 
     /**
-     * @param PersonContactEntity $mainContact
+     * @param PersonContactDTO $mainContact
      * @return PersonDTO
      */
-    public function setMainContact(PersonContactEntity $mainContact): PersonDTO
+    public function setMainContact(PersonContactDTO $mainContact): PersonDTO
     {
         $this->mainContact = $mainContact;
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getAddresses(): ArrayCollection
+    public function getAddresses(): Collection
     {
         return $this->addresses;
     }
 
     /**
-     * @param ArrayCollection $addresses
+     * @param PersonAddressDTO $addressDTO
+     * @return $this
+     */
+    public function addAddresses(PersonAddressDTO $addressDTO): self
+    {
+        if (!$this->addresses->contains($addressDTO)) {
+            $this->addresses->add($addressDTO);
+        }
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAddresses(): bool
+    {
+        return count($this->addresses) > 0;
+    }
+
+    /**
+     * @param PersonAddressDTO $addressDTO
+     * @return $this
+     */
+    public function removeAddresses(PersonAddressDTO $addressDTO): self
+    {
+        if ($this->addresses->contains($addressDTO)) {
+            $this->addresses->removeElement($addressDTO);
+        }
+        return $this;
+    }
+
+    /**
+     * @param Collection $addresses
      * @return PersonDTO
      */
-    public function setAddresses(ArrayCollection $addresses): PersonDTO
+    public function setAddresses(Collection $addresses): self
     {
         $this->addresses = $addresses;
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getContacts(): ArrayCollection
+    public function getContacts(): Collection
     {
         return $this->contacts;
     }
 
     /**
-     * @param ArrayCollection $contacts
+     * @param Collection $contacts
      * @return PersonDTO
      */
-    public function setContacts(ArrayCollection $contacts): PersonDTO
+    public function setContacts(Collection $contacts): self
     {
         $this->contacts = $contacts;
         return $this;
+    }
+
+    /**
+     * @param PersonContactDTO $contactDTO
+     * @return $this
+     */
+    public function addContacts(PersonContactDTO $contactDTO): self
+    {
+        if (!$this->contacts->contains($contactDTO)) {
+            $this->contacts->add($contactDTO);
+        }
+        return $this;
+    }
+
+    /**
+     * @param PersonContactDTO $contactDTO
+     * @return $this
+     */
+    public function removeContacts(PersonContactDTO $contactDTO): self
+    {
+        if ($this->contacts->contains($contactDTO)) {
+            $this->contacts->removeElement($contactDTO);
+        }
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasContacts(): bool
+    {
+        return count($this->contacts) > 0;
     }
 
     /**
