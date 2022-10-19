@@ -23,6 +23,7 @@ class ContactManager
             ->setEmail($contactDTO->getEmail())
             ->setContactName($contactDTO->getName())
             ->setPhone($contactDTO->getPhone())
+            ->setPerson($contactDTO->getPersonEntity())
         ;
 
         $this->entityManager->persist($contact);

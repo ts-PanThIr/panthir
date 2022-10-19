@@ -40,41 +40,83 @@ class JuridicalPersonEntity
     #[Groups(['person'])]
     private ?PersonContactEntity $mainContact = null;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getNickname(): ?string
     {
         return $this->nickname;
     }
 
+    /**
+     * @param string $nickname
+     * @return self
+     */
     public function setNickname(string $nickname): static
     {
         $this->nickname = $nickname;
         return $this;
     }
 
+    /**
+     * @return PersonAddressEntity|null
+     */
     public function getMainAddress(): ?PersonAddressEntity
     {
         return $this->mainAddress;
     }
 
+    /**
+     * @param PersonAddressEntity|null $mainAddress
+     * @return self
+     */
     public function setMainAddress(?PersonAddressEntity $mainAddress): static
     {
         $this->mainAddress = $mainAddress;
         return $this;
     }
 
+    /**
+     * @return PersonContactEntity|null
+     */
     public function getMainContact(): ?PersonContactEntity
     {
         return $this->mainContact;
     }
 
+    /**
+     * @param PersonContactEntity|null $mainContact
+     * @return self
+     */
     public function setMainContact(?PersonContactEntity $mainContact): static
     {
         $this->mainContact = $mainContact;
+        return $this;
+    }
+
+    /**
+     * @return PersonEntity
+     */
+    public function getPerson(): PersonEntity
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param PersonEntity $person
+     * @return self
+     */
+    public function setPerson(PersonEntity $person): static
+    {
+        $this->person = $person;
         return $this;
     }
 }

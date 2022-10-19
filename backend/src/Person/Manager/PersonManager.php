@@ -3,6 +3,7 @@
 namespace App\Person\Manager;
 
 use App\Person\DTO\PersonAddressDTO;
+use App\Person\DTO\PersonContactDTO;
 use App\Person\DTO\PersonDTO;
 use App\Person\Entity\IndividualPersonEntity;
 use App\Person\Entity\PersonEntity;
@@ -29,7 +30,7 @@ class PersonManager
         ;
         $this->entityManager->persist($person);
 
-        if ($personDTO->getIsIndividual()) {
+        if ($personDTO->IsIndividual()) {
             $personIndividual = new IndividualPersonEntity();
             $personIndividual
                 ->setBirthDate($personDTO->getBirthDate())
@@ -43,10 +44,14 @@ class PersonManager
 
         /** @var PersonAddressDTO $address */
         foreach($personDTO->getAddresses() as $address) {
-            $address->setPersonEntity($personIndividual);
+            $address->setIndividual($personDTO->IsIndividual());
+            $address->setPersonEntity($person);
             $this->addressManager->saveAddress($address);
         }
+        /** @var PersonContactDTO $contact */
         foreach($personDTO->getContacts() as $contact) {
+            $contact->setIndividual($personDTO->IsIndividual());
+            $contact->setPersonEntity($person);
             $this->contactManager->saveContact($contact);
         }
 

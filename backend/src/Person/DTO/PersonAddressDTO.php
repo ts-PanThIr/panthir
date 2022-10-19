@@ -16,13 +16,15 @@ class PersonAddressDTO
 
     private string $address;
 
-    private string $addressComplement;
+    private ?string $addressComplement = null;
 
     private string $number;
 
     private string $zip;
 
     private PersonEntity $personEntity;
+
+    private bool $individual;
 
     /**
      * @return int
@@ -115,18 +117,18 @@ class PersonAddressDTO
     }
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getAddressComplement(): string
+    public function getAddressComplement(): ?string
     {
         return $this->addressComplement;
     }
 
     /**
-     * @param string $addressComplement
+     * @param ?string $addressComplement
      * @return PersonAddressDTO
      */
-    public function setAddressComplement(string $addressComplement): PersonAddressDTO
+    public function setAddressComplement(?string $addressComplement): PersonAddressDTO
     {
         $this->addressComplement = $addressComplement;
         return $this;
@@ -183,6 +185,24 @@ class PersonAddressDTO
     public function setPersonEntity(PersonEntity $personEntity): PersonAddressDTO
     {
         $this->personEntity = $personEntity;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function IsIndividual(): bool
+    {
+        return $this->individual;
+    }
+
+    /**
+     * @param bool $individual
+     * @return self
+     */
+    public function setIndividual(bool $individual): self
+    {
+        $this->individual = $individual;
         return $this;
     }
 }

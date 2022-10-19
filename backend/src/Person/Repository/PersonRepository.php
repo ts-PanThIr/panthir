@@ -20,5 +20,4 @@ class PersonRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, PersonEntity::class);
     }
-
 }

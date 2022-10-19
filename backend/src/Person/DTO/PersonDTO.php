@@ -2,6 +2,7 @@
 
 namespace App\Person\DTO;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,9 +13,9 @@ class PersonDTO
 
     private string $name;
 
-    private ?string $additionInformation;
+    private ?string $additionInformation = null;
 
-    private bool $isIndividual;
+    private bool $individual;
 
     private PersonAddressDTO $mainAddress;
 
@@ -24,17 +25,17 @@ class PersonDTO
 
     private Collection $contacts;
 
-    private \DateTime $birthDate;
+    private ?DateTime $birthDate = null;
 
-    private ?string $surname;
+    private ?string $surname = null;
 
-    private ?string $nickname;
+    private ?string $nickname = null;
 
     private string $document;
 
-    private ?string $secondaryDocument;
+    private ?string $secondaryDocument = null;
 
-    private \DateTime $createdAt;
+    private DateTime $createdAt;
 
     private UserInterface $createdBy;
 
@@ -101,18 +102,18 @@ class PersonDTO
     /**
      * @return bool
      */
-    public function getIsIndividual(): bool
+    public function IsIndividual(): bool
     {
-        return $this->isIndividual;
+        return $this->individual;
     }
 
     /**
-     * @param bool $isIndividual
+     * @param bool $individual
      * @return PersonDTO
      */
-    public function setIsIndividual(bool $isIndividual): PersonDTO
+    public function setIndividual(bool $individual): PersonDTO
     {
-        $this->isIndividual = $isIndividual;
+        $this->individual = $individual;
         return $this;
     }
 
@@ -253,18 +254,29 @@ class PersonDTO
     }
 
     /**
-     * @return \DateTime
+     * @return ?DateTime
      */
-    public function getBirthDate(): \DateTime
+    public function getBirthDate(): ?DateTime
     {
         return $this->birthDate;
     }
 
     /**
-     * @param \DateTime $birthDate
+     * @return string
+     */
+    public function getFormattedBirthDate(): String
+    {
+        if(empty($this->birthDate)) {
+            return '';
+        }
+        return date_format($this->birthDate, 'd-m-Y');
+    }
+
+    /**
+     * @param DateTime $birthDate
      * @return PersonDTO
      */
-    public function setBirthDate(\DateTime $birthDate): PersonDTO
+    public function setBirthDate(DateTime $birthDate): PersonDTO
     {
         $this->birthDate = $birthDate;
         return $this;
@@ -343,18 +355,18 @@ class PersonDTO
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      * @return PersonDTO
      */
-    public function setCreatedAt(\DateTime $createdAt): PersonDTO
+    public function setCreatedAt(DateTime $createdAt): PersonDTO
     {
         $this->createdAt = $createdAt;
         return $this;
@@ -375,6 +387,17 @@ class PersonDTO
     public function setCreatedBy(UserInterface $createdBy): PersonDTO
     {
         $this->createdBy = $createdBy;
+        return $this;
+    }
+
+    public function getAdditionalInformation(): ?string
+    {
+        return $this->additionalInformation;
+    }
+
+    public function setAdditionalInformation(?string $additionalInformation): static
+    {
+        $this->additionalInformation = $additionalInformation;
         return $this;
     }
 }

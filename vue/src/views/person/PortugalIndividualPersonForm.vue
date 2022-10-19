@@ -63,6 +63,7 @@ export default {
   async setup() {
     const personStore = usePersonStore();
     const person = personStore.person;
+    personStore.person.individual = true;
     return { person };
   },
 };

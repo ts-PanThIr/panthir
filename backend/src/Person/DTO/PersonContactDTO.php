@@ -2,6 +2,8 @@
 
 namespace App\Person\DTO;
 
+use App\Person\Entity\PersonEntity;
+
 class PersonContactDTO
 {
     private int $id;
@@ -11,6 +13,10 @@ class PersonContactDTO
     private string $email;
 
     private string $phone;
+
+    private PersonEntity $personEntity;
+
+    private bool $individual;
 
     /**
      * @return int
@@ -81,6 +87,42 @@ class PersonContactDTO
     public function setPhone(string $phone): PersonContactDTO
     {
         $this->phone = $phone;
+        return $this;
+    }
+
+    /**
+     * @return PersonEntity
+     */
+    public function getPersonEntity(): PersonEntity
+    {
+        return $this->personEntity;
+    }
+
+    /**
+     * @param PersonEntity $personEntity
+     * @return self
+     */
+    public function setPersonEntity(PersonEntity $personEntity): self
+    {
+        $this->personEntity = $personEntity;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function IsIndividual(): bool
+    {
+        return $this->individual;
+    }
+
+    /**
+     * @param bool $individual
+     * @return self
+     */
+    public function setIndividual(bool $individual): self
+    {
+        $this->individual = $individual;
         return $this;
     }
 }

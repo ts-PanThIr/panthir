@@ -8,13 +8,16 @@ export const usePersonStore = defineStore({
     person: {},
   }),
   actions: {
-    async getAll() {
+    async getAll(id = null) {
       try {
-        this.person = await this.$http
-          .get(`${this.$apiUrl}/api/person`)
-          .then((d) => {
-            return d.data.data;
-          });
+        let path = `${this.$apiUrl}/api/person`;
+        if (id) {
+          path = `${this.$apiUrl}/api/person/${id}`;
+        }
+
+        this.person = await this.$http.get(path).then((d) => {
+          return d.data.data;
+        });
       } catch (error) {
         this.person = { error };
       }

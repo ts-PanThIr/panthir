@@ -15,13 +15,48 @@ class PersonContactEntity
 {
     use ContactTrait;
 
-    #[ManyToOne(targetEntity: IndividualPersonEntity::class)]
-    #[JoinColumn(name: "individual_person_id", referencedColumnName: "id")]
+    #[ORM\Column]
     #[Groups(['person'])]
-    private IndividualPersonEntity $individualPerson;
+    private bool $individual = true;
 
-    #[ManyToOne(targetEntity: JuridicalPersonEntity::class)]
-    #[JoinColumn(name: "juridical_person_id", referencedColumnName: "id")]
+    #[ManyToOne(targetEntity: PersonEntity::class)]
+    #[JoinColumn(name: "person_id", referencedColumnName: "id")]
     #[Groups(['person'])]
-    private JuridicalPersonEntity $juridicalPerson;
+    private PersonEntity $person;
+
+    /**
+     * @return bool
+     */
+    public function isIndividual(): bool
+    {
+        return $this->individual;
+    }
+
+    /**
+     * @param bool $individual
+     * @return self
+     */
+    public function setIndividual(bool $individual): self
+    {
+        $this->individual = $individual;
+        return $this;
+    }
+
+    /**
+     * @return PersonEntity
+     */
+    public function getPerson(): PersonEntity
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param PersonEntity $person
+     * @return self
+     */
+    public function setPerson(PersonEntity $person): self
+    {
+        $this->person = $person;
+        return $this;
+    }
 }
