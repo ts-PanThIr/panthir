@@ -35,7 +35,7 @@ class JuridicalPersonEntity
     #[Groups(['person'])]
     private ?PersonAddressEntity $mainAddress = null;
 
-    #[ORM\OneToOne(targetEntity: PersonContactEntity::class)]
+    #[ORM\OneToOne(inversedBy: 'juridicalPerson', targetEntity: PersonContactEntity::class)]
     #[ORM\JoinColumn(name: "main_contact_id", referencedColumnName: "id")]
     #[Groups(['person'])]
     private ?PersonContactEntity $mainContact = null;

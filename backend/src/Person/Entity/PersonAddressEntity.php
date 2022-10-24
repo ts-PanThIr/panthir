@@ -19,7 +19,7 @@ class PersonAddressEntity
     #[Groups(['person'])]
     private bool $individual = true;
 
-    #[ManyToOne(targetEntity: PersonEntity::class)]
+    #[ManyToOne(targetEntity: PersonEntity::class, inversedBy: "addresses")]
     #[JoinColumn(name: "person_id", referencedColumnName: "id")]
     #[Groups(['person'])]
     private PersonEntity $person;

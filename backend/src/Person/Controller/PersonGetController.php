@@ -7,6 +7,7 @@ use App\Shared\ApiController;
 use App\Shared\Notify\NotifyInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api/person')]
@@ -16,9 +17,11 @@ class PersonGetController extends ApiController
     public function get(
         NotifyInterface $notify,
         EntityManagerInterface $entityManager,
-        string $id
+        string $id,
+        Request $request
     ): JsonResponse
     {
+        $request->query->get("individual");
         $person = $entityManager->getRepository(PersonEntity::class)->find($id);
 
         $notify->addMessage($notify::WARNING, "teste de warning");

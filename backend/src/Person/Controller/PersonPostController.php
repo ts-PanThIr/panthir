@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -27,13 +29,24 @@ class PersonPostController extends ApiController
         EntityManagerInterface $entityManager
     ): JsonResponse
     {
-        $serializer = new Serializer([new ObjectNormalizer()], []);
+
+        $dateCallback = function ($innerObject) {
+            return !empty($innerObject) ? new \DateTime($innerObject) : null;
+        };
+
+        $defaultContext = [
+            AbstractNormalizer::CALLBACKS => [
+                'birthDate' => $dateCallback
+            ],
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['contacts', 'addresses']
+        ];
+
+        $serializer = new Serializer([new ObjectNormalizer(defaultContext: $defaultContext)], []);
 
         /** @var PersonDTO $person */
         $person = $serializer->denormalize(
             data: $request->request->all(),
-            type: PersonDTO::class,
-            context: [AbstractNormalizer::IGNORED_ATTRIBUTES => ['contacts', 'addresses']]
+            type: PersonDTO::class
         );
 
         if(isset($request->request->all()["contacts"])) {
@@ -49,8 +62,8 @@ class PersonPostController extends ApiController
         }
 
         $notify->addMessage($notify::WARNING, "teste de warning");
-        $personManager->savePerson($person);
+        $return = $personManager->savePerson($person);
         $entityManager->flush();
-        return $this->response(items: $person, groups: ['person']);
+        return $this->response(items: $return, groups: ['person']);
     }
 }

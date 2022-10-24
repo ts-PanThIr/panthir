@@ -39,7 +39,7 @@ class IndividualPersonEntity
     #[Groups(['person'])]
     private string $secondaryDocument;
 
-    #[ORM\OneToOne(targetEntity: PersonEntity::class)]
+    #[ORM\OneToOne(inversedBy: 'individualPerson', targetEntity: PersonEntity::class)]
     #[ORM\JoinColumn(name: "person_id", referencedColumnName: "id")]
     #[Groups(['person'])]
     private PersonEntity $person;

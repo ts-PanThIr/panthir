@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
@@ -29,13 +31,21 @@ class PersonEntity
     #[Groups(['person'])]
     private ?string $additionalInformation = null;
 
-    #[ORM\OneToMany(mappedBy: "person_id", targetEntity: PersonAddressEntity::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: "person", targetEntity: PersonAddressEntity::class, cascade: ["persist"])]
     #[Groups(['person'])]
     private Collection $addresses;
 
-    #[ORM\OneToMany(mappedBy: "person_id", targetEntity: PersonContactEntity::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: "person", targetEntity: PersonContactEntity::class, cascade: ["persist"])]
     #[Groups(['person'])]
     private Collection $contacts;
+
+    #[OneToOne(mappedBy: 'person', targetEntity: IndividualPersonEntity::class)]
+    #[Groups(['person'])]
+    private ?IndividualPersonEntity $individualPerson;
+
+    #[OneToOne(mappedBy: 'person', targetEntity: JuridicalPersonEntity::class)]
+    #[Groups(['person'])]
+    private ?JuridicalPersonEntity $juridicalPerson;
 
     public function __construct()
     {
@@ -184,4 +194,41 @@ class PersonEntity
 
         return $this;
     }
+
+    /**
+     * @return IndividualPersonEntity|null
+     */
+    public function getIndividualPerson(): ?IndividualPersonEntity
+    {
+        return $this->individualPerson;
+    }
+
+    /**
+     * @param IndividualPersonEntity|null $individualPerson
+     * @return self
+     */
+    public function setIndividualPerson(?IndividualPersonEntity $individualPerson): self
+    {
+        $this->individualPerson = $individualPerson;
+        return $this;
+    }
+
+    /**
+     * @return JuridicalPersonEntity|null
+     */
+    public function getJuridicalPerson(): ?JuridicalPersonEntity
+    {
+        return $this->juridicalPerson;
+    }
+
+    /**
+     * @param JuridicalPersonEntity|null $juridicalPerson
+     * @return self
+     */
+    public function setJuridicalPerson(?JuridicalPersonEntity $juridicalPerson): self
+    {
+        $this->juridicalPerson = $juridicalPerson;
+        return $this;
+    }
+
 }

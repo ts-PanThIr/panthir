@@ -1,4 +1,5 @@
 <template>
+  {{model}}
   <Datepicker
     v-model="model"
     auto-apply

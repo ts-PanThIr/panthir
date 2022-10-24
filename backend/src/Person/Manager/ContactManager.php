@@ -10,15 +10,25 @@ use Doctrine\ORM\EntityManagerInterface;
 class ContactManager
 {
     public function __construct(
-        private Notify $notify,
-        private EntityManagerInterface $entityManager
+        private readonly Notify                 $notify,
+        private readonly EntityManagerInterface $entityManager
     )
     {
     }
 
-    public function saveContact(PersonContactDTO $contactDTO): void
+    public function saveContact(PersonContactDTO $contactDTO): ?PersonContactEntity
     {
-        $contact = new PersonContactEntity();
+        if($contactDTO->getId()) {
+            $contact = $this->entityManager->getRepository(PersonContactEntity::class)->find($contactDTO->getId());
+            if (empty($contact)) {
+                $this->notify->addMessage($this->notify::ERROR, "Invalid Contact Id.");
+                return null;
+            }
+        }
+        else{
+            $contact = new PersonContactEntity();
+        }
+
         $contact
             ->setEmail($contactDTO->getEmail())
             ->setContactName($contactDTO->getName())
@@ -28,5 +38,6 @@ class ContactManager
 
         $this->entityManager->persist($contact);
         $this->notify->addMessage($this->notify::INFO, "Contact saved");
+        return $contact;
     }
 }

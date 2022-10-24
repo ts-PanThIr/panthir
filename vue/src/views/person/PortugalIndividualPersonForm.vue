@@ -22,7 +22,7 @@
 
     <v-row>
       <v-col cols="4">
-        <TheDatepicker :model="person.birthdate" hours></TheDatepicker>
+        <TheDatepicker v-model="person.birthdate" hours></TheDatepicker>
       </v-col>
       <v-col cols="4">
         <v-text-field

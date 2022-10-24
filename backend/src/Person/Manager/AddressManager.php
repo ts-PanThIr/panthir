@@ -10,16 +10,26 @@ use Doctrine\ORM\EntityManagerInterface;
 class AddressManager
 {
     public function __construct(
-        private readonly Notify $notify,
+        private readonly Notify                 $notify,
         private readonly EntityManagerInterface $entityManager
     )
     {
     }
 
-    public function saveAddress(PersonAddressDTO $addressDTO): void
+    public function saveAddress(PersonAddressDTO $addressDTO): ?PersonAddressEntity
     {
-        $contact = new PersonAddressEntity();
-        $contact
+        if($addressDTO->getId()) {
+            $address = $this->entityManager->getRepository(PersonAddressEntity::class)->find($addressDTO->getId());
+            if (empty($address)) {
+                $this->notify->addMessage($this->notify::ERROR, "Invalid Address Id.");
+                return null;
+            }
+        }
+        else{
+            $address = new PersonAddressEntity();
+        }
+
+        $address
             ->setPerson($addressDTO->getPersonEntity())
             ->setAddress($addressDTO->getAddress())
             ->setAddressComplement($addressDTO->getAddressComplement())
@@ -30,7 +40,8 @@ class AddressManager
             ->setZip($addressDTO->getZip())
         ;
 
-        $this->entityManager->persist($contact);
+        $this->entityManager->persist($address);
         $this->notify->addMessage($this->notify::INFO, "Address saved");
+        return $address;
     }
 }

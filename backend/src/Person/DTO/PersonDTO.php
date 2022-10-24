@@ -273,10 +273,10 @@ class PersonDTO
     }
 
     /**
-     * @param DateTime $birthDate
+     * @param ?DateTime $birthDate
      * @return PersonDTO
      */
-    public function setBirthDate(DateTime $birthDate): PersonDTO
+    public function setBirthDate(?DateTime $birthDate): PersonDTO
     {
         $this->birthDate = $birthDate;
         return $this;

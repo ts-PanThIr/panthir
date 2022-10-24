@@ -13,17 +13,30 @@ use Doctrine\ORM\EntityManagerInterface;
 class PersonManager
 {
     public function __construct(
-        private readonly Notify         $notify,
-        private readonly AddressManager $addressManager,
-        private readonly ContactManager $contactManager,
+        private readonly Notify                 $notify,
+        private readonly AddressManager         $addressManager,
+        private readonly ContactManager         $contactManager,
         private readonly EntityManagerInterface $entityManager
     )
     {
     }
 
-    public function savePerson(PersonDTO $personDTO): void
+    /**
+     * @param PersonDTO $personDTO
+     * @return PersonEntity|null
+     */
+    public function savePerson(PersonDTO $personDTO): ?PersonEntity
     {
-        $person = new PersonEntity();
+        if($personDTO->getId()) {
+            $person = $this->entityManager->getRepository(PersonEntity::class)->find($personDTO->getId());
+            if (empty($person)) {
+                $this->notify->addMessage($this->notify::ERROR, "Invalid Id");
+                return null;
+            }
+        }
+        else{
+            $person = new PersonEntity();
+        }
         $person
             ->setName($personDTO->getName())
             ->setAdditionalInformation($personDTO->getAdditionInformation())
@@ -31,7 +44,17 @@ class PersonManager
         $this->entityManager->persist($person);
 
         if ($personDTO->IsIndividual()) {
-            $personIndividual = new IndividualPersonEntity();
+            if ($person->getIndividualPerson() == null) {
+                $personIndividual = new IndividualPersonEntity();
+            } else {
+                $personIndividual = $this->entityManager->getRepository(IndividualPersonEntity::class)
+                    ->findOneBy(["person" => $personDTO->getId()]);
+                if (empty($personIndividual)) {
+                    $this->notify->addMessage($this->notify::ERROR, "Invalid Id");
+                    return null;
+                }
+            }
+
             $personIndividual
                 ->setBirthDate($personDTO->getBirthDate())
                 ->setDocument($personDTO->getDocument())
@@ -40,6 +63,11 @@ class PersonManager
                 ->setPerson($person)
             ;
             $this->entityManager->persist($personIndividual);
+        }
+
+        if (!$personDTO->IsIndividual()) {
+            $this->notify->addMessage($this->notify::ERROR, "Not implemented method");
+            return null;
         }
 
         /** @var PersonAddressDTO $address */
@@ -56,5 +84,6 @@ class PersonManager
         }
 
         $this->notify->addMessage($this->notify::INFO, "Person saved");
+        return $person;
     }
 }
