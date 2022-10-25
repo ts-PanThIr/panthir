@@ -17,7 +17,12 @@
             color="error"
             @click="deleteAddress(index)"
           ></v-btn>
-          <v-radio label="Primary" :value="index"></v-radio>
+          <v-switch
+            v-model="personStore.primaryAddress"
+            label="Primary"
+            :value="index"
+            color="primary"
+          ></v-switch>
         </v-col>
         <v-col cols="10">
           <v-row>
@@ -97,17 +102,18 @@
 
 <script>
 import { mask } from "vue-the-mask";
-import { useAddressStore } from "~/stores";
+import { useAddressStore, usePersonStore } from "~/stores";
 
 export default {
   name: "TheAddressAddList",
   directives: { mask },
   setup: async function () {
     const addressStore = useAddressStore();
+    const personStore = usePersonStore();
     const addresses = addressStore.list;
     const deleteAddress = addressStore.delete;
     const addAddress = addressStore.createNewItem;
-    return { addresses, deleteAddress, addAddress };
+    return { addresses, deleteAddress, addAddress, personStore };
   },
 };
 </script>

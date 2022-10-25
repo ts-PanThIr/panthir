@@ -17,7 +17,12 @@
             color="error"
             @click="deleteContact(index)"
           ></v-btn>
-          <v-radio label="Primary" :value="index"></v-radio>
+          <v-switch
+            v-model="personStore.primaryContact"
+            label="Primary"
+            :value="index"
+            color="primary"
+          ></v-switch>
         </v-col>
         <v-col cols="10">
           <v-row>
@@ -85,17 +90,18 @@
 </template>
 
 <script>
-import { useContactStore } from "~/stores";
+import { useContactStore, usePersonStore } from "~/stores";
 
 export default {
   name: "TheContactsAddList",
   setup: async function () {
     const contactStore = useContactStore();
+    const personStore = usePersonStore();
     const contacts = contactStore.list;
     const ddiList = contactStore.ddiList;
     const deleteContact = contactStore.delete;
     const addContact = contactStore.createNewItem;
-    return { contacts, deleteContact, addContact, ddiList };
+    return { contacts, deleteContact, addContact, ddiList, personStore };
   },
   data() {
     return {

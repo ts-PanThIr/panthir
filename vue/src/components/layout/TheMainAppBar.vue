@@ -1,14 +1,14 @@
-<script setup>
-import { useAuthStore } from "~/stores";
-const authStore = useAuthStore();
-</script>
 <template>
   <v-app-bar>
-    <router-link to="/" class="nav-item nav-link">Home</router-link>
-    <router-link to="/users" class="nav-item nav-link">Users</router-link>
+    <v-btn
+      class="fa fa-bars"
+      icon
+      title="Switch menu"
+      @click.stop="switchMenu()"
+    ></v-btn>
     <v-spacer></v-spacer>
     <v-btn
-      class="fas fa-sign-out"
+      class="fa fa-sign-out"
       icon
       title="Logout"
       @click="authStore.logout()"
@@ -17,7 +17,15 @@ const authStore = useAuthStore();
 </template>
 
 <script>
+import { useInterfaceStore } from "~/stores";
+import { useAuthStore } from "~/stores";
+
 export default {
   name: "TheMainAppBar",
+  setup() {
+    const authStore = useAuthStore();
+    const switchMenu = useInterfaceStore().switchMenu;
+    return { switchMenu, authStore };
+  },
 };
 </script>

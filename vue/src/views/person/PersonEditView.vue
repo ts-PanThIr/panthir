@@ -56,7 +56,7 @@ export default {
     const route = useRoute();
     const personStore = usePersonStore();
     if (route.name !== "PersonNew") {
-      await personStore.getAll(route.params.id);
+      await personStore.getOne(route.params.id);
     }
     const person = personStore.person;
     const personSend = personStore.send;
