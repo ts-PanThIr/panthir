@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class PersonDTO
 {
-    private int $id;
+    private ?int $id = null;
 
     private string $name;
 
@@ -46,9 +46,9 @@ class PersonDTO
     }
 
     /**
-     * @return int
+     * @return ?int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

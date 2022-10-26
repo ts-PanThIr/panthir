@@ -23,7 +23,7 @@ class IndividualPersonEntity
     #[Groups(['person'])]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['person'])]
     private ?DateTimeInterface $birthDate = null;
 
@@ -63,17 +63,6 @@ class IndividualPersonEntity
     }
 
     /**
-     * @return String
-     */
-    public function getBirthDate(): String
-    {
-        if(empty($this->birthDate)) {
-            return '';
-        }
-        return $this->birthDate;
-    }
-
-    /**
      * @param null|DateTimeInterface $birthDate
      * @return self
      */
@@ -84,14 +73,22 @@ class IndividualPersonEntity
     }
 
     /**
-     * @return string
+     * @return ?String
      */
-    public function getFormattedBirthDate(): String
+    public function getBirthDate(): ?String
     {
         if(empty($this->birthDate)) {
-            return '';
+            return null;
         }
-        return date_format($this->birthDate, 'd-m-Y');
+        return date_format($this->birthDate, 'd/m/Y');
+    }
+
+    /**
+     * @return ?DateTimeInterface
+     */
+    public function getRawBirthDate(): ?DateTimeInterface
+    {
+        return $this->birthDate;
     }
 
     /**

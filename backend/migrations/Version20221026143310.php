@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20221019145806 extends AbstractMigration
+final class Version20221026143310 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -42,15 +42,14 @@ final class Version20221019145806 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_5A57924496ABA05F ON financial_title (account_financial_id)');
         $this->addSql('CREATE INDEX IDX_5A5792448CE5F2C8 ON financial_title (counterpart_account_financial_id)');
         $this->addSql('CREATE TABLE person (id INT NOT NULL, name VARCHAR(255) NOT NULL, additional_information TEXT DEFAULT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE person_address (id INT NOT NULL, person_id INT DEFAULT NULL, individual BOOLEAN NOT NULL, country VARCHAR(255) NOT NULL, district VARCHAR(255) NOT NULL, city VARCHAR(255) NOT NULL, address VARCHAR(255) NOT NULL, address_complement VARCHAR(255) DEFAULT NULL, number VARCHAR(255) NOT NULL, zip VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE person_address (id INT NOT NULL, person_id INT DEFAULT NULL, individual BOOLEAN NOT NULL, name VARCHAR(255) NOT NULL, country VARCHAR(255) NOT NULL, district VARCHAR(255) NOT NULL, city VARCHAR(255) NOT NULL, address VARCHAR(255) NOT NULL, address_complement VARCHAR(255) DEFAULT NULL, number VARCHAR(255) NOT NULL, zip VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_2FD0DC08217BBB47 ON person_address (person_id)');
-        $this->addSql('CREATE TABLE person_contact (id INT NOT NULL, person_id INT DEFAULT NULL, individual BOOLEAN NOT NULL, contact_name VARCHAR(255) NOT NULL, phone VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE person_contact (id INT NOT NULL, person_id INT DEFAULT NULL, individual BOOLEAN NOT NULL, name VARCHAR(255) NOT NULL, phone VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_6EFC55B1217BBB47 ON person_contact (person_id)');
         $this->addSql('CREATE TABLE person_individual (id INT NOT NULL, person_id INT DEFAULT NULL, main_address_id INT DEFAULT NULL, main_contact_id INT DEFAULT NULL, birth_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, surname VARCHAR(255) NOT NULL, document VARCHAR(255) NOT NULL, secondary_document VARCHAR(255) NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_B1289F02217BBB47 ON person_individual (person_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_B1289F02CD4FDB16 ON person_individual (main_address_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_B1289F02DF595129 ON person_individual (main_contact_id)');
-        $this->addSql('COMMENT ON COLUMN person_individual.birth_date IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE person_juridical (id INT NOT NULL, person_id INT DEFAULT NULL, main_address_id INT DEFAULT NULL, main_contact_id INT DEFAULT NULL, nickname VARCHAR(255) NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_7F3E97B2217BBB47 ON person_juridical (person_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_7F3E97B2CD4FDB16 ON person_juridical (main_address_id)');

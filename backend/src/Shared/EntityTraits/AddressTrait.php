@@ -15,6 +15,10 @@ trait AddressTrait
 
     #[ORM\Column]
     #[Groups(['person'])]
+    private string $name;
+
+    #[ORM\Column]
+    #[Groups(['person'])]
     private string $country;
 
     #[ORM\Column]
@@ -47,6 +51,24 @@ trait AddressTrait
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $name
+     * @return self
+     */
+    public function setName($name): self
+    {
+        $this->name = $name;
+        return $this;
     }
 
     /**

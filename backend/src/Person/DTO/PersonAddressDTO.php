@@ -6,7 +6,9 @@ use App\Person\Entity\PersonEntity;
 
 class PersonAddressDTO
 {
-    private int $id;
+    private ?int $id = null;
+
+    private string $name;
 
     private string $country;
 
@@ -27,9 +29,9 @@ class PersonAddressDTO
     private bool $individual;
 
     /**
-     * @return int
+     * @return ?int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -41,6 +43,24 @@ class PersonAddressDTO
     public function setId(int $id): PersonAddressDTO
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return self
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
         return $this;
     }
 

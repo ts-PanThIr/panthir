@@ -15,7 +15,7 @@ trait ContactTrait
 
     #[ORM\Column]
     #[Groups(['person'])]
-    private string $contactName;
+    private string $name;
 
     #[ORM\Column]
     #[Groups(['person'])]
@@ -36,18 +36,18 @@ trait ContactTrait
     /**
      * @return string
      */
-    public function getContactName(): string
+    public function getName(): string
     {
-        return $this->contactName;
+        return $this->name;
     }
 
     /**
-     * @param $contactName
+     * @param $name
      * @return self
      */
-    public function setContactName($contactName): self
+    public function setName($name): self
     {
-        $this->contactName = $contactName;
+        $this->name = $name;
         return $this;
     }
 

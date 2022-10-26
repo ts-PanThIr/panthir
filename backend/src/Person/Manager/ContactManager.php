@@ -31,7 +31,7 @@ class ContactManager
 
         $contact
             ->setEmail($contactDTO->getEmail())
-            ->setContactName($contactDTO->getName())
+            ->setName($contactDTO->getName())
             ->setPhone($contactDTO->getPhone())
             ->setPerson($contactDTO->getPersonEntity())
         ;

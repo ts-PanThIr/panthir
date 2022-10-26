@@ -22,7 +22,11 @@
 
     <v-row>
       <v-col cols="4">
-        <TheDatepicker v-model="person.birthdate" hours></TheDatepicker>
+        <TheDatepicker
+          v-model="person.birthDate"
+          hours
+          label="Birthdate"
+        ></TheDatepicker>
       </v-col>
       <v-col cols="4">
         <v-text-field

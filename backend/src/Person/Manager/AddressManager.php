@@ -30,6 +30,7 @@ class AddressManager
         }
 
         $address
+            ->setName($addressDTO->getName())
             ->setPerson($addressDTO->getPersonEntity())
             ->setAddress($addressDTO->getAddress())
             ->setAddressComplement($addressDTO->getAddressComplement())

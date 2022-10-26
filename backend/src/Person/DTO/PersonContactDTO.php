@@ -6,7 +6,7 @@ use App\Person\Entity\PersonEntity;
 
 class PersonContactDTO
 {
-    private int $id;
+    private ?int $id = null;
 
     private string $name;
 
@@ -19,9 +19,9 @@ class PersonContactDTO
     private bool $individual;
 
     /**
-     * @return int
+     * @return ?int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

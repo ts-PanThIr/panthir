@@ -1,7 +1,6 @@
 <template>
-  {{ internalModel }}
   <Datepicker
-    v-model="internalModel"
+    v-model="dateModel"
     auto-apply
     text-input
     model-type="dd/MM/yyyy"
@@ -11,9 +10,9 @@
   >
     <template #dp-input>
       <v-text-field
-        v-model="internalModel"
+        v-model="dateModel"
         :rules="[(v) => required === false || !!v || 'Item is required']"
-        label="Birthdate"
+        :label="label"
         :required="required"
       ></v-text-field>
     </template>
@@ -23,32 +22,23 @@
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
 import { mask } from "vue-the-mask";
-import { useVModel } from "@vueuse/core";
+import { useModelWrapper } from "~/helpers";
 
 export default {
   name: "TheDatepicker",
   components: { Datepicker },
   directives: { mask },
   props: {
-    modelValue: { type: Date },
+    modelValue: String,
     hours: { type: Boolean, default: false },
     required: { type: Boolean, default: false },
+    label: String,
   },
   emits: ["update:modelValue"],
-  setup() {
-    const emit = defineEmits(["update:modelValue"]);
-    const model = useVModel(props, "modelValue", emit);
-  },
-  computed: {
-    internalModel: {
-      get: function () {
-        return this.model;
-      },
-      set: function (e) {
-        console.log(e);
-        this.$emit("update:modelValue", e);
-      },
-    },
+  setup(props, { emit }) {
+    return {
+      dateModel: useModelWrapper(props, emit, "modelValue"),
+    };
   },
 };
 </script>

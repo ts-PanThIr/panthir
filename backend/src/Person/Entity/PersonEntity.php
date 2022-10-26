@@ -41,11 +41,11 @@ class PersonEntity
 
     #[OneToOne(mappedBy: 'person', targetEntity: IndividualPersonEntity::class)]
     #[Groups(['person'])]
-    private ?IndividualPersonEntity $individualPerson;
+    private ?IndividualPersonEntity $individualPerson = null;
 
     #[OneToOne(mappedBy: 'person', targetEntity: JuridicalPersonEntity::class)]
     #[Groups(['person'])]
-    private ?JuridicalPersonEntity $juridicalPerson;
+    private ?JuridicalPersonEntity $juridicalPerson = null;
 
     public function __construct()
     {

@@ -39,14 +39,11 @@
 <script>
 import { useInterfaceStore } from "~/stores";
 import TheMenuItem from "~/components/layout/TheMenuItem.vue";
-import { useRoute } from "vue-router";
 
 export default {
   name: "TheMainMenu",
   components: { TheMenuItem },
   setup() {
-    const route = useRoute();
-    console.log(route);
     const interfaceStore = useInterfaceStore();
     return { interfaceStore };
   },
