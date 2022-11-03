@@ -42,18 +42,20 @@
     </v-table>
     <div v-else>
       <div class="subtitle-bread text-center mt-15">
-        Vous n'avez actuellement aucun élément à lister. Vous pouvez modifier le
-        filtre ou la page.
+        There's no item to list. You can modify the filter or the page.
       </div>
     </div>
-    <v-row>
-      <div class="text-center mt-4">
-        <v-pagination
-          v-model="internalPage"
-          :length="page + 6"
-          :total-visible="7"
-        ></v-pagination>
-      </div>
+    <v-row class="justify-center mt-0">
+      <slot name="pagination">
+        <div class="text-center mt-4">
+          <v-pagination
+            v-model="internalPage"
+            active-color="secondary"
+            :length="page + 6"
+            :total-visible="7"
+          ></v-pagination>
+        </div>
+      </slot>
     </v-row>
   </div>
 </template>

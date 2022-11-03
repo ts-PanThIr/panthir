@@ -2,14 +2,11 @@
 
 namespace App\Person\Entity;
 
-use App\Entity\Company\Company;
-use App\Entity\Vault\Vault;
 use App\Person\Repository\PersonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
 

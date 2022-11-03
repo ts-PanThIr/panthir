@@ -2,7 +2,9 @@
 
 namespace App\Person\Controller;
 
+use App\Person\DTO\PersonSearchDTO;
 use App\Person\Entity\PersonEntity;
+use App\Person\Repository\PersonRepository;
 use App\Shared\ApiController;
 use App\Shared\Notify\NotifyInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,9 +22,10 @@ class PersonGetAllController extends ApiController
         Request $request
     ): JsonResponse
     {
-        $individual = $request->query->get("individual");
-        $person = $entityManager->getRepository(PersonEntity::class)->findAll();
-
+        $search = new PersonSearchDTO();
+        $search->setIndividual($request->query->get("individual"));
+        /** @var PersonRepository $person */
+        $person = $entityManager->getRepository(PersonEntity::class)->search($search);
         $notify->addMessage($notify::WARNING, "teste de warning");
         return $this->response(items: $person, groups: ['person']);
     }

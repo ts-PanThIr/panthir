@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   php-fpm:
-    container_name: php-fpm
+    container_name: panthir_php-fpm
     build:
       context: .
       dockerfile: ./.docker/php-fpm/Dockerfile
@@ -20,7 +20,7 @@ services:
       - host.docker.internal:host-gateway
 
   nginx:
-    container_name: nginx
+    container_name: panthir_nginx
     build:
       context: ./.docker/nginx
     ports:
@@ -33,7 +33,7 @@ services:
       - postgres
 
   postgres:
-    container_name: postgres
+    container_name: panthir_postgres
     build:
       context: ./.docker/postgres
     ports:

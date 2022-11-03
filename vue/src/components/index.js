@@ -8,3 +8,4 @@ export { default as TheDatepicker } from "~/components/TheDatepicker.vue";
 export { default as TheAddressAddList } from "~/components/TheAddressAddList.vue";
 export { default as TheContactAddList } from "~/components/TheContactAddList.vue";
 export { default as TheMenuItem } from "~/components/layout/TheMenuItem.vue";
+export { default as TheCardTitle } from "~/components/layout/TheCardTitle.vue";
