@@ -39,7 +39,7 @@ class PersonManager
         }
         $person
             ->setName($personDTO->getName())
-            ->setAdditionalInformation($personDTO->getAdditionInformation())
+            ->setAdditionalInformation($personDTO->getAdditionalInformation())
         ;
         $this->entityManager->persist($person);
 

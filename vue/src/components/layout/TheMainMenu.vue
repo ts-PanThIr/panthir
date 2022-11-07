@@ -55,9 +55,9 @@ export default {
           group: true,
           icon: "fa fa-person",
           title: "Person",
-          items: [{ title: "Individual", routeName: "PersonList" }],
+          items: [{ title: "Individual", routeName: "personList" }],
         },
-        { title: "Home", icon: "fa fa-home" },
+        { title: "Home", icon: "fa fa-home", routeName: "home" },
         { title: "Users", icon: "fa fa-user", routeName: "usersList" },
       ],
     };

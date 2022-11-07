@@ -2,30 +2,43 @@
 
 namespace App\Person\DTO;
 
+use App\Person\Entity\PersonAddressEntity;
 use App\Person\Entity\PersonEntity;
+use App\Shared\Transformer\AbstractDTOTransformer;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-class PersonAddressDTO
+class PersonAddressDTO extends AbstractDTOTransformer
 {
+    #[Groups(['person'])]
     private ?int $id = null;
 
+    #[Groups(['person'])]
     private string $name;
 
+    #[Groups(['person'])]
     private string $country;
 
+    #[Groups(['person'])]
     private string $district;
 
+    #[Groups(['person'])]
     private string $city;
 
+    #[Groups(['person'])]
     private string $address;
 
+    #[Groups(['person'])]
     private ?string $addressComplement = null;
 
+    #[Groups(['person'])]
     private string $number;
 
+    #[Groups(['person'])]
     private string $zip;
 
     private PersonEntity $personEntity;
 
+    #[Groups(['person'])]
     private bool $individual;
 
     /**
@@ -224,5 +237,25 @@ class PersonAddressDTO
     {
         $this->individual = $individual;
         return $this;
+    }
+
+    /**
+     * @param PersonAddressEntity $object
+     * @return PersonAddressDTO
+     */
+    public static function transformFromObject(object $object): PersonAddressDTO
+    {
+        $dto = new PersonAddressDTO();
+        return $dto->setId($object->getId())
+            ->setName($object->getName())
+            ->setIndividual($object->isIndividual())
+            ->setAddress($object->getAddress())
+            ->setAddressComplement($object->getAddressComplement())
+            ->setCity($object->getCity())
+            ->setCountry($object->getCountry())
+            ->setDistrict($object->getDistrict())
+            ->setNumber($object->getNumber())
+            ->setZip($object->getZip())
+            ;
     }
 }

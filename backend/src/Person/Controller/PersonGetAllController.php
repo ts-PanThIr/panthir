@@ -2,6 +2,7 @@
 
 namespace App\Person\Controller;
 
+use App\Person\DTO\PersonDTO;
 use App\Person\DTO\PersonSearchDTO;
 use App\Person\Entity\PersonEntity;
 use App\Person\Repository\PersonRepository;
@@ -24,9 +25,12 @@ class PersonGetAllController extends ApiController
     {
         $search = new PersonSearchDTO();
         $search->setIndividual($request->query->get("individual"));
+
         /** @var PersonRepository $person */
         $person = $entityManager->getRepository(PersonEntity::class)->search($search);
-        $notify->addMessage($notify::WARNING, "teste de warning");
-        return $this->response(items: $person, groups: ['person']);
+
+        $personDTO = PersonDTO::transformFromObjects($person);
+
+        return $this->response(items: $personDTO, groups: ['person']);
     }
 }

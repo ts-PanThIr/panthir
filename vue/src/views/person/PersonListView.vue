@@ -12,7 +12,19 @@
         v-model:limit="limit"
         :matrix="people"
         :header="headers"
-      ></base-grid>
+      >
+        <template #action="{ element }">
+          <td class="actions to-none pa-lg-3">
+            <v-btn
+              color="primary"
+              size="x-small"
+              icon="fa fa-pencil"
+              :to="{ name: 'personEdit', params: { id: element.id } }"
+            >
+            </v-btn>
+          </td>
+        </template>
+      </base-grid>
     </v-card-text>
   </v-card>
 </template>
@@ -34,8 +46,12 @@ export default {
     limit: "All",
     page: 1,
     headers: {
+      action: "#",
+      id: "Id",
       name: "Name",
-      Surname: "Surname",
+      surname: "Surname",
+      document: "NIF",
+      birthDate: "BirthDate",
     },
     search: null,
   }),

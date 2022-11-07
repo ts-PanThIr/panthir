@@ -2,20 +2,28 @@
 
 namespace App\Person\DTO;
 
+use App\Person\Entity\PersonContactEntity;
 use App\Person\Entity\PersonEntity;
+use App\Shared\Transformer\AbstractDTOTransformer;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-class PersonContactDTO
+class PersonContactDTO extends AbstractDTOTransformer
 {
+    #[Groups(['person'])]
     private ?int $id = null;
 
+    #[Groups(['person'])]
     private string $name;
 
+    #[Groups(['person'])]
     private string $email;
 
+    #[Groups(['person'])]
     private string $phone;
 
     private PersonEntity $personEntity;
 
+    #[Groups(['person'])]
     private bool $individual;
 
     /**
@@ -124,5 +132,20 @@ class PersonContactDTO
     {
         $this->individual = $individual;
         return $this;
+    }
+
+    /**
+     * @param PersonContactEntity $object
+     * @return PersonContactDTO
+     */
+    public static function transformFromObject(object $object): PersonContactDTO
+    {
+        $dto = new PersonContactDTO();
+        return $dto->setIndividual($object->isIndividual())
+            ->setName($object->getName())
+            ->setId($object->getId())
+            ->setEmail($object->getEmail())
+            ->setPhone($object->getPhone())
+        ;
     }
 }

@@ -2,48 +2,59 @@
 
 namespace App\Person\DTO;
 
+use App\Person\Entity\IndividualPersonEntity;
+use App\Person\Entity\JuridicalPersonEntity;
+use App\Person\Entity\PersonEntity;
+use App\Shared\Transformer\AbstractDTOTransformer;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-class PersonDTO
+class PersonDTO extends AbstractDTOTransformer
 {
+    #[Groups(['person'])]
     private ?int $id = null;
 
+    #[Groups(['person'])]
     private string $name;
 
-    private ?string $additionInformation = null;
+    #[Groups(['person'])]
+    private ?string $additionalInformation = null;
 
+    #[Groups(['person'])]
     private bool $individual;
 
+    #[Groups(['person'])]
     private PersonAddressDTO $mainAddress;
 
+    #[Groups(['person'])]
     private PersonContactDTO $mainContact;
 
-    private Collection $addresses;
+    #[Groups(['person'])]
+    private array $addresses = [];
 
-    private Collection $contacts;
+    #[Groups(['person'])]
+    private array $contacts = [];
 
     private ?DateTime $birthDate = null;
 
+    #[Groups(['person'])]
     private ?string $surname = null;
 
+    #[Groups(['person'])]
     private ?string $nickname = null;
 
+    #[Groups(['person'])]
     private string $document;
 
+    #[Groups(['person'])]
     private ?string $secondaryDocument = null;
 
+    #[Groups(['person'])]
     private DateTime $createdAt;
 
+    #[Groups(['person'])]
     private UserInterface $createdBy;
-
-    public function __construct()
-    {
-        $this->addresses = new ArrayCollection();
-        $this->contacts = new ArrayCollection();
-    }
 
     /**
      * @return ?int
@@ -84,18 +95,18 @@ class PersonDTO
     /**
      * @return string|null
      */
-    public function getAdditionInformation(): ?string
+    public function getAdditionalInformation(): ?string
     {
-        return $this->additionInformation;
+        return $this->additionalInformation;
     }
 
     /**
-     * @param string|null $additionInformation
+     * @param string|null $additionalInformation
      * @return PersonDTO
      */
-    public function setAdditionInformation(?string $additionInformation): PersonDTO
+    public function setAdditionalInformation(?string $additionalInformation): PersonDTO
     {
-        $this->additionInformation = $additionInformation;
+        $this->additionalInformation = $additionalInformation;
         return $this;
     }
 
@@ -154,9 +165,9 @@ class PersonDTO
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getAddresses(): Collection
+    public function getAddresses(): array
     {
         return $this->addresses;
     }
@@ -194,28 +205,28 @@ class PersonDTO
     }
 
     /**
-     * @param Collection $addresses
+     * @param array $addresses
      * @return PersonDTO
      */
-    public function setAddresses(Collection $addresses): self
+    public function setAddresses(array $addresses): self
     {
         $this->addresses = $addresses;
         return $this;
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getContacts(): Collection
+    public function getContacts(): array
     {
         return $this->contacts;
     }
 
     /**
-     * @param Collection $contacts
+     * @param array $contacts
      * @return PersonDTO
      */
-    public function setContacts(Collection $contacts): self
+    public function setContacts(array $contacts): self
     {
         $this->contacts = $contacts;
         return $this;
@@ -227,9 +238,7 @@ class PersonDTO
      */
     public function addContacts(PersonContactDTO $contactDTO): self
     {
-        if (!$this->contacts->contains($contactDTO)) {
-            $this->contacts->add($contactDTO);
-        }
+        $this->contacts[] = $contactDTO;
         return $this;
     }
 
@@ -239,9 +248,7 @@ class PersonDTO
      */
     public function removeContacts(PersonContactDTO $contactDTO): self
     {
-        if ($this->contacts->contains($contactDTO)) {
-            $this->contacts->removeElement($contactDTO);
-        }
+        $this->contacts[] = $contactDTO;
         return $this;
     }
 
@@ -256,7 +263,7 @@ class PersonDTO
     /**
      * @return ?DateTime
      */
-    public function getBirthDate(): ?DateTime
+    public function getRawBirthDate(): ?DateTime
     {
         return $this->birthDate;
     }
@@ -264,12 +271,13 @@ class PersonDTO
     /**
      * @return string
      */
-    public function getFormattedBirthDate(): String
+    #[Groups(['person'])]
+    public function getBirthDate(): String
     {
         if(empty($this->birthDate)) {
             return '';
         }
-        return date_format($this->birthDate, 'd-m-Y');
+        return date_format($this->birthDate, 'd/m/Y');
     }
 
     /**
@@ -390,14 +398,37 @@ class PersonDTO
         return $this;
     }
 
-    public function getAdditionalInformation(): ?string
+    /**
+     * @param PersonEntity $object
+     * @return self
+     */
+    public static function transformFromObject(object $object): self
     {
-        return $this->additionalInformation;
-    }
+        $dto = new PersonDTO();
+        $dto->setAdditionalInformation($object->getAdditionalInformation())
+            ->setAddresses(PersonAddressDTO::transformFromObjects($object->getAddresses()))
+            ->setContacts(PersonContactDTO::transformFromObjects($object->getContacts()))
+            ->setName($object->getName())
+            ->setId($object->getId())
+        ;
+        if($object->getIndividualPerson()) {
+            /** @var IndividualPersonEntity $individualperson */
+            $individualperson = $object->getIndividualPerson();
+            $dto->setBirthDate($individualperson->getRawBirthDate())
+                ->setDocument($individualperson->getDocument())
+                ->setSecondaryDocument($individualperson->getSecondaryDocument())
+                ->setIndividual(true)
+                ->setSurname($individualperson->getSurname())
+                ;
+        } else {
+            // needs improvement
+            /** @var JuridicalPersonEntity $juridicalPerson */
+            $juridicalPerson = $object->getJuridicalPerson();
+            $dto->setName($juridicalPerson->getNickname())
+                ->setIndividual(false)
+            ;
+        }
 
-    public function setAdditionalInformation(?string $additionalInformation): static
-    {
-        $this->additionalInformation = $additionalInformation;
-        return $this;
+        return $dto;
     }
 }

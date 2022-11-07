@@ -51,17 +51,17 @@ export const router = createRouter({
       children: [
         {
           path: "",
-          name: "PersonList",
+          name: "personList",
           component: PersonListView,
         },
         {
           path: "edit/:id",
-          name: "PersonEdit",
+          name: "personEdit",
           component: PersonEditView,
         },
         {
           path: "new",
-          name: "PersonNew",
+          name: "personNew",
           component: PersonEditView,
         },
       ],
