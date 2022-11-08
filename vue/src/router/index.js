@@ -1,18 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import { Home } from "~/views";
+import {
+  HomeView,
+  PersonEditView,
+  PersonListView,
+  UserListView,
+  UserEditView,
+  LoginView,
+  RegisterView,
+  FinancialEditView,
+} from "~/views";
+
 import { TheEmptyLayout, TheMainLayout } from "~/components";
 import guest from "~/router/middleware/guest";
 import auth from "~/router/middleware/auth";
 import middlewarePipeline from "~/router/middleware/middlewarePipeline";
 import { useAuthStore } from "~/stores";
-
-import PersonEditView from "~/views/person/PersonEditView.vue";
-import PersonListView from "~/views/person/PersonListView.vue";
-import UserListView from "~/views/user/UserListView.vue";
-import UserEditView from "~/views/user/UserEditView.vue";
-import LoginView from "~/views/common/LoginView.vue";
-import RegisterView from "~/views/common/RegisterView.vue";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +70,25 @@ export const router = createRouter({
       ],
     },
     {
+      path: "/financial",
+      component: TheMainLayout,
+      meta: {
+        middleware: [auth],
+      },
+      children: [
+        {
+          path: "",
+          name: "personList",
+          component: PersonListView,
+        },
+        {
+          path: "new",
+          name: "financialEdit",
+          component: FinancialEditView,
+        },
+      ],
+    },
+    {
       path: "/account",
       component: TheEmptyLayout,
       meta: {
@@ -96,7 +118,7 @@ export const router = createRouter({
         {
           path: "",
           name: "home",
-          component: Home,
+          component: HomeView,
         },
       ],
     },
