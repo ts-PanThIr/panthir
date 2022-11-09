@@ -37,6 +37,10 @@ class TitleFinancialEntity
     #[Groups(['financial'])]
     private ?string $description;
 
+    #[ORM\Column]
+    #[Groups(['financial'])]
+    private ?bool $isIndividualPerson;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['financial'])]
     private \DateTime $entryAt;
@@ -45,10 +49,6 @@ class TitleFinancialEntity
     #[JoinColumn(name: "person_id", referencedColumnName: "id")]
     #[Groups(['financial'])]
     private PersonEntity $person;
-
-    #[ORM\Column]
-    #[Groups(['financial'])]
-    private ?bool $isIndividualPerson;
 
     #[ManyToOne(targetEntity: AccountsFinancialEntity::class)]
     #[JoinColumn(name: "account_financial_id", referencedColumnName: "id")]

@@ -5,7 +5,7 @@
     :rail="interfaceStore.menuOpen"
     expand-on-hover
   >
-    <v-list dense>
+    <v-list dense class="main-menu">
       <template v-for="item in items" :key="item.title">
         <template v-if="item.group">
           <v-list-group
@@ -69,3 +69,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.main-menu {
+  i.fa::before {
+    margin-left: 5px;
+  }
+}
+</style>

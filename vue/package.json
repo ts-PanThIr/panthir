@@ -19,6 +19,7 @@
     "roboto-fontface": "*",
     "vee-validate": "^4.5.11",
     "vue": "^3.2.33",
+    "vue-currency-input": "^3.0.2",
     "vue-router": "^4.0.14",
     "vue-the-mask": "^0.11.1",
     "vuetify": "^3.0.0-beta.0",
