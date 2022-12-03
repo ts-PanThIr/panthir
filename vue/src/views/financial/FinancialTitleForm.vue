@@ -55,13 +55,14 @@
       <v-card-text>
         <v-row>
           <v-col cols="3">
-            <v-text-field
+            <v-select
               v-model="title.quantityInstallments"
-              :rules="[(v) => !!v || 'Item is required']"
+              :items="paymentConditions"
+              item-title="name"
+              return-object
               label="Quantity Installments"
-              required
-              type="number"
-            ></v-text-field>
+            >
+            </v-select>
           </v-col>
           <v-col cols="3">
             <the-currency-input
@@ -99,10 +100,12 @@
             ></the-currency-input>
           </v-col>
           <v-col cols="4">
+            {{ totalValue }}
             <the-currency-input
-              v-model="totalValue"
+              v-model.lazy="totalValue"
               label="Total ="
               color="secondary"
+              readonly
             ></the-currency-input>
           </v-col>
         </v-row>
@@ -162,6 +165,7 @@ export default {
   directives: { mask },
   components: { TheDatepicker, ThePersonAutocomplete, TheCurrencyInput },
   async setup() {
+    const paymentConditions = await useFinancialStore().getPaymentCondition();
     const { title, totalValue, installments } = storeToRefs(
       useFinancialStore()
     );
@@ -171,6 +175,7 @@ export default {
       title,
       totalValue,
       createInstallments,
+      paymentConditions,
     };
   },
 };

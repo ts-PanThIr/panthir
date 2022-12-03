@@ -1,28 +1,17 @@
 <template>
-  <v-card>
-    <v-tabs v-model="tab" class="bg-accent mb-3" stacked color="white" grow>
-      <v-tab value="1">
-        <em class="fas fa-person"></em>
-        <small class="pt-1">Title</small>
-      </v-tab>
-      <v-tab value="2">
-        <em class="fas fa-address-book"></em>
-        <small class="pt-1">Movement</small>
-      </v-tab>
-    </v-tabs>
-    <v-window v-model="tab">
-      <v-window-item value="1" eager>
-        <v-card-text>
-          <financial-title-form></financial-title-form>
-        </v-card-text>
-      </v-window-item>
-      <v-window-item value="2" eager>
-        <v-card-text> dasdasdasd </v-card-text>
-      </v-window-item>
-    </v-window>
-    <v-container fluid class="justify-end d-flex">
-      <v-btn color="success" @click="validate"> Send</v-btn>
-    </v-container>
+  <v-card class="overflow-visible">
+    <the-card-title
+      text="Financial title"
+      icon="fas fa-money-bill-wave-alt"
+      bg-color="bg-secondary"
+      text-color="white"
+    ></the-card-title>
+    <v-card-text>
+      <financial-title-form></financial-title-form>
+      <v-container fluid class="justify-end d-flex">
+        <v-btn color="success" @click="validate"> Send</v-btn>
+      </v-container>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -30,10 +19,11 @@
 import { usePersonStore } from "~/stores";
 import { useRoute } from "vue-router";
 import { FinancialTitleForm } from "~/views/components";
+import { TheCardTitle } from "~/components";
 
 export default {
   name: "FinancialEditView",
-  components: { FinancialTitleForm },
+  components: { FinancialTitleForm, TheCardTitle },
   async setup() {
     const route = useRoute();
     const personStore = usePersonStore();
@@ -45,7 +35,7 @@ export default {
     return { person, personStore, personSend };
   },
   data: () => ({
-    tab: null,
+    tab: "1",
   }),
 
   methods: {

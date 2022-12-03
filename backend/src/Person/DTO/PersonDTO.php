@@ -399,7 +399,7 @@ class PersonDTO extends AbstractDTOTransformer
     }
 
     /**
-     * @param PersonEntity $object
+     * @param object $object
      * @return self
      */
     public static function transformFromObject(object $object): self

@@ -13,6 +13,7 @@ export const useFinancialStore = defineStore({
     },
     list: [],
     installments: [],
+    paymentCondition: [],
   }),
   getters: {
     totalValue: (state) => {
@@ -23,7 +24,7 @@ export const useFinancialStore = defineStore({
         state.title.extra -
         state.title.discount;
 
-      return Number(value.toFixed(2)) || null;
+      return Number(value.toFixed(3)) || null;
     },
   },
   actions: {
@@ -88,6 +89,19 @@ export const useFinancialStore = defineStore({
     },
     async installmentAdd({ value, fees, fine, extra, discount }) {
       this.installments.push({ value, fees, fine, extra, discount });
+    },
+    async getPaymentCondition() {
+      try {
+        const path = `${this.$apiUrl}/api/financial/payment-condition/`;
+
+        this.list = await this.$http.get(path).then((d) => {
+          this.paymentCondition = d.data.data;
+          return d.data.data;
+        });
+        return this.list;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

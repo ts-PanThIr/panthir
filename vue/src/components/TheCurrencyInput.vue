@@ -1,14 +1,14 @@
 <template>
   <v-text-field
     ref="inputRef"
-    v-model="valueModel"
+    v-model="modelValue"
     :label="label"
+    :readonly="readonly"
   ></v-text-field>
 </template>
 
 <script>
 import { useCurrencyInput } from "vue-currency-input";
-import { computed } from "vue";
 
 export default {
   name: "TheCurrencyInput",
@@ -16,20 +16,18 @@ export default {
     modelValue: Number,
     options: Object,
     label: String,
+    readonly: { type: Boolean, default: false },
   },
   emits: ["update:modelValue"],
-  setup(props, { emit }) {
-    const { inputRef, numberValue } = useCurrencyInput(
+  setup() {
+    const { inputRef, formattedValue, numberValue } = useCurrencyInput(
       { currency: "EUR", autoDecimalDigits: true },
       false
     );
-
+    console.log(formattedValue.value);
     return {
       inputRef,
-      valueModel: computed({
-        get: () => props.modelValue,
-        set: () => emit(`update:modelValue`, numberValue),
-      }),
+      numberValue,
     };
   },
 };

@@ -77,11 +77,6 @@ export const router = createRouter({
       },
       children: [
         {
-          path: "",
-          name: "personList",
-          component: PersonListView,
-        },
-        {
           path: "new",
           name: "financialEdit",
           component: FinancialEditView,
