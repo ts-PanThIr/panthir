@@ -1,0 +1,15 @@
+// .prettierrc.json in root of project
+{
+  "printWidth": 120,
+  // 120 characters per line
+  "singleQuote": true,
+  // double quotes will be changed to single quotes wherever possible
+  "trailingComma": "es5",
+  // add commas after object properties or array items
+  "tabWidth": 2
+  // tab width equal to 4 spaces
+}
+
+
+// command to update files
+// $prettier --write 'resources/assets/**/*.{js,json,scss,css}'
