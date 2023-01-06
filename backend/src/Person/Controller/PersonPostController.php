@@ -6,7 +6,7 @@ use App\Person\DTO\PersonAddressDTO;
 use App\Person\DTO\PersonContactDTO;
 use App\Person\DTO\PersonDTO;
 use App\Person\Manager\PersonManager;
-use App\Shared\ApiController;
+use App\Shared\APIController;
 use App\Shared\Helper\SerializerHelper;
 use App\Shared\Notify\NotifyInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 #[Route(path: '/api/person')]
-class PersonPostController extends ApiController
+class PersonPostController extends APIController
 {
     #[Route(path: "/", name: "app_person_post", methods: 'POST')]
     public function post(

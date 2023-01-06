@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-abstract class ApiController extends AbstractController
+abstract class APIController extends AbstractController
 {
     /**
      * @param NotifyInterface $notify

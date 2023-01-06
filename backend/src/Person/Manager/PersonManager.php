@@ -56,7 +56,7 @@ class PersonManager
             }
 
             $personIndividual
-                ->setBirthDate($personDTO->getBirthDate())
+                ->setBirthDate($personDTO->getRawBirthDate())
                 ->setDocument($personDTO->getDocument())
                 ->setSecondaryDocument($personDTO->getSecondaryDocument())
                 ->setSurname($personDTO->getSurname())

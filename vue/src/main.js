@@ -9,8 +9,10 @@ import "~/plugins/axios";
 import { piniaPlugins } from "~/stores/pluginsStore";
 
 const app = createApp(App);
-// app.config.globalProperties.$http = axios
-// app.config.globalProperties.$apiUrl = import.meta.env.VITE_API_URL
+app.config.globalProperties.locale = 'pt-PT'
+app.config.globalProperties.currency = 'EUR'
+app.config.globalProperties.$http = axios
+app.config.globalProperties.$apiUrl = import.meta.env.VITE_API_URL
 
 const pinia = createPinia();
 piniaPlugins.setContext(pinia);

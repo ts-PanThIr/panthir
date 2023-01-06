@@ -5,7 +5,7 @@
       icon="fa fa-person"
       bg-color="bg-secondary"
       text-color="white"
-    ></the-card-title>
+    />
     <v-card-text>
       <base-grid
         v-model:page="page"
@@ -20,8 +20,7 @@
               size="x-small"
               icon="fa fa-pencil"
               :to="{ name: 'personEdit', params: { id: element.id } }"
-            >
-            </v-btn>
+            />
           </td>
         </template>
       </base-grid>

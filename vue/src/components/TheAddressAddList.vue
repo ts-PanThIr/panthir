@@ -2,7 +2,13 @@
   <div class="wrapper">
     <v-form ref="form">
       <v-row class="justify-center">
-        <v-btn size="large" color="info" @click="addAddress()">New</v-btn>
+        <v-btn
+          size="large"
+          color="info"
+          @click="addAddress()"
+        >
+          New
+        </v-btn>
       </v-row>
       <v-row
         v-for="(item, index) in addresses"
@@ -10,88 +16,115 @@
         :class="index % 2 !== 0 ? 'bg-surfaceLighten' : ''"
         class="py-4"
       >
-        <v-col cols="2" class="d-flex justify-center align-center flex-column">
+        <v-col
+          cols="2"
+          class="d-flex justify-center align-center flex-column"
+        >
           <v-btn
             size="small"
             icon="fa fa-times"
             color="error"
             @click="deleteAddress(index)"
-          ></v-btn>
+          />
           <v-switch
             v-model="personStore.primaryAddress"
             label="Primary"
             :value="index"
             color="primary"
-          ></v-switch>
+          />
         </v-col>
         <v-col cols="10">
           <v-row>
-            <v-col cols="6" sm="3">
+            <v-col
+              cols="6"
+              sm="3"
+            >
               <v-text-field
                 v-model="item.name"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Name"
                 required
                 density="compact"
-              ></v-text-field>
+              />
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col
+              cols="6"
+              sm="3"
+            >
               <v-text-field
                 v-model="item.zip"
                 v-mask="'#####-###'"
                 label="Zip"
                 density="compact"
-              ></v-text-field>
+              />
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col
+              cols="6"
+              sm="3"
+            >
               <v-text-field
                 v-model="item.country"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Country"
                 density="compact"
                 required
-              ></v-text-field>
+              />
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col
+              cols="6"
+              sm="3"
+            >
               <v-text-field
                 v-model="item.district"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="District"
                 required
                 density="compact"
-              ></v-text-field>
+              />
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col
+              cols="6"
+              sm="3"
+            >
               <v-text-field
                 v-model="item.city"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="City"
                 required
                 density="compact"
-              ></v-text-field>
+              />
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col
+              cols="6"
+              sm="3"
+            >
               <v-text-field
                 v-model="item.address"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Address"
                 required
                 density="compact"
-              ></v-text-field>
+              />
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col
+              cols="6"
+              sm="3"
+            >
               <v-text-field
                 v-model="item.complement"
                 label="Complement"
                 density="compact"
-              ></v-text-field>
+              />
             </v-col>
-            <v-col cols="6" sm="3">
+            <v-col
+              cols="6"
+              sm="3"
+            >
               <v-text-field
                 v-model="item.number"
                 label="Number"
                 density="compact"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-col>

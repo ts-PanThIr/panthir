@@ -9,6 +9,7 @@ import {
   LoginView,
   RegisterView,
   FinancialEditView,
+  AccountingEditView
 } from "~/views";
 
 import { TheEmptyLayout, TheMainLayout } from "~/components";
@@ -80,6 +81,11 @@ export const router = createRouter({
           path: "new",
           name: "financialEdit",
           component: FinancialEditView,
+        },
+        {
+          path: "accounting",
+          name: "accountingEdit",
+          component: AccountingEditView,
         },
       ],
     },

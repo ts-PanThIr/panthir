@@ -1,15 +1,16 @@
 <template>
-  <v-form ref="form">
+  <v-form ref="titleForm">
     <v-row>
-      <v-col cols="9">
-        <the-person-autocomplete></the-person-autocomplete>
+      <v-col cols="8">
+        <the-person-autocomplete :rules="[(v) => !!v || 'Item is required']" />
       </v-col>
-      <v-col cols="3">
+      <v-col cols="4">
         <TheDatepicker
           v-model="title.entryAt"
           hours
           label="Entry Date"
-        ></TheDatepicker>
+          :rules="[(v) => !!v || 'Item is required']"
+        />
       </v-col>
     </v-row>
 
@@ -21,7 +22,7 @@
           :rules="[(v) => !!v || 'Item is required']"
           label="Title"
           required
-        ></v-text-field>
+        />
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -29,7 +30,7 @@
           :rules="[(v) => !!v || 'Item is required']"
           label="Account"
           required
-        ></v-text-field>
+        />
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -37,7 +38,7 @@
           :rules="[(v) => !!v || 'Item is required']"
           label="Counterpart account"
           required
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
@@ -46,11 +47,14 @@
         <v-textarea
           v-model="title.description"
           label="Description"
-        ></v-textarea>
+        />
       </v-col>
     </v-row>
 
-    <v-card color="surfaceLighten">
+    <v-card
+      class="my-4"
+      color="surfaceLighten"
+    >
       <v-card-title>Values</v-card-title>
       <v-card-text>
         <v-row>
@@ -61,112 +65,90 @@
               item-title="name"
               return-object
               label="Quantity Installments"
-            >
-            </v-select>
+              :rules="[(v) => (!!v && !!v.id) || 'Item is required']"
+            />
           </v-col>
           <v-col cols="3">
             <the-currency-input
               v-model.lazy="title.value"
               label="Gross +"
               color="success"
-            ></the-currency-input>
+              :rules="[(v) => (!!v && v > 0) || 'Item is required']"
+            />
           </v-col>
           <v-col cols="3">
             <the-currency-input
               v-model.lazy="title.fees"
               label="Fees +"
               color="success"
-            ></the-currency-input>
+            />
           </v-col>
           <v-col cols="3">
             <the-currency-input
               v-model.lazy="title.fine"
               label="Fine +"
               color="success"
-            ></the-currency-input>
+            />
           </v-col>
           <v-col cols="4">
             <the-currency-input
               v-model.lazy="title.extra"
               label="Extra +"
               color="success"
-            ></the-currency-input>
+            />
           </v-col>
           <v-col cols="4">
             <the-currency-input
               v-model.lazy="title.discount"
               label="Discount -"
               color="warning"
-            ></the-currency-input>
+            />
           </v-col>
           <v-col cols="4">
-            {{ totalValue }}
             <the-currency-input
-              v-model.lazy="totalValue"
+              v-model="totalValue"
               label="Total ="
               color="secondary"
               readonly
-            ></the-currency-input>
+              :rules="[(v) => !!v || 'Item is required']"
+            />
           </v-col>
         </v-row>
         <v-row class="justify-end">
           <v-btn
             class="mx-3 mb-3"
             color="secondary"
-            @click="createInstallments"
+            @click="validate"
           >
-            <i class="fa fa-gear"></i>
+            <i class="fa fa-gear" />
             Process
           </v-btn>
         </v-row>
       </v-card-text>
     </v-card>
 
-    <v-row v-if="installments.length">
-      <v-col cols="12">
-        <table>
-          <thead>
-            <tr>
-              <th>Gross</th>
-              <th>Fees</th>
-              <th>Fine</th>
-              <th>Extra</th>
-              <th>Discount</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in installments" :key="index">
-              <td>{{ item.value }}</td>
-              <td>{{ item.fees }}</td>
-              <td>{{ item.fine }}</td>
-              <td>{{ item.extra }}</td>
-              <td>{{ item.discount }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </v-col>
-    </v-row>
+    <financial-installment-table :installments="installments" />
   </v-form>
 </template>
 
 <script>
-import { mask } from "vue-the-mask";
+import FinancialInstallmentTable from '~/views/financial/FinancialInstallmentTable.vue';
 import {
   TheDatepicker,
   ThePersonAutocomplete,
-  TheCurrencyInput,
-} from "~/components";
-import { useFinancialStore } from "~/stores";
-import { storeToRefs } from "pinia";
+  TheCurrencyInput
+} from '~/components';
+import {useFinancialStore} from '~/stores';
+import {storeToRefs} from 'pinia';
+import {mask} from 'vue-the-mask';
 
 export default {
-  name: "FinancialTitleForm",
+  name: 'FinancialTitleForm',
+  components: { TheDatepicker, ThePersonAutocomplete, TheCurrencyInput, FinancialInstallmentTable },
   directives: { mask },
-  components: { TheDatepicker, ThePersonAutocomplete, TheCurrencyInput },
   async setup() {
     const paymentConditions = await useFinancialStore().getPaymentCondition();
-    const { title, totalValue, installments } = storeToRefs(
+    const {title, totalValue, installments} = storeToRefs(
       useFinancialStore()
     );
     const createInstallments = useFinancialStore().createInstallments;
@@ -177,6 +159,14 @@ export default {
       createInstallments,
       paymentConditions,
     };
+  },
+  methods: {
+    validate: async function () {
+      if (!(await this.$refs.titleForm.validate()).valid) {
+        return;
+      }
+      this.createInstallments();
+    },
   },
 };
 </script>

@@ -66,7 +66,9 @@ async function onSubmit(values) {
             class="form-control"
             :class="{ 'is-invalid': errors.firstName }"
           />
-          <div class="invalid-feedback">{{ errors.firstName }}</div>
+          <div class="invalid-feedback">
+            {{ errors.firstName }}
+          </div>
         </div>
         <div class="form-group col">
           <label>Last Name</label>
@@ -76,7 +78,9 @@ async function onSubmit(values) {
             class="form-control"
             :class="{ 'is-invalid': errors.lastName }"
           />
-          <div class="invalid-feedback">{{ errors.lastName }}</div>
+          <div class="invalid-feedback">
+            {{ errors.lastName }}
+          </div>
         </div>
       </div>
       <div class="form-row">
@@ -88,7 +92,9 @@ async function onSubmit(values) {
             class="form-control"
             :class="{ 'is-invalid': errors.username }"
           />
-          <div class="invalid-feedback">{{ errors.username }}</div>
+          <div class="invalid-feedback">
+            {{ errors.username }}
+          </div>
         </div>
         <div class="form-group col">
           <label>
@@ -101,29 +107,41 @@ async function onSubmit(values) {
             class="form-control"
             :class="{ 'is-invalid': errors.password }"
           />
-          <div class="invalid-feedback">{{ errors.password }}</div>
+          <div class="invalid-feedback">
+            {{ errors.password }}
+          </div>
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" :disabled="isSubmitting">
+        <button
+          class="btn btn-primary"
+          :disabled="isSubmitting"
+        >
           <span
             v-show="isSubmitting"
             class="spinner-border spinner-border-sm mr-1"
-          ></span>
+          />
           Save
         </button>
-        <router-link to="/users" class="btn btn-link">Cancel</router-link>
+        <router-link
+          to="/users"
+          class="btn btn-link"
+        >
+          Cancel
+        </router-link>
       </div>
     </Form>
   </template>
   <template v-if="user?.loading">
     <div class="text-center m-5">
-      <span class="spinner-border spinner-border-lg align-center"></span>
+      <span class="spinner-border spinner-border-lg align-center" />
     </div>
   </template>
   <template v-if="user?.error">
     <div class="text-center m-5">
-      <div class="text-danger">Error loading user: {{ user.error }}</div>
+      <div class="text-danger">
+        Error loading user: {{ user.error }}
+      </div>
     </div>
   </template>
 </template>

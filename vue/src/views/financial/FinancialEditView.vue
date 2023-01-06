@@ -5,11 +5,19 @@
       icon="fas fa-money-bill-wave-alt"
       bg-color="bg-secondary"
       text-color="white"
-    ></the-card-title>
+    />
     <v-card-text>
-      <financial-title-form></financial-title-form>
-      <v-container fluid class="justify-end d-flex">
-        <v-btn color="success" @click="validate"> Send</v-btn>
+      <financial-title-form />
+      <v-container
+        fluid
+        class="justify-end d-flex"
+      >
+        <v-btn
+          color="success"
+          @click="validate"
+        >
+          Send
+        </v-btn>
       </v-container>
     </v-card-text>
   </v-card>

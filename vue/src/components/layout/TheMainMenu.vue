@@ -5,8 +5,14 @@
     :rail="interfaceStore.menuOpen"
     expand-on-hover
   >
-    <v-list dense class="main-menu">
-      <template v-for="item in items" :key="item.title">
+    <v-list
+      dense
+      class="main-menu"
+    >
+      <template
+        v-for="item in items"
+        :key="item.title"
+      >
         <template v-if="item.group">
           <v-list-group
             :value="item.title"
@@ -19,7 +25,7 @@
                 v-bind="props"
                 :prepend-icon="item.icon"
                 :title="item.title"
-              ></v-list-item>
+              />
             </template>
 
             <TheMenuItem
@@ -27,10 +33,13 @@
               :key="ii.title"
               :item="ii"
               variant="tonal"
-            ></TheMenuItem>
+            />
           </v-list-group>
         </template>
-        <TheMenuItem v-else :item="item"></TheMenuItem>
+        <TheMenuItem
+          v-else
+          :item="item"
+        />
       </template>
     </v-list>
   </v-navigation-drawer>

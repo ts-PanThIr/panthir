@@ -3,9 +3,9 @@ import { TheMainAppBar, TheMainFooter, TheMainMenu } from "~/components";
 </script>
 
 <template>
-  <TheMainAppBar></TheMainAppBar>
+  <TheMainAppBar />
 
-  <TheMainMenu></TheMainMenu>
+  <TheMainMenu />
 
   <v-main>
     <v-container fluid>
@@ -20,7 +20,7 @@ import { TheMainAppBar, TheMainFooter, TheMainMenu } from "~/components";
     </v-container>
   </v-main>
 
-  <TheMainFooter></TheMainFooter>
+  <TheMainFooter />
 </template>
 
 <script>

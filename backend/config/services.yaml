@@ -16,7 +16,7 @@ services:
     Doctrine\ORM\EntityManagerInterface: '@doctrine.orm.entity_manager'
 
     App\Shared\:
-        resource: '../src/Shared/{Service,Notify,Helper}'
+        resource: '../src/Shared/{Service,Notify,Helper,*.php}'
 
     App\User\:
         resource: '../src/User/*'

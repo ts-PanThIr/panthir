@@ -5,16 +5,14 @@
     text-input
     model-type="dd/MM/yyyy"
     dark
-    :required="required"
     :enable-time-picker="!hours"
   >
     <template #dp-input>
       <v-text-field
         v-model="dateModel"
-        :rules="[(v) => required === false || !!v || 'Item is required']"
+        :rules="rules"
         :label="label"
-        :required="required"
-      ></v-text-field>
+      />
     </template>
   </Datepicker>
 </template>
@@ -31,8 +29,11 @@ export default {
   props: {
     modelValue: String,
     hours: { type: Boolean, default: false },
-    required: { type: Boolean, default: false },
     label: String,
+    rules: {
+      type: Array,
+      required: false,
+    },
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {

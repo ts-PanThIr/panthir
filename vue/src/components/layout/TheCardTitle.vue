@@ -5,9 +5,14 @@
       class="icon-wrapper text-center rounded-lg mt-n5 position-absolute d-flex align-center justify-center"
       :class="bgColor"
     >
-      <v-icon :icon="icon" :color="textColor"></v-icon>
+      <v-icon
+        :icon="icon"
+        :color="textColor"
+      />
     </div>
-    <h3 class="pl-16 ml-3">{{ text }}</h3>
+    <h3 class="pl-16 ml-3">
+      {{ text }}
+    </h3>
   </v-card-title>
 </template>
 

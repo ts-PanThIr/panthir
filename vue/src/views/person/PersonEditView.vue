@@ -1,40 +1,63 @@
 <template>
   <v-card>
-    <v-tabs v-model="tab" class="bg-accent mb-3" stacked color="white" grow>
+    <v-tabs
+      v-model="tab"
+      class="bg-accent mb-3"
+      stacked
+      color="white"
+      grow
+    >
       <v-tab value="1">
-        <em class="fas fa-person"></em>
+        <em class="fas fa-person" />
         <small class="pt-1">Who</small>
       </v-tab>
       <v-tab value="2">
-        <em class="fas fa-address-book"></em>
+        <em class="fas fa-address-book" />
         <small class="pt-1">Address</small>
       </v-tab>
       <v-tab value="3">
-        <em class="fas fa-mobile-alt"></em>
+        <em class="fas fa-mobile-alt" />
         <small class="pt-1">Contact</small>
       </v-tab>
     </v-tabs>
     <v-window v-model="tab">
-      <v-window-item value="1" eager>
+      <v-window-item
+        value="1"
+        eager
+      >
         <v-card-text>
           <PortugalIndividualPersonForm
             ref="personIndividual"
-          ></PortugalIndividualPersonForm>
+          />
         </v-card-text>
       </v-window-item>
-      <v-window-item value="2" eager>
+      <v-window-item
+        value="2"
+        eager
+      >
         <v-card-text>
-          <TheAddressAddList ref="address"></TheAddressAddList>
+          <TheAddressAddList ref="address" />
         </v-card-text>
       </v-window-item>
-      <v-window-item value="3" eager>
+      <v-window-item
+        value="3"
+        eager
+      >
         <v-card-text>
-          <TheContactAddList ref="contact"></TheContactAddList>
+          <TheContactAddList ref="contact" />
         </v-card-text>
       </v-window-item>
     </v-window>
-    <v-container fluid class="justify-end d-flex">
-      <v-btn color="success" @click="validate"> Send</v-btn>
+    <v-container
+      fluid
+      class="justify-end d-flex"
+    >
+      <v-btn
+        color="success"
+        @click="validate"
+      >
+        Send
+      </v-btn>
     </v-container>
   </v-card>
 </template>

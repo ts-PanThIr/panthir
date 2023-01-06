@@ -6,3 +6,5 @@ export { default as UserEditView } from "~/views/user/UserEditView.vue";
 export { default as LoginView } from "~/views/common/LoginView.vue";
 export { default as RegisterView } from "~/views/common/RegisterView.vue";
 export { default as FinancialEditView } from "~/views/financial/FinancialEditView.vue";
+export { default as FinancialInstallmentTable } from "~/views/financial/FinancialInstallmentTable.vue";
+export { default as AccountingEditView } from "~/views/accounting/AccountingEditView.vue";

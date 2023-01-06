@@ -1,8 +1,14 @@
 <template>
   <v-container fluid>
-    <v-card class="mx-auto mt-16" elevation="15" max-width="400">
+    <v-card
+      class="mx-auto mt-16"
+      elevation="15"
+      max-width="400"
+    >
       <v-card-title class="text-center">
-        <h3 class="pa-3">User Registration</h3>
+        <h3 class="pa-3">
+          User Registration
+        </h3>
       </v-card-title>
       <v-card-text>
         <v-text-field
@@ -10,14 +16,14 @@
           label="First name"
           variant="underlined"
           color="primary"
-        ></v-text-field>
+        />
 
         <v-text-field
           v-model="last"
           label="Last name"
           variant="underlined"
           color="primary"
-        ></v-text-field>
+        />
 
         <v-text-field
           v-model="email"
@@ -25,7 +31,7 @@
           label="Email"
           variant="underlined"
           color="primary"
-        ></v-text-field>
+        />
 
         <v-text-field
           v-model="password"
@@ -34,27 +40,32 @@
           type="password"
           variant="underlined"
           color="primary"
-        ></v-text-field>
+        />
 
         <v-checkbox
           v-model="terms"
           label="I agree to site terms and conditions"
           color="primary"
-        ></v-checkbox>
+        />
       </v-card-text>
 
-      <v-divider></v-divider>
+      <v-divider />
 
       <router-link
         class="text-decoration-none d-block pa-3 text-center text-secondary"
         :to="{ name: 'login' }"
-        >Sign in</router-link
       >
+        Sign in
+      </router-link>
 
       <v-card-actions>
-        <v-spacer></v-spacer>
+        <v-spacer />
 
-        <v-btn block color="success" variant="elevated">
+        <v-btn
+          block
+          color="success"
+          variant="elevated"
+        >
           Complete Registration
         </v-btn>
       </v-card-actions>

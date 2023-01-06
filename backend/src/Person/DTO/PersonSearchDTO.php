@@ -4,21 +4,21 @@ namespace App\Person\DTO;
 
 class PersonSearchDTO
 {
-    private bool $individual;
+    private ?bool $individual;
 
     /**
-     * @return bool
+     * @return ?bool
      */
-    public function IsIndividual(): bool
+    public function IsIndividual(): ?bool
     {
         return $this->individual;
     }
 
     /**
-     * @param bool $individual
+     * @param ?bool $individual
      * @return self
      */
-    public function setIndividual(bool $individual): self
+    public function setIndividual(?bool $individual): self
     {
         $this->individual = $individual;
         return $this;

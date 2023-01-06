@@ -5,13 +5,13 @@ namespace App\Financial\Controller;
 use App\Financial\DTO\FinancialPaymentConditionDTO;
 use App\Financial\Entity\PaymentConditionFinancialEntity;
 use App\Financial\Repository\PaymentConditionFinancialRepository;
-use App\Shared\ApiController;
+use App\Shared\APIController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api/financial/payment-condition')]
-class FinancialPaymentConditionGetAllController extends ApiController
+class FinancialPaymentConditionGetAllController extends APIController
 {
     #[Route(path: "/", name: "app_financial_payment_condition_get_all", methods: 'GET')]
     public function get(

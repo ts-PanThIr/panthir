@@ -1,11 +1,20 @@
 <template>
   <v-container fluid>
-    <v-card class="mx-auto mt-16" elevation="15" max-width="400px">
+    <v-card
+      class="mx-auto mt-16"
+      elevation="15"
+      max-width="400px"
+    >
       <v-card-title class="text-center">
-        <h3 class="pa-3">Welcome back!</h3>
+        <h3 class="pa-3">
+          Welcome back!
+        </h3>
       </v-card-title>
       <v-card-text>
-        <v-form v-model="form" @submit.prevent="onSubmit">
+        <v-form
+          v-model="form"
+          @submit.prevent="onSubmit"
+        >
           <v-text-field
             v-model="email"
             :rules="emailRules"
@@ -14,7 +23,7 @@
             color="primary"
             label="Email"
             variant="underlined"
-          ></v-text-field>
+          />
 
           <v-text-field
             v-model="password"
@@ -25,13 +34,14 @@
             label="Password"
             placeholder="Enter your password"
             variant="underlined"
-          ></v-text-field>
+          />
 
           <router-link
             class="text-decoration-none d-block pa-3 text-center text-secondary"
             :to="{ name: 'register' }"
-            >Register</router-link
           >
+            Register
+          </router-link>
 
           <v-btn
             type="submit"

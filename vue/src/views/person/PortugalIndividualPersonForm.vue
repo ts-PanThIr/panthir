@@ -7,7 +7,7 @@
           :rules="[(v) => !!v || 'Item is required']"
           label="Name"
           required
-        ></v-text-field>
+        />
       </v-col>
 
       <v-col cols="6">
@@ -16,7 +16,7 @@
           :rules="[(v) => !!v || 'Item is required']"
           label="Surname"
           required
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
@@ -26,7 +26,7 @@
           v-model="person.birthDate"
           hours
           label="Birthdate"
-        ></TheDatepicker>
+        />
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -35,7 +35,7 @@
           :rules="[(v) => !!v || 'Item is required']"
           label="NIF"
           required
-        ></v-text-field>
+        />
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -43,15 +43,14 @@
           :rules="[(v) => !!v || 'Item is required']"
           label="NISS"
           required
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
     <v-textarea
       v-model="person.AdditionInformation"
       label="Addition information"
-    >
-    </v-textarea>
+    />
   </v-form>
 </template>
 

@@ -1,7 +1,10 @@
 <template>
   <div>
     <v-row class="justify-content-between">
-      <v-col cols="3" md="2">
+      <v-col
+        cols="3"
+        md="2"
+      >
         <v-select
           v-model="internalLimit"
           label="Page limit"
@@ -11,20 +14,28 @@
           :items="profiles"
           :rules="[(v) => !!v || 'Le type doit être renseignée']"
           @input="$emit('update:limit', $event)"
-        ></v-select>
+        />
       </v-col>
     </v-row>
     <v-table v-if="getCleanedMatrix.length">
       <slot name="thead">
         <thead>
           <tr>
-            <th v-for="item in getHeader" :key="item">{{ item }}</th>
+            <th
+              v-for="item in getHeader"
+              :key="item"
+            >
+              {{ item }}
+            </th>
           </tr>
         </thead>
       </slot>
       <slot name="tbody">
         <tbody>
-          <tr v-for="(item, index) in getCleanedMatrix" :key="index">
+          <tr
+            v-for="(item, index) in getCleanedMatrix"
+            :key="index"
+          >
             <template v-for="(r, i) in item">
               <slot
                 :item="item"
@@ -33,7 +44,9 @@
                 :text="r"
                 :name="i"
               >
-                <td :key="i">{{ r ? r : "-" }}</td>
+                <td :key="i">
+                  {{ r ? r : "-" }}
+                </td>
               </slot>
             </template>
           </tr>
@@ -53,7 +66,7 @@
             active-color="secondary"
             :length="page + 6"
             :total-visible="7"
-          ></v-pagination>
+          />
         </div>
       </slot>
     </v-row>
@@ -145,10 +158,10 @@ export default {
       }
 
       switch (type) {
-        case "date":
-          return this.formatDate(value);
-        default:
-          return value;
+      case "date":
+        return this.formatDate(value);
+      default:
+        return value;
       }
     },
     formatDate(currentDate) {

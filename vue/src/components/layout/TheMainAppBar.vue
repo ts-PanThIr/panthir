@@ -5,14 +5,14 @@
       icon
       title="Switch menu"
       @click.stop="switchMenu()"
-    ></v-btn>
-    <v-spacer></v-spacer>
+    />
+    <v-spacer />
     <v-btn
       class="fa fa-sign-out"
       icon
       title="Logout"
       @click="authStore.logout()"
-    ></v-btn>
+    />
   </v-app-bar>
 </template>
 

@@ -2,7 +2,7 @@
 
 namespace App\User\Controller;
 
-use App\Shared\ApiController;
+use App\Shared\APIController;
 use App\Shared\Notify\NotifyInterface;
 use App\Shared\OCR\TesseractOCR;
 use App\User\Manager\UserManagerInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api')]
-class UserGetController extends ApiController
+class UserGetController extends APIController
 {
     #[Route(path: "/user/number/{max}", name: "app_user_number", methods: 'GET')]
     public function number(int $max): JsonResponse

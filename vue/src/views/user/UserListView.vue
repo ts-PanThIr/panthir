@@ -1,6 +1,9 @@
 <template>
   <h1>Users</h1>
-  <router-link to="/users/add" class="btn btn-sm btn-success mb-2">
+  <router-link
+    to="/users/add"
+    class="btn btn-sm btn-success mb-2"
+  >
     Add User
   </router-link>
 
@@ -12,9 +15,15 @@
     :header="headers"
   >
     <template #action="{ element, index }">
-      <td class="actions to-none pa-lg-3" data-label="Actions :">
-        <button title="Détails" @click="clicked(element, index)">
-          <i class="fas fa-search"></i>
+      <td
+        class="actions to-none pa-lg-3"
+        data-label="Actions :"
+      >
+        <button
+          title="Détails"
+          @click="clicked(element, index)"
+        >
+          <i class="fas fa-search" />
         </button>
       </td>
     </template>

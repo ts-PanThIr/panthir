@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import moment from 'moment';
 
 export const useFinancialStore = defineStore({
   id: "financial",
@@ -29,66 +30,58 @@ export const useFinancialStore = defineStore({
   },
   actions: {
     async createInstallments() {
-      if (!(this.title.value > 0 && this.title.quantityInstallments > 0)) {
-        console.log("burrice");
+      if (!(this.title.value > 0 && this.title.quantityInstallments?.maximumInstallmentQuantity > 0)) {
+        console.log("error burr");
         return;
       }
-      let partialValue = Number(
-        (this.title.value / this.title.quantityInstallments).toFixed(2)
-      );
-      let partialFees =
-        Number(
-          (this.title.fees / this.title.quantityInstallments).toFixed(2)
-        ) || null;
-      let partialFine =
-        Number(
-          (this.title.fine / this.title.quantityInstallments).toFixed(2)
-        ) || null;
-      let partialExtra =
-        Number(
-          (this.title.extra / this.title.quantityInstallments).toFixed(2)
-        ) || null;
-      let partialDiscount =
-        Number(
-          (this.title.discount / this.title.quantityInstallments).toFixed(2)
-        ) || null;
+      this.installments = [];
 
-      //check for differences
-      for (let temp = this.title.quantityInstallments; temp > 0; temp--) {
-        if (temp === 1) {
-          const diffValue =
-            this.title.value - partialValue * this.title.quantityInstallments;
-          const diffFees =
-            this.title.fees - partialFees * this.title.quantityInstallments;
-          const diffFine =
-            this.title.fine - partialFine * this.title.quantityInstallments;
-          const diffExtra =
-            this.title.extra - partialExtra * this.title.quantityInstallments;
-          const diffDiscount =
-            this.title.discount -
-            partialDiscount * this.title.quantityInstallments;
+      // split values
+      const quantityInstallments = this.title.quantityInstallments.maximumInstallmentQuantity;
+      let partialValue = Number((this.title.value / quantityInstallments).toFixed(2));
+      let partialFees = Number((this.title.fees / quantityInstallments).toFixed(2)) || null;
+      let partialFine = Number((this.title.fine / quantityInstallments).toFixed(2)) || null;
+      let partialExtra = Number((this.title.extra / quantityInstallments).toFixed(2)) || null;
+      let partialDiscount = Number((this.title.discount / quantityInstallments).toFixed(2)) || null;
+
+      //get base date based on skipped time
+      const baseDate = moment(this.title.entryAt, "DD/MM/YYYY")
+        .add(this.title.quantityInstallments.firstInterval, 'days');
+
+      for (let temp = 0; temp < quantityInstallments; temp++) {
+        //get date
+        if (temp === 0) {
+          const diffValue = this.title.value - partialValue * quantityInstallments;
+          const diffFees = this.title.fees - partialFees * quantityInstallments;
+          const diffFine = this.title.fine - partialFine * quantityInstallments;
+          const diffExtra = this.title.extra - partialExtra * quantityInstallments;
+          const diffDiscount = this.title.discount - partialDiscount * quantityInstallments;
 
           this.installmentAdd({
             value: Number((partialValue + diffValue).toFixed(2)) || null,
             fees: Number((partialFees + diffFees).toFixed(2)) || null,
             fine: Number((partialFine + diffFine).toFixed(2)) || null,
             extra: Number((partialExtra + diffExtra).toFixed(2)) || null,
-            discount:
-              Number((partialDiscount + diffDiscount).toFixed(2)) || null,
+            discount: Number((partialDiscount + diffDiscount).toFixed(2)) || null,
+            date: baseDate.format("DD/MM/YYYY"),
           });
           continue;
         }
+
+        baseDate.add(1, "months");
         this.installmentAdd({
           value: partialValue,
           fees: partialFees,
           fine: partialFine,
           extra: partialExtra,
           discount: partialDiscount,
+          date: baseDate.format("DD/MM/YYYY"),
         });
       }
     },
-    async installmentAdd({ value, fees, fine, extra, discount }) {
-      this.installments.push({ value, fees, fine, extra, discount });
+    async installmentAdd({ value, fees, fine, extra, discount, date }) {
+      const total = Number((value + fees + fine + extra - discount).toFixed(2));
+      this.installments.push({ value, fees, fine, extra, discount, date, total });
     },
     async getPaymentCondition() {
       try {
