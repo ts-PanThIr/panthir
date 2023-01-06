@@ -5,3 +5,4 @@ export * from "./addressStore";
 export * from "./contactStore";
 export * from "./interfaceStore";
 export * from "./financialStore";
+export * from "./notification";

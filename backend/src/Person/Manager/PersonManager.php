@@ -70,17 +70,22 @@ class PersonManager
             return null;
         }
 
-        /** @var PersonAddressDTO $address */
-        foreach($personDTO->getAddresses() as $address) {
-            $address->setIndividual($personDTO->IsIndividual());
-            $address->setPersonEntity($person);
-            $this->addressManager->saveAddress($address);
+        if(!empty($personDTO->getAddresses())){
+            /** @var PersonAddressDTO $address */
+            foreach($personDTO->getAddresses() as $address) {
+                $address->setIndividual($personDTO->IsIndividual());
+                $address->setPersonEntity($person);
+                $this->addressManager->saveAddress($address);
+            }
         }
-        /** @var PersonContactDTO $contact */
-        foreach($personDTO->getContacts() as $contact) {
-            $contact->setIndividual($personDTO->IsIndividual());
-            $contact->setPersonEntity($person);
-            $this->contactManager->saveContact($contact);
+
+        if(!empty($personDTO->getContacts())){
+            /** @var PersonContactDTO $contact */
+            foreach($personDTO->getContacts() as $contact) {
+                $contact->setIndividual($personDTO->IsIndividual());
+                $contact->setPersonEntity($person);
+                $this->contactManager->saveContact($contact);
+            }
         }
 
         $this->notify->addMessage($this->notify::INFO, "Person saved");

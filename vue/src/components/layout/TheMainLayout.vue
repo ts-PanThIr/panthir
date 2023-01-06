@@ -1,5 +1,5 @@
 <script setup>
-import { TheMainAppBar, TheMainFooter, TheMainMenu } from "~/components";
+import { TheMainAppBar, TheMainFooter, TheMainMenu, TheNotifications } from "~/components";
 </script>
 
 <template>
@@ -9,14 +9,17 @@ import { TheMainAppBar, TheMainFooter, TheMainMenu } from "~/components";
 
   <v-main>
     <v-container fluid>
-      <Suspense>
+      <suspense>
         <template #default>
           <router-view />
         </template>
         <template #fallback>
           <div>Loading...</div>
         </template>
-      </Suspense>
+      </suspense>
+      <suspense>
+        <the-notifications />
+      </suspense>
     </v-container>
   </v-main>
 

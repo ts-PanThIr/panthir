@@ -46,6 +46,7 @@ export default {
         let decimal = parseFloat(
           e.replace(new RegExp('\\' + thousandSeparator, 'g'), '').replace(new RegExp('\\' + decimalSeparator), '.')
         );
+        if(isNaN(decimal)) decimal = 0;
         this.$emit(`update:modelValue`,Number(decimal.toFixed(2)))
       },
     },

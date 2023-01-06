@@ -7,6 +7,7 @@ use App\Person\Entity\JuridicalPersonEntity;
 use App\Person\Entity\PersonEntity;
 use App\Shared\Transformer\AbstractDTOTransformer;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -31,10 +32,10 @@ class PersonDTO extends AbstractDTOTransformer
     private PersonContactDTO $mainContact;
 
     #[Groups(['person'])]
-    private array $addresses = [];
+    private ?ArrayCollection $addresses = null;
 
     #[Groups(['person'])]
-    private array $contacts = [];
+    private ?ArrayCollection $contacts = null;
 
     private ?DateTime $birthDate = null;
 
@@ -165,9 +166,9 @@ class PersonDTO extends AbstractDTOTransformer
     }
 
     /**
-     * @return array
+     * @return ArrayCollection|null
      */
-    public function getAddresses(): array
+    public function getAddresses(): ?ArrayCollection
     {
         return $this->addresses;
     }
@@ -205,28 +206,28 @@ class PersonDTO extends AbstractDTOTransformer
     }
 
     /**
-     * @param array $addresses
+     * @param ArrayCollection $addresses
      * @return PersonDTO
      */
-    public function setAddresses(array $addresses): self
+    public function setAddresses(ArrayCollection $addresses): self
     {
         $this->addresses = $addresses;
         return $this;
     }
 
     /**
-     * @return array
+     * @return ArrayCollection|null
      */
-    public function getContacts(): array
+    public function getContacts(): ?ArrayCollection
     {
         return $this->contacts;
     }
 
     /**
-     * @param array $contacts
+     * @param ArrayCollection|null $contacts
      * @return PersonDTO
      */
-    public function setContacts(array $contacts): self
+    public function setContacts(?ArrayCollection $contacts): self
     {
         $this->contacts = $contacts;
         return $this;
@@ -238,7 +239,9 @@ class PersonDTO extends AbstractDTOTransformer
      */
     public function addContacts(PersonContactDTO $contactDTO): self
     {
-        $this->contacts[] = $contactDTO;
+        if (!$this->contacts->contains($contactDTO)) {
+            $this->contacts->add($contactDTO);
+        }
         return $this;
     }
 
@@ -248,7 +251,9 @@ class PersonDTO extends AbstractDTOTransformer
      */
     public function removeContacts(PersonContactDTO $contactDTO): self
     {
-        $this->contacts[] = $contactDTO;
+        if ($this->contacts->contains($contactDTO)) {
+            $this->contacts->removeElement($contactDTO);
+        }
         return $this;
     }
 
@@ -406,8 +411,8 @@ class PersonDTO extends AbstractDTOTransformer
     {
         $dto = new PersonDTO();
         $dto->setAdditionalInformation($object->getAdditionalInformation())
-            ->setAddresses(PersonAddressDTO::transformFromObjects($object->getAddresses()))
-            ->setContacts(PersonContactDTO::transformFromObjects($object->getContacts()))
+            ->setAddresses(PersonAddressDTO::transformFromObjectsToCollection($object->getAddresses()))
+            ->setContacts(PersonContactDTO::transformFromObjectsToCollection($object->getContacts()))
             ->setName($object->getName())
             ->setId($object->getId())
         ;

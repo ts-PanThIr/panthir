@@ -4,33 +4,15 @@ namespace App\User\Controller;
 
 use App\Shared\APIController;
 use App\Shared\Notify\NotifyInterface;
-use App\Shared\OCR\TesseractOCR;
-use App\User\Manager\UserManagerInterface;
+use App\User\Manager\UserManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api')]
 class UserGetController extends APIController
 {
-    #[Route(path: "/user/number/{max}", name: "app_user_number", methods: 'GET')]
-    public function number(int $max): JsonResponse
-    {
-        $number = random_int(0, $max);
-
-        return JsonResponse::fromJsonString($number);
-    }
-
-    #[Route(path: "/user/upload", name: "app_user_upload", methods: 'POST')]
-    public function upload(Request $request): JsonResponse
-    {
-        $txt = (new TesseractOCR('../var/img.png'))->run();
-
-        return JsonResponse::fromJsonString($txt);
-    }
-
     #[Route(path: "/users", name: "app_users_getAll", methods: 'GET')]
-    public function get(UserManagerInterface $userManager, NotifyInterface $notify): JsonResponse
+    public function get(UserManager $userManager, NotifyInterface $notify): JsonResponse
     {
         $notify->addMessage($notify::WARNING, "teste de warning");
         $users = $userManager->search();

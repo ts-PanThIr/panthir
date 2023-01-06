@@ -31,6 +31,7 @@ export const useAuthStore = defineStore({
       }
     },
     logout() {
+      debugger;
       this.user = null;
       localStorage.removeItem("user");
       this.$router.push("/account/login");

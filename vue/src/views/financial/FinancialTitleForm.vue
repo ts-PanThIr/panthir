@@ -73,7 +73,7 @@
               v-model.lazy="title.value"
               label="Gross +"
               color="success"
-              :rules="[(v) => (!!v && v > 0) || 'Item is required']"
+              :rules="grossRule"
             />
           </v-col>
           <v-col cols="3">
@@ -160,6 +160,12 @@ export default {
       paymentConditions,
     };
   },
+  data: () => ({
+    tab: "1",
+    grossRule: [
+      (v) => !!v || 'Item is required',
+    ],
+  }),
   methods: {
     validate: async function () {
       if (!(await this.$refs.titleForm.validate()).valid) {

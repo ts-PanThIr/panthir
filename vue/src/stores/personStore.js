@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useAddressStore, useContactStore } from "~/stores";
+import { useAddressStore, useContactStore, useNotificationStore } from "~/stores";
 import { FormHelper } from "~/helpers";
 
 export const usePersonStore = defineStore({
@@ -60,6 +60,7 @@ export const usePersonStore = defineStore({
       return await this.$http
         .post(`${this.$apiUrl}/api/person/`, formData)
         .then((d) => {
+          useNotificationStore().proccessReturn(d.data.notify)
           return d.data.data;
         });
     },
