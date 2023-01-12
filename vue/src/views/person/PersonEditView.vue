@@ -1,25 +1,38 @@
 <template>
-  <v-card>
-    <v-tabs
-      v-model="tab"
-      class="bg-accent mb-3"
-      stacked
-      color="white"
-      grow
+  <v-card class="overflow-visible">
+    <the-card-title
+      text="Person"
+      icon="fas fa-person"
+      bg-color="bg-success-gradient"
+      text-color="white"
     >
-      <v-tab value="1">
-        <em class="fas fa-person" />
-        <small class="pt-1">Who</small>
-      </v-tab>
-      <v-tab value="2">
-        <em class="fas fa-address-book" />
-        <small class="pt-1">Address</small>
-      </v-tab>
-      <v-tab value="3">
-        <em class="fas fa-mobile-alt" />
-        <small class="pt-1">Contact</small>
-      </v-tab>
-    </v-tabs>
+      <template #after>
+        <v-col
+          cols="6"
+          class="pa-0 d-flex justify-end"
+        >
+          <v-tabs
+            v-model="tab"
+            class="bg-success-gradient position-absolute rounded mt-n5 mb-3"
+            stacked
+            grow
+          >
+            <v-tab value="1">
+              <em class="fas fa-person" />
+              <small class="pt-1">Who</small>
+            </v-tab>
+            <v-tab value="2">
+              <em class="fas fa-address-book" />
+              <small class="pt-1">Address</small>
+            </v-tab>
+            <v-tab value="3">
+              <em class="fas fa-mobile-alt" />
+              <small class="pt-1">Contact</small>
+            </v-tab>
+          </v-tabs>
+        </v-col>
+      </template>
+    </the-card-title>
     <v-window v-model="tab">
       <v-window-item
         value="1"
@@ -53,7 +66,7 @@
       class="justify-end d-flex"
     >
       <v-btn
-        color="success"
+        class="success"
         @click="validate"
       >
         Send
@@ -66,7 +79,7 @@
 import PortugalIndividualPersonForm from "~/views/person/PortugalIndividualPersonForm.vue";
 import { usePersonStore } from "~/stores";
 import { useRoute } from "vue-router";
-import { TheAddressAddList, TheContactAddList } from "~/components";
+import { TheAddressAddList, TheContactAddList, TheCardTitle } from "~/components";
 
 export default {
   name: "PersonEditView",
@@ -74,6 +87,7 @@ export default {
     TheContactAddList,
     PortugalIndividualPersonForm,
     TheAddressAddList,
+    TheCardTitle,
   },
   async setup() {
     const route = useRoute();

@@ -14,7 +14,7 @@
         :header="headers"
       >
         <template #action="{ element }">
-          <td class="actions to-none pa-lg-3">
+          <td class="actions to-none pa-1">
             <v-btn
               color="primary"
               size="x-small"

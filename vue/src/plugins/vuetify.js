@@ -1,44 +1,57 @@
-// Styles
-// https://mycolor.space/?hex=%23D0EA59&sub=1
 // import colors from "vuetify/lib/util/colors";
 import "@fortawesome/fontawesome-free/css/all.css"; // Ensure you are using css-loader
 import "~/assets/base.sass";
+import customColors  from "~/assets/template/exports/colors.module.scss";
 // import "@mdi/font/css/materialdesignicons.css";
+// import { md1 } from 'vuetify/blueprints'
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import { aliases, fa } from "vuetify/iconsets/fa";
 
-/**
- * main
- * #050505
- * #30303a
- * #d0ea59
- *      #D9F752
- *      #9AAD42
- * #b189fa
- */
-
 const myCustomLightTheme = {
-  dark: true,
+  dark: false,
   colors: {
-    background: "#252e42",
-    surface: "#2f3b52",
-    surfaceLighten: "#49556C",
-    primary: "#d0ea59", //"#b189fa",
-    secondary: "#b189fa",
-    error: "#e06457",
-    info: "#6C9FE0",
-    success: "#d0ea59",
-    warning: "#EDD64E",
-    color: "#d0ea59",
-    accent: "#9DB924",
+    background: customColors.background,
+    surface: customColors.surface,
+    surfaceLighten: customColors.surfaceLighten,
+    primary: customColors.primary,
+    secondary: customColors.secondary,
+    error: customColors.error,
+    info: customColors.info,
+    success: customColors.success,
+    warning: customColors.warning,
+    accent: customColors.accent,
+    textDark: customColors.textDark,
   },
 };
 
 export default createVuetify({
-  // theme: {
-  //     defaultTheme: 'dark'
-  // }
+  blueprint: {
+    defaults: {
+      VCombobox: {
+        variant: 'underlined',
+      },
+      VSelect: {
+        variant: 'underlined',
+        color: 'textDark',
+      },
+      VTextarea: {
+        variant: 'underlined',
+        color: 'textDark',
+      },
+      VTextField: {
+        variant: 'underlined',
+        density: 'compact',
+        color: 'textDark',
+      },
+      VTabs: {
+        density: 'compact',
+      },
+      VTable: {
+        density: 'compact',
+      },
+    },
+  },
   icons: {
     defaultSet: "fa",
     aliases,

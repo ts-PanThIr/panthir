@@ -14,4 +14,18 @@ export default defineConfig({
       "~": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  // css: {
+  //   loaderOptions: {
+  //     scss: {
+  //       // Here we can specify the older indent syntax formatted SASS
+  //       // Note that there is *not* a semicolon at the end of the below line
+  //       data: `@import "./src/assets/template/variables/colors.scss"`,
+  //     },
+  //     // scss: {
+  //     //   // Here we can use the newer SCSS flavor of Sass.
+  //     //   // Note that there *is* a semicolon at the end of the below line
+  //     //   data: `@import "@/styles/_variables.scss";`,
+  //     // },
+  //   },
+  // },
 });

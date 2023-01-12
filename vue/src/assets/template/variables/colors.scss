@@ -1,0 +1,32 @@
+$background: #eff1f4;
+$surface: #fdfdfe;
+$text-light: $surface;
+$text-dark: #344767;
+$surfaceLighten: #fff;
+$primary: #43a047;
+$secondary: #7b809a;
+$error: #f44335;
+$danger: $error;
+$info: #03a9f4;
+$accent: #43a047;
+$warning: #fb8c00;
+$success: #4caf50;
+$dark: #191919;
+
+//never changes any value in this array, do it in the upwards vars
+$theme-colors: (
+  background: $background,
+  textLight: $text-light,
+  textDark: $text-dark,
+  surface: $surface,
+  surfaceLighten: $surfaceLighten,
+  primary: $primary,
+  secondary: $secondary,
+  error: $error,
+  danger: $danger,
+  dark: $dark,
+  info: $info,
+  success: $success,
+  warning: $warning,
+  accent: $accent,
+);

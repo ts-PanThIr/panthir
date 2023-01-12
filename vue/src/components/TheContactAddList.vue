@@ -3,8 +3,7 @@
     <v-form ref="form">
       <v-row class="justify-center">
         <v-btn
-          size="large"
-          color="info"
+          class="info"
           @click="addContact()"
         >
           New

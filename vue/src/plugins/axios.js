@@ -65,6 +65,7 @@ async function handleError(error) {
   if ([401, 403].includes(error.status) && user) {
     // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
     logout();
+    return;
   }
   return Promise.reject(error);
 }
