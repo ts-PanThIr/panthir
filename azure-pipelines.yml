@@ -15,7 +15,7 @@ steps:
 - task: DockerCompose@0
   inputs:
     containerregistrytype: 'Azure Container Registry'
-    azureSubscription: 'Azure Storage'
+    azureSubscription: 'docbuilder storage'
     azureContainerRegistry: '{"loginServer":"docbuilderbackend.azurecr.io", "id" : "/subscriptions/08a0b74a-f117-40c6-a944-63fbdbb675d8/resourceGroups/docbuilder-storage/providers/Microsoft.ContainerRegistry/registries/docbuilderbackend"}'
     dockerComposeFile: '**/docker-compose.yml'
     action: 'Run a Docker Compose command'
@@ -24,9 +24,10 @@ steps:
 - task: DockerCompose@0
   inputs:
     containerregistrytype: 'Azure Container Registry'
-    azureSubscription: 'Azure Storage'
+    azureSubscription: 'docbuilder storage'
     azureContainerRegistry: '{"loginServer":"docbuilderbackend.azurecr.io", "id" : "/subscriptions/08a0b74a-f117-40c6-a944-63fbdbb675d8/resourceGroups/docbuilder-storage/providers/Microsoft.ContainerRegistry/registries/docbuilderbackend"}'
     dockerComposeFile: '**/docker-compose.yml'
     action: 'Push services'
     includeSourceTags: true
     includeLatestTag: true
+
