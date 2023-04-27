@@ -1,7 +1,13 @@
 FROM nginx:alpine
 
-COPY nginx.conf /etc/nginx/
-COPY default.conf /etc/nginx/conf.d/
+ENV COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}
+ENV NGINX_HOST_HTTP_PORT=${NGINX_HOST_HTTP_PORT}
+ENV ENV=${ENV}
+
+RUN echo "------> ENV ${ENV}"
+
+COPY ./.docker/nginx/nginx.conf /etc/nginx/
+COPY ./.docker/nginx/default.conf /etc/nginx/conf.d/
 
 RUN apk update && apk upgrade && apk add --no-cache bash
 
@@ -13,5 +19,7 @@ RUN set -x ; \
 ARG PHP_UPSTREAM_CONTAINER=php-fpm
 ARG PHP_UPSTREAM_PORT=9000
 RUN echo "upstream php-upstream { server ${PHP_UPSTREAM_CONTAINER}:${PHP_UPSTREAM_PORT}; }" > /etc/nginx/conf.d/upstream.conf
+
+COPY ./backend /var/www
 
 EXPOSE 80

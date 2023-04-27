@@ -2,7 +2,9 @@
 
 namespace App\User\Command;
 
+use App\User\DTO\UserDTO;
 use App\User\Manager\UserManager;
+use App\User\UserRoles;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,10 +54,14 @@ class UserCreateCommand extends Command
 
         $output->writeln('Username: ' . $email);
 
-        $this->userManager->create(
-            email: $email,
-            password: $password
+        $this->userManager->saveUser(
+            new UserDTO(
+                email: $email,
+                roles: UserRoles::PROFILE_ADMIN,
+                password: $password
+            )
         );
+        $this->userManager->flush();
 
         // this method must return an integer number with the "exit status code"
         // of the command. You can also use these constants to make code more readable

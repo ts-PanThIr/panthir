@@ -4,16 +4,18 @@ namespace App\Person\Manager;
 
 use App\Person\DTO\PersonAddressDTO;
 use App\Person\Entity\PersonAddressEntity;
+use App\Shared\AbstractManager;
 use App\Shared\Notify\Notify;
 use Doctrine\ORM\EntityManagerInterface;
 
-class AddressManager
+class AddressManager extends AbstractManager
 {
     public function __construct(
-        private readonly Notify                 $notify,
-        private readonly EntityManagerInterface $entityManager
+        Notify                  $notify,
+        EntityManagerInterface  $entityManager
     )
     {
+        parent::__construct(entityManager: $entityManager, notify: $notify);
     }
 
     public function saveAddress(PersonAddressDTO $addressDTO): ?PersonAddressEntity

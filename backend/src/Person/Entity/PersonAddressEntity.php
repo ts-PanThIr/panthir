@@ -15,32 +15,10 @@ class PersonAddressEntity
 {
     use AddressTrait;
 
-    #[ORM\Column]
-    #[Groups(['person'])]
-    private bool $individual = true;
-
     #[ManyToOne(targetEntity: PersonEntity::class, inversedBy: "addresses")]
     #[JoinColumn(name: "person_id", referencedColumnName: "id")]
     #[Groups(['person'])]
     private PersonEntity $person;
-
-    /**
-     * @return bool
-     */
-    public function isIndividual(): bool
-    {
-        return $this->individual;
-    }
-
-    /**
-     * @param bool $individual
-     * @return self
-     */
-    public function setIndividual(bool $individual): self
-    {
-        $this->individual = $individual;
-        return $this;
-    }
 
     /**
      * @return PersonEntity

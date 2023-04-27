@@ -23,9 +23,6 @@ class PersonContactDTO extends AbstractDTOTransformer
 
     private PersonEntity $personEntity;
 
-    #[Groups(['person'])]
-    private bool $individual;
-
     /**
      * @return ?int
      */
@@ -117,31 +114,13 @@ class PersonContactDTO extends AbstractDTOTransformer
     }
 
     /**
-     * @return bool
-     */
-    public function IsIndividual(): bool
-    {
-        return $this->individual;
-    }
-
-    /**
-     * @param bool $individual
-     * @return self
-     */
-    public function setIndividual(bool $individual): self
-    {
-        $this->individual = $individual;
-        return $this;
-    }
-
-    /**
      * @param PersonContactEntity $object
      * @return PersonContactDTO
      */
     public static function transformFromObject(object $object): PersonContactDTO
     {
         $dto = new PersonContactDTO();
-        return $dto->setIndividual($object->isIndividual())
+        return $dto
             ->setName($object->getName())
             ->setId($object->getId())
             ->setEmail($object->getEmail())

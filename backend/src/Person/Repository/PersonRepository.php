@@ -25,17 +25,9 @@ class PersonRepository extends ServiceEntityRepository
     public function search(PersonSearchDTO $search): array
     {
         $qb = $this->createQueryBuilder('p')
-            ->select('p, pi, addresses, pj')
-            ->leftJoin('p.individualPerson', 'pi')
+            ->select('p, addresses')
             ->leftJoin('p.addresses', 'addresses')
-            ->leftJoin('p.juridicalPerson', 'pj')
         ;
-//        if ($search->IsIndividual()) {
-//            $qb->andWhere('pi.id is not null');
-//        }
-//        else{
-//            $qb->andWhere('pj.id is not null');
-//        }
         return $qb->getQuery()->getResult();
     }
 }

@@ -19,9 +19,9 @@ abstract class APIController extends AbstractController
      * @param LoggerInterface $logger
      */
     public function __construct(
-        private readonly NotifyInterface     $notify,
-        private readonly SerializerInterface $serializer,
-        private readonly LoggerInterface     $logger
+        protected readonly NotifyInterface     $notify,
+        protected readonly SerializerInterface $serializer,
+        protected readonly LoggerInterface     $logger
     ){}
 
     /**

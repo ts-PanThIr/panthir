@@ -2,12 +2,18 @@ version: "3.8"
 
 services:
   php-fpm:
-    container_name: panthir_php-fpm
+    container_name: ${COMPOSE_PROJECT_NAME}_php-fpm
     build:
       context: .
       dockerfile: ./.docker/php-fpm/Dockerfile
       args:
         - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+        - ENV=${ENV}
+        - DB_NAME=${POSTGRES_DB}
+        - DB_USER=${POSTGRES_USER}
+        - DB_PASS=${POSTGRES_PASSWORD}
+        - DB_HOST=${POSTGRES_HOST}
+        - DB_PORT=${POSTGRES_PORT}
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
     expose:
@@ -15,14 +21,17 @@ services:
     volumes:
       - ./backend:/var/www/
     networks:
-      - postgres
+      - symfony
     extra_hosts:
       - host.docker.internal:host-gateway
 
   nginx:
-    container_name: panthir_nginx
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
     build:
-      context: ./.docker/nginx
+      context: .
+      dockerfile: ./.docker/nginx/Dockerfile
+      args:
+        - NGINX_HOST_HTTP_PORT=${NGINX_HOST_HTTP_PORT}
     ports:
       - ${NGINX_HOST_HTTP_PORT}:80
     volumes:
@@ -30,10 +39,10 @@ services:
     depends_on:
       - php-fpm
     networks:
-      - postgres
+      - symfony
 
   postgres:
-    container_name: panthir_postgres
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
     build:
       context: ./.docker/postgres
     ports:
@@ -45,10 +54,38 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data:rw
     networks:
-      - postgres
+      - symfony
+
+#  mysql:
+#    image: mysql:8.0
+#    container_name: ${COMPOSE_PROJECT_NAME}_mysql
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - mysql:/var/lib/mysql/
+#    environment:
+#      MYSQL_DATABASE: ${DB_NAME}
+#      MYSQL_USER: ${DB_USER}
+#      MYSQL_PASSWORD: ${DB_PASS}
+#      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+#    networks:
+#      - symfony
+
+#  phpmyadmin:
+#    container_name: ${COMPOSE_PROJECT_NAME}_phpmyadmin
+#    image: phpmyadmin/phpmyadmin:latest
+#    ports:
+#      - 8081:80
+#    environment:
+#      - PMA_ARBITRARY=1
+#    depends_on:
+#      - mysql
+#    networks:
+#      - symfony
 
 volumes:
   db_data:
+#  backend:
 
 networks:
-  postgres:
+  symfony:

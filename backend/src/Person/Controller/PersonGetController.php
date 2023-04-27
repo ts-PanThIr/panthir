@@ -21,7 +21,6 @@ class PersonGetController extends APIController
         Request $request
     ): JsonResponse
     {
-        $request->query->get("individual");
         $person = $entityManager->getRepository(PersonEntity::class)->find($id);
 
         $notify->addMessage($notify::WARNING, "teste de warning");

@@ -3,10 +3,16 @@
 namespace App\Person\Entity;
 
 use App\Person\Repository\PersonRepository;
+use App\Project\Entity\ProjectEntity;
+use App\User\Entity\UserEntity;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -24,6 +30,34 @@ class PersonEntity
     #[Groups(['person'])]
     private string $name;
 
+    #[ORM\Column]
+    #[Groups(['person'])]
+    private string $surname;
+
+    #[ORM\Column]
+    #[Groups(['person'])]
+    private string $document;
+
+    #[ORM\Column]
+    #[Groups(['person'])]
+    private string $secondaryDocument;
+
+    #[ORM\OneToOne(targetEntity: PersonAddressEntity::class)]
+    #[ORM\JoinColumn(name: "main_address_id", referencedColumnName: "id")]
+    #[Groups(['person'])]
+    private ?PersonAddressEntity $mainAddress = null;
+
+    /** TODO: replace main things for more specialized ones */
+
+    #[ORM\OneToOne(targetEntity: PersonContactEntity::class)]
+    #[ORM\JoinColumn(name: "main_contact_id", referencedColumnName: "id")]
+    #[Groups(['person'])]
+    private ?PersonContactEntity $mainContact = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['person'])]
+    private ?DateTimeInterface $birthDate = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['person'])]
     private ?string $additionalInformation = null;
@@ -36,68 +70,127 @@ class PersonEntity
     #[Groups(['person'])]
     private Collection $contacts;
 
-    #[OneToOne(mappedBy: 'person', targetEntity: IndividualPersonEntity::class)]
+    #[ORM\OneToMany(mappedBy: "client", targetEntity: UserEntity::class)]
     #[Groups(['person'])]
-    private ?IndividualPersonEntity $individualPerson = null;
+    private Collection $users;
 
-    #[OneToOne(mappedBy: 'person', targetEntity: JuridicalPersonEntity::class)]
-    #[Groups(['person'])]
-    private ?JuridicalPersonEntity $juridicalPerson = null;
+    #[OneToOne(inversedBy: 'person', targetEntity: PersonAccountEntity::class)]
+    #[JoinColumn(name: 'account_id', referencedColumnName: 'id')]
+    private PersonAccountEntity|null $account = null;
+
+    #[ManyToMany(targetEntity: ProjectEntity::class, inversedBy: 'clients')]
+    #[JoinTable(name: 'person_project')]
+    private Collection $projects;
 
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return self
-     */
     public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
+    public function getSurname(): string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(string $surname): static
+    {
+        $this->surname = $surname;
+        return $this;
+    }
+
+    public function getMainAddress(): ?PersonAddressEntity
+    {
+        return $this->mainAddress;
+    }
+
+    public function setMainAddress(?PersonAddressEntity $mainAddress): static
+    {
+        $this->mainAddress = $mainAddress;
+        return $this;
+    }
+
+    public function getMainContact(): ?PersonContactEntity
+    {
+        return $this->mainContact;
+    }
+
+    public function setMainContact(?PersonContactEntity $mainContact): static
+    {
+        $this->mainContact = $mainContact;
+        return $this;
+    }
+
+    public function getDocument(): string
+    {
+        return $this->document;
+    }
+
+    public function setDocument(string $document): static
+    {
+        $this->document = $document;
+        return $this;
+    }
+
+    public function getSecondaryDocument(): string
+    {
+        return $this->secondaryDocument;
+    }
+
+    public function setSecondaryDocument(string $secondaryDocument): static
+    {
+        $this->secondaryDocument = $secondaryDocument;
+        return $this;
+    }
+
+    public function setBirthDate(?\DateTimeInterface $birthDate): static
+    {
+        $this->birthDate = $birthDate;
+        return $this;
+    }
+
+    public function getBirthDate(): ?String
+    {
+        if(empty($this->birthDate)) {
+            return null;
+        }
+        return date_format($this->birthDate, 'd/m/Y');
+    }
+
+    public function getRawBirthDate(): ?DateTimeInterface
+    {
+        return $this->birthDate;
+    }
+
     public function getAdditionalInformation(): ?string
     {
         return $this->additionalInformation;
     }
 
-    /**
-     * @param string|null $additionalInformation
-     * @return self
-     */
     public function setAdditionalInformation(?string $additionalInformation): static
     {
         $this->additionalInformation = $additionalInformation;
         return $this;
     }
 
-    /**
-     * @param PersonAddressEntity $address
-     * @return self
-     */
     public function addAddresses(PersonAddressEntity $address): self
     {
         if (!$this->addresses->contains($address)) {
@@ -109,10 +202,6 @@ class PersonEntity
         return $this;
     }
 
-    /**
-     * @param PersonAddressEntity $address
-     * @return self
-     */
     public function removeAddresses(PersonAddressEntity $address): self
     {
         if ($this->addresses->contains($address)) {
@@ -124,18 +213,11 @@ class PersonEntity
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getAddresses(): Collection
     {
         return $this->addresses;
     }
 
-    /**
-     * @param ArrayCollection $address
-     * @return self
-     */
     public function setAddresses(ArrayCollection $address): self
     {
         $this->addresses = $address;
@@ -143,10 +225,6 @@ class PersonEntity
         return $this;
     }
 
-    /**
-     * @param PersonContactEntity $contact
-     * @return self
-     */
     public function addContacts(PersonContactEntity $contact): self
     {
         if (!$this->contacts->contains($contact)) {
@@ -158,10 +236,6 @@ class PersonEntity
         return $this;
     }
 
-    /**
-     * @param PersonContactEntity $contact
-     * @return self
-     */
     public function removeContacts(PersonContactEntity $contact): self
     {
         if ($this->contacts->contains($contact)) {
@@ -173,18 +247,11 @@ class PersonEntity
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getContacts(): Collection
     {
         return $this->contacts;
     }
 
-    /**
-     * @param ArrayCollection $contact
-     * @return self
-     */
     public function setContacts(ArrayCollection $contact): self
     {
         $this->contacts = $contact;
@@ -192,40 +259,36 @@ class PersonEntity
         return $this;
     }
 
-    /**
-     * @return IndividualPersonEntity|null
-     */
-    public function getIndividualPerson(): ?IndividualPersonEntity
+    public function getAccount(): ?PersonAccountEntity
     {
-        return $this->individualPerson;
+        return $this->account;
     }
 
-    /**
-     * @param IndividualPersonEntity|null $individualPerson
-     * @return self
-     */
-    public function setIndividualPerson(?IndividualPersonEntity $individualPerson): self
+    public function setAccount(?PersonAccountEntity $account): self
     {
-        $this->individualPerson = $individualPerson;
+        $this->account = $account;
         return $this;
     }
 
-    /**
-     * @return JuridicalPersonEntity|null
-     */
-    public function getJuridicalPerson(): ?JuridicalPersonEntity
+    public function getUsers(): Collection
     {
-        return $this->juridicalPerson;
+        return $this->users;
     }
 
-    /**
-     * @param JuridicalPersonEntity|null $juridicalPerson
-     * @return self
-     */
-    public function setJuridicalPerson(?JuridicalPersonEntity $juridicalPerson): self
+    public function setUsers(Collection $users): PersonEntity
     {
-        $this->juridicalPerson = $juridicalPerson;
+        $this->users = $users;
         return $this;
     }
 
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function setProjects(Collection $projects): PersonEntity
+    {
+        $this->projects = $projects;
+        return $this;
+    }
 }

@@ -24,7 +24,6 @@ class PersonGetAllController extends APIController
     ): JsonResponse
     {
         $search = new PersonSearchDTO();
-        $search->setIndividual($request->query->get("individual"));
 
         /** @var PersonRepository $person */
         $person = $entityManager->getRepository(PersonEntity::class)->search($search);

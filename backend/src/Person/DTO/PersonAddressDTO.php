@@ -38,9 +38,6 @@ class PersonAddressDTO extends AbstractDTOTransformer
 
     private PersonEntity $personEntity;
 
-    #[Groups(['person'])]
-    private bool $individual;
-
     /**
      * @return ?int
      */
@@ -222,33 +219,15 @@ class PersonAddressDTO extends AbstractDTOTransformer
     }
 
     /**
-     * @return bool
-     */
-    public function IsIndividual(): bool
-    {
-        return $this->individual;
-    }
-
-    /**
-     * @param bool $individual
-     * @return self
-     */
-    public function setIndividual(bool $individual): self
-    {
-        $this->individual = $individual;
-        return $this;
-    }
-
-    /**
      * @param PersonAddressEntity $object
      * @return PersonAddressDTO
      */
     public static function transformFromObject(object $object): PersonAddressDTO
     {
         $dto = new PersonAddressDTO();
-        return $dto->setId($object->getId())
+        return $dto
+            ->setId($object->getId())
             ->setName($object->getName())
-            ->setIndividual($object->isIndividual())
             ->setAddress($object->getAddress())
             ->setAddressComplement($object->getAddressComplement())
             ->setCity($object->getCity())
@@ -256,6 +235,6 @@ class PersonAddressDTO extends AbstractDTOTransformer
             ->setDistrict($object->getDistrict())
             ->setNumber($object->getNumber())
             ->setZip($object->getZip())
-            ;
+        ;
     }
 }

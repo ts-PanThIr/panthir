@@ -15,6 +15,11 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     Doctrine\ORM\EntityManagerInterface: '@doctrine.orm.entity_manager'
 
+    app.event.jwt_created_listener:
+        class: App\Shared\EventListener\JWTListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }
+
     App\Shared\:
         resource: '../src/Shared/{Service,Notify,Helper,*.php}'
 

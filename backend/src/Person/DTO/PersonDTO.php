@@ -2,9 +2,6 @@
 
 namespace App\Person\DTO;
 
-use App\Person\Entity\IndividualPersonEntity;
-use App\Person\Entity\JuridicalPersonEntity;
-use App\Person\Entity\PersonEntity;
 use App\Shared\Transformer\AbstractDTOTransformer;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,9 +20,6 @@ class PersonDTO extends AbstractDTOTransformer
     private ?string $additionalInformation = null;
 
     #[Groups(['person'])]
-    private bool $individual;
-
-    #[Groups(['person'])]
     private PersonAddressDTO $mainAddress;
 
     #[Groups(['person'])]
@@ -41,9 +35,6 @@ class PersonDTO extends AbstractDTOTransformer
 
     #[Groups(['person'])]
     private ?string $surname = null;
-
-    #[Groups(['person'])]
-    private ?string $nickname = null;
 
     #[Groups(['person'])]
     private string $document;
@@ -108,24 +99,6 @@ class PersonDTO extends AbstractDTOTransformer
     public function setAdditionalInformation(?string $additionalInformation): PersonDTO
     {
         $this->additionalInformation = $additionalInformation;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function IsIndividual(): bool
-    {
-        return $this->individual;
-    }
-
-    /**
-     * @param bool $individual
-     * @return PersonDTO
-     */
-    public function setIndividual(bool $individual): PersonDTO
-    {
-        $this->individual = $individual;
         return $this;
     }
 
@@ -314,24 +287,6 @@ class PersonDTO extends AbstractDTOTransformer
     }
 
     /**
-     * @return string|null
-     */
-    public function getNickname(): ?string
-    {
-        return $this->nickname;
-    }
-
-    /**
-     * @param string|null $nickname
-     * @return PersonDTO
-     */
-    public function setNickname(?string $nickname): PersonDTO
-    {
-        $this->nickname = $nickname;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getDocument(): string
@@ -410,30 +365,17 @@ class PersonDTO extends AbstractDTOTransformer
     public static function transformFromObject(object $object): self
     {
         $dto = new PersonDTO();
-        $dto->setAdditionalInformation($object->getAdditionalInformation())
+        $dto
+            ->setAdditionalInformation($object->getAdditionalInformation())
             ->setAddresses(PersonAddressDTO::transformFromObjectsToCollection($object->getAddresses()))
             ->setContacts(PersonContactDTO::transformFromObjectsToCollection($object->getContacts()))
             ->setName($object->getName())
             ->setId($object->getId())
+            ->setBirthDate($object->getRawBirthDate())
+            ->setDocument($object->getDocument())
+            ->setSecondaryDocument($object->getSecondaryDocument())
+            ->setSurname($object->getSurname())
         ;
-        if($object->getIndividualPerson()) {
-            /** @var IndividualPersonEntity $individualperson */
-            $individualperson = $object->getIndividualPerson();
-            $dto->setBirthDate($individualperson->getRawBirthDate())
-                ->setDocument($individualperson->getDocument())
-                ->setSecondaryDocument($individualperson->getSecondaryDocument())
-                ->setIndividual(true)
-                ->setSurname($individualperson->getSurname())
-                ;
-        } else {
-            // needs improvement
-            /** @var JuridicalPersonEntity $juridicalPerson */
-            $juridicalPerson = $object->getJuridicalPerson();
-            $dto->setName($juridicalPerson->getNickname())
-                ->setIndividual(false)
-            ;
-        }
-
         return $dto;
     }
 }
