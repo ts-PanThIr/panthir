@@ -33,11 +33,6 @@ class UserPostController extends APIController
             type: UserDTO::class
         );
 
-        if($request->request->get("client")){
-            $client = $entityManager->getReference(PersonEntity::class, $request->request->get("client"));
-            $user->setClient($client);
-        }
-
         $return = $userManager->saveUser($user);
         $entityManager->flush();
         return $this->response(items: $return, groups: ['user']);

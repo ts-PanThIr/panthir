@@ -54,10 +54,6 @@ export default {
         title: 'People',
         items: [
           {
-            title: 'Client',
-            routeName: 'clientList',
-          },
-          {
             title: 'Individual',
             routeName: 'personList',
           },

@@ -3,17 +3,11 @@
 namespace App\Person\Entity;
 
 use App\Person\Repository\PersonRepository;
-use App\Project\Entity\ProjectEntity;
-use App\User\Entity\UserEntity;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
-use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
@@ -70,24 +64,10 @@ class PersonEntity
     #[Groups(['person'])]
     private Collection $contacts;
 
-    #[ORM\OneToMany(mappedBy: "client", targetEntity: UserEntity::class)]
-    #[Groups(['person'])]
-    private Collection $users;
-
-    #[OneToOne(inversedBy: 'person', targetEntity: PersonAccountEntity::class)]
-    #[JoinColumn(name: 'account_id', referencedColumnName: 'id')]
-    private PersonAccountEntity|null $account = null;
-
-    #[ManyToMany(targetEntity: ProjectEntity::class, inversedBy: 'clients')]
-    #[JoinTable(name: 'person_project')]
-    private Collection $projects;
-
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->contacts = new ArrayCollection();
-        $this->users = new ArrayCollection();
-        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -256,39 +236,6 @@ class PersonEntity
     {
         $this->contacts = $contact;
 
-        return $this;
-    }
-
-    public function getAccount(): ?PersonAccountEntity
-    {
-        return $this->account;
-    }
-
-    public function setAccount(?PersonAccountEntity $account): self
-    {
-        $this->account = $account;
-        return $this;
-    }
-
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function setUsers(Collection $users): PersonEntity
-    {
-        $this->users = $users;
-        return $this;
-    }
-
-    public function getProjects(): Collection
-    {
-        return $this->projects;
-    }
-
-    public function setProjects(Collection $projects): PersonEntity
-    {
-        $this->projects = $projects;
         return $this;
     }
 }

@@ -2,15 +2,8 @@
 
 namespace App\User\Entity;
 
-use App\Person\Entity\PersonAccountEntity;
-use App\Person\Entity\PersonEntity;
-use App\Project\Entity\ProjectEntity;
 use App\User\UserRoles;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\ManyToMany;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use App\User\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,21 +22,12 @@ class UserEntity implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user', 'client'])]
+    #[Groups(['user'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user', 'client'])]
+    #[Groups(['user'])]
     private string $email;
-
-    #[ManyToOne(targetEntity: PersonAccountEntity::class, inversedBy: 'users')]
-    #[JoinColumn(name: 'account_id', referencedColumnName: 'id')]
-    private PersonAccountEntity|null $account = null;
-
-
-    #[ManyToOne(targetEntity: PersonEntity::class, inversedBy: 'users')]
-    #[JoinColumn(name: 'client_id', referencedColumnName: 'id')]
-    private PersonEntity|null $client = null;
 
     #[ORM\Column]
     #[Groups(['user'])]
@@ -55,15 +39,8 @@ class UserEntity implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "text", length: 10000, nullable: true)]
     private ?string $passwordResetToken = null;
 
-    #[ManyToMany(targetEntity: ProjectEntity::class, mappedBy: 'users')]
-    private Collection $projects;
-
-    #[Groups(['user', 'client'])]
+    #[Groups(['user'])]
     private string $profile;
-
-    public function __construct() {
-        $this->projects = new ArrayCollection();
-    }
 
     public function getProfile(): string
     {
@@ -130,39 +107,6 @@ class UserEntity implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getAccount(): ?PersonAccountEntity
-    {
-        return $this->account;
-    }
-
-    public function setAccount(?PersonAccountEntity $account): UserEntity
-    {
-        $this->account = $account;
-        return $this;
-    }
-
-    public function getClient(): ?PersonEntity
-    {
-        return $this->client;
-    }
-
-    public function setClient(?PersonEntity $client): UserEntity
-    {
-        $this->client = $client;
-        return $this;
-    }
-
-    public function getProjects(): Collection
-    {
-        return $this->projects;
-    }
-
-    public function setProjects(Collection $projects): UserEntity
-    {
-        $this->projects = $projects;
-        return $this;
     }
 
     public function getPasswordResetToken(): ?string

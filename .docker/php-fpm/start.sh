@@ -6,7 +6,7 @@ declare -A REP
 
 echo "------> Criando .env.$ENV"
 touch /var/www/.env.$ENV
-echo "DATABASE_URL='postgres://$DB_USER:$DB_PASS@$DB_HOST:$DB_PORT/$DB_NAME'" > /var/www/.env.$ENV
+echo "DATABASE_URL='pgsql://$DB_USER:$DB_PASS@$DB_HOST:$DB_PORT/$DB_NAME'" > /var/www/.env.$ENV
 echo "APP_ENV=$ENV" >> /var/www/.env.$ENV
 
 echo "------> Composer install"

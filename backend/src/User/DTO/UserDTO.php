@@ -2,8 +2,6 @@
 
 namespace App\User\DTO;
 
-use App\Person\Entity\PersonAccountEntity;
-use App\Person\Entity\PersonEntity;
 use App\Shared\Transformer\AbstractDTOTransformer;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,16 +14,7 @@ class UserDTO extends AbstractDTOTransformer
         private string $email,
 
         #[Groups(['user'])]
-        private Collection $projects = new ArrayCollection(),
-
-        #[Groups(['user'])]
         private ?int $id = null,
-
-        #[Groups(['user'])]
-        private PersonAccountEntity|null $account = null,
-
-        #[Groups(['user'])]
-        private PersonEntity|null $client = null,
 
         #[Groups(['user'])]
         private array $roles = [],
@@ -65,28 +54,6 @@ class UserDTO extends AbstractDTOTransformer
         return $this;
     }
 
-    public function getAccount(): ?PersonAccountEntity
-    {
-        return $this->account;
-    }
-
-    public function setAccount(?PersonAccountEntity $account): UserDTO
-    {
-        $this->account = $account;
-        return $this;
-    }
-
-    public function getClient(): ?PersonEntity
-    {
-        return $this->client;
-    }
-
-    public function setClient(?PersonEntity $client): UserDTO
-    {
-        $this->client = $client;
-        return $this;
-    }
-
     public function getRoles(): array
     {
         return $this->roles;
@@ -117,17 +84,6 @@ class UserDTO extends AbstractDTOTransformer
     public function setPasswordResetToken(?string $passwordResetToken): UserDTO
     {
         $this->passwordResetToken = $passwordResetToken;
-        return $this;
-    }
-
-    public function getProjects(): Collection
-    {
-        return $this->projects;
-    }
-
-    public function setProjects(Collection $projects): UserDTO
-    {
-        $this->projects = $projects;
         return $this;
     }
 }

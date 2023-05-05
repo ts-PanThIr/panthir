@@ -34,13 +34,6 @@ class UserGetController extends APIController
         return $this->response(items: $users, groups:['user']);
     }
 
-    #[Route(path: "/client/{clientId}", name: "app_users_getAll_byClient", methods: 'GET')]
-    public function getAllByClient(EntityManagerInterface $entityManager, int $clientId): JsonResponse
-    {
-        $users = $entityManager->getRepository(UserEntity::class)->findBy(["client" => $clientId]);
-        return $this->response(items: $users, groups:['client']);
-    }
-
     #[Route(path: "/profile", name: "app_users_getProfileByUser", methods: 'GET')]
     public function getProfileByUser(
         TokenStorageInterface $tokenStorageInterface,

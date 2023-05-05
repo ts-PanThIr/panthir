@@ -36,24 +36,27 @@ class UserManager extends AbstractManager
             $user->setEmail($userDTO->getEmail());
             $resetToken = base64_encode($this->JWTManager->createFromPayload($user, ['expires_at' => $expires_at]));
 
-            $userDTO->setPassword(base64_encode(random_bytes(10)));
-            $user->setPasswordResetToken($resetToken);
-            //todo hook to send email to the invited user
+            if(empty($userDTO->getPassword())){
+                $hashedPassword = $this->passwordHasher->hashPassword(
+                    $user,
+                    base64_encode(random_bytes(10))
+                );
+                $user->setPasswordResetToken($resetToken);
+            } else{
+                $hashedPassword = $this->passwordHasher->hashPassword(
+                    $user,
+                    $userDTO->getPassword()
+                );
+            }
+            $user->setPassword($hashedPassword);
 
             $user->setRoles(UserRoles::PROFILE_VIEWER);
             if(!empty($userDTO->getRoles())){
                 $user->setRoles($userDTO->getRoles());
             }
 
-            $hashedPassword = $this->passwordHasher->hashPassword(
-                $user,
-                $userDTO->getPassword()
-            );
-
-            $user->setPassword($hashedPassword);
+            //todo hook to send email to the invited user
         }
-
-        $user->setClient($userDTO->getClient());
 
         $this->entityManager->persist($user);
 

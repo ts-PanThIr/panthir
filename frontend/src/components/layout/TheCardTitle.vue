@@ -26,11 +26,11 @@ export default defineComponent({
     icon: String,
     text: String,
     bgColor: {
-      Type: String,
+      type: String,
       default: 'bg-primary'
     },
     textColor: {
-      Type: String,
+      type: String,
       default: 'grey-darken-4',
     },
   },

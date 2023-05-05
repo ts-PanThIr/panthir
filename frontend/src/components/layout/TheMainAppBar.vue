@@ -27,7 +27,7 @@ import { useAuthStore } from '~/stores';
 export default {
   name: 'TheMainAppBar',
   setup() {
-    const imgUrl = new URL('~/assets/logo.svg', import.meta.url).href
+    const imgUrl = new URL('/logo.png', import.meta.url).href
     const authStore = useAuthStore();
     const switchMenu = useInterfaceStore().switchMenu;
     return { switchMenu, authStore, imgUrl };
