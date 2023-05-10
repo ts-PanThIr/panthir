@@ -3,9 +3,7 @@
 namespace App\User\DTO;
 
 use App\Shared\Transformer\AbstractDTOTransformer;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class UserDTO extends AbstractDTOTransformer
 {

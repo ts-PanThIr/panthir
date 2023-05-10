@@ -2,8 +2,8 @@
 
 namespace App\User\Entity;
 
+use App\Shared\EntityTraits\CountableTrait;
 use App\User\UserRoles;
-use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use App\User\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`user`')]
 class UserEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use CountableTrait;
     use BlameableEntity;
     use TimestampableEntity;
 

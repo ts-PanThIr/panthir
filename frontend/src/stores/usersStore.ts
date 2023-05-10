@@ -5,13 +5,20 @@ type TState = {
   profileList: string[];
   list: IUser[];
   user: IUser;
-};
+}
 
 export interface IUser {
   id?: string;
   email?: string;
   profile?: string;
-};
+}
+
+interface IUserSearch {
+  email?: string | null;
+  profile?: string | null;
+  limit?: number | null;
+  page?: number | null;
+}
 
 export const useUsersStore = defineStore('users', {
   state: (): TState => ({
@@ -20,9 +27,17 @@ export const useUsersStore = defineStore('users', {
     user: {},
   }),
   actions: {
-    async getAll(): Promise<void> {
+    async getAll({limit = null, page = null, email = null, profile = null}: IUserSearch): Promise<void> {
+      const params = {
+        params: {
+          limit,
+          page,
+          email,
+          profile
+        }
+      }
       this.list = await this.$http
-        .get(`${this.$apiUrl}/api/users`)
+        .get(`${this.$apiUrl}/api/users/`, params)
         .then((d) => {
           return d.data.data;
         });

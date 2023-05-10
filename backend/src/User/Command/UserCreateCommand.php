@@ -54,7 +54,7 @@ class UserCreateCommand extends Command
 
         $output->writeln('Username: ' . $email);
 
-        $this->userManager->saveUser(
+        $this->userManager->createUser(
             new UserDTO(
                 email: $email,
                 roles: UserRoles::PROFILE_ADMIN,

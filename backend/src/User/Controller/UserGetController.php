@@ -19,10 +19,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class UserGetController extends APIController
 {
     #[Route(path: "/", name: "app_users_getAll", methods: 'GET')]
-    public function getAll(UserManager $userManager): JsonResponse
+    public function getAll(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $users = $userManager->search();
-        return $this->response(items: $users, groups:['user']);
+        $searchDTO = UserSearchDTO::transformFromObject($request);
+        $users = $entityManager->getRepository(UserEntity::class)->search($searchDTO);
+        return $this->response(items: $users, groups:['user', 'countable']);
     }
 
     #[Route(path: "/token/{token}", name: "app_users_get_byToken", methods: 'GET')]

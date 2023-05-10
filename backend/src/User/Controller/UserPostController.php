@@ -33,7 +33,7 @@ class UserPostController extends APIController
             type: UserDTO::class
         );
 
-        $return = $userManager->saveUser($user);
+        $return = $userManager->createUser($user);
         $entityManager->flush();
         return $this->response(items: $return, groups: ['user']);
     }

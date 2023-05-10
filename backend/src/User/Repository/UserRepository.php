@@ -2,6 +2,8 @@
 
 namespace App\User\Repository;
 
+use App\Shared\RepositoryTraits\CountableTrait;
+use App\User\DTO\UserSearchDTO;
 use App\User\Entity\UserEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,6 +21,8 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    use CountableTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserEntity::class);
@@ -46,5 +50,30 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    public function search(UserSearchDTO $search): array
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->where('1=1');
+
+        if (!empty($search->getPage()) && !empty($search->getLimit())){
+            $qb->setFirstResult(($search->getPage() - 1) * $search->getLimit())
+                ->setMaxResults($search->getLimit());
+        }
+
+        if (!empty($search->getEmail())){
+            $qb->andWhere('u.email = :email')
+                ->setParameter(':email', $search->getEmail());
+        }
+
+        $results = $qb->getQuery()->getResult();
+        $total = $this->countAllResults($qb, 'u.id');
+
+        if (!empty($results)) {
+            $results[0]->setTotalItems($total);
+        }
+
+        return $results;
     }
 }

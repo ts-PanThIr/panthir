@@ -56,7 +56,7 @@
             v-model="internalPage"
             density="comfortable"
             active-color="secondary"
-            :length="page + 6"
+            :length=" (Math.ceil(matrix[0]?.totalItems / limit)) || page + 6"
             :total-visible="7"
           />
         </div>

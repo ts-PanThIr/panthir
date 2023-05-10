@@ -3,6 +3,7 @@
 namespace App\User\Manager;
 
 use App\Shared\AbstractManager;
+use App\Shared\Exception\ManagerException;
 use App\Shared\Notify\Notify;
 use App\User\DTO\UserDTO;
 use App\User\Entity\UserEntity;
@@ -24,47 +25,50 @@ class UserManager extends AbstractManager
     }
 
 
-    public function saveUser(UserDTO $userDTO): UserEntity
+    /**
+     * @throws ManagerException
+     */
+    public function createUser(UserDTO $userDTO): UserEntity
     {
-        $user = $this->entityManager->getRepository(UserEntity::class)->findOneBy(["email" => $userDTO->getEmail()]);
-        if(empty($user)) {
-            $current_time = time();
-            $future_time = $current_time + (2 * 60 * 60);
-            $expires_at = date('Y-m-d H:i:s', $future_time);
-
-            $user = new UserEntity();
-            $user->setEmail($userDTO->getEmail());
-            $resetToken = base64_encode($this->JWTManager->createFromPayload($user, ['expires_at' => $expires_at]));
-
-            if(empty($userDTO->getPassword())){
-                $hashedPassword = $this->passwordHasher->hashPassword(
-                    $user,
-                    base64_encode(random_bytes(10))
-                );
-                $user->setPasswordResetToken($resetToken);
-            } else{
-                $hashedPassword = $this->passwordHasher->hashPassword(
-                    $user,
-                    $userDTO->getPassword()
-                );
-            }
-            $user->setPassword($hashedPassword);
-
-            $user->setRoles(UserRoles::PROFILE_VIEWER);
-            if(!empty($userDTO->getRoles())){
-                $user->setRoles($userDTO->getRoles());
-            }
-
-            //todo hook to send email to the invited user
+        if (!filter_var($userDTO->getEmail(), FILTER_VALIDATE_EMAIL)) {
+            throw new ManagerException("The given e-mail is not valid.", 400);
         }
 
+        $user = $this->entityManager->getRepository(UserEntity::class)->findOneBy(["email" => $userDTO->getEmail()]);
+        if(!empty($user)) {
+            throw new ManagerException("There's already one user registered with this e-mail.", 400);
+        }
+
+        $current_time = time();
+        $future_time = $current_time + (2 * 60 * 60);
+        $expires_at = date('Y-m-d H:i:s', $future_time);
+
+        $user = new UserEntity();
+        $user->setEmail($userDTO->getEmail());
+        $resetToken = base64_encode($this->JWTManager->createFromPayload($user, ['expires_at' => $expires_at]));
+
+        if(empty($userDTO->getPassword())){
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $user,
+                base64_encode(random_bytes(10))
+            );
+            $user->setPasswordResetToken($resetToken);
+        } else{
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $user,
+                $userDTO->getPassword()
+            );
+        }
+        $user->setPassword($hashedPassword);
+
+        $user->setRoles(UserRoles::PROFILE_VIEWER);
+        if(!empty($userDTO->getRoles())){
+            $user->setRoles($userDTO->getRoles());
+        }
+
+        //todo hook to send email to the invited user
         $this->entityManager->persist($user);
 
         return $user;
-    }
-
-    public function search (): array
-    {
-        return $this->entityManager->getRepository(UserEntity::class)->findAll();
     }
 }

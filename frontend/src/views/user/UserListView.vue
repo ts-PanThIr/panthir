@@ -19,12 +19,36 @@
     </the-card-title>
 
     <v-card-text>
+      <v-form ref="searchForm" @submit.prevent="updateList()">
+        <v-row>
+          <v-btn type="submit" class="d-none"></v-btn>
+          <v-col cols="6">
+            <v-text-field
+              v-model="email"
+              :rules="emailRules"
+              label="E-mail"
+              required
+            />
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              v-model="profile"
+              label="Profile"
+              required
+              :items="profileList"
+            >
+            </v-select>
+          </v-col>
+        </v-row>
+      </v-form>
       <base-grid
         v-model:page="page"
         v-model:limit="limit"
         class="collaborators-table"
         :matrix="users"
         :header="headers"
+        @update:limit="updateList()"
+        @update:page="updateList()"
       >
         <template #action="{ element }">
           <td class="actions to-none pa-1">
@@ -55,30 +79,54 @@
 import { BaseGrid, TheCardTitle } from '~/components';
 import { useUsersStore } from '~/stores';
 import { defineComponent, ref } from 'vue';
+import {storeToRefs} from "pinia";
 
 export default defineComponent({
   components: { BaseGrid, TheCardTitle },
   async setup() {
-    const usersStore = useUsersStore();
-    await usersStore.getAll();
-    const users = usersStore.list;
-
     const data = {
-      limit: ref(50),
+      limit: ref(10),
       page: ref(1),
+      searchForm: ref(null) as unknown as HTMLFormElement,
       headers: {
         action: '#',
         id: 'Id',
         email: 'Email',
       },
+      email: ref(''),
+      profile: ref(''),
       search: null,
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) =>
+          // eslint-disable-next-line max-len
+          /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+            v,
+          ) || 'E-mail must be valid',
+      ],
     }
 
-    return { users, ...data };
+    const usersStore = useUsersStore();
+    await usersStore.getAll(
+      {limit: data.limit.value, page: data.page.value, email: data.email.value, profile: data.profile.value}
+    );
+    await usersStore.getProfile();
+
+    const {list: users, profileList} = storeToRefs(usersStore);
+
+    return { users, profileList, ...data };
   },
   unmounted() {
     const store = useUsersStore()
     store.$reset()
-  },  
+  }, 
+  methods: {
+    updateList: async function () {
+      const usersStore = useUsersStore();
+      await usersStore.getAll(
+        {limit: this.limit, page: this.page, email: this.email, profile: this.profile}
+      );
+    },
+  }
 });
 </script>

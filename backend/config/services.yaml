@@ -20,6 +20,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }
 
+    App\Shared\DataFixtures\:
+        resource: '../src/Shared/DataFixtures/*'
+        tags:
+            - {name: doctrine.fixture.orm}
+
     App\Shared\:
         resource: '../src/Shared/{Service,Notify,Helper,*.php}'
 
