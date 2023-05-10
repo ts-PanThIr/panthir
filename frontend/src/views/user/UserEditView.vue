@@ -49,10 +49,10 @@ export default defineComponent({
   async setup() {
     const route = useRoute();
     const usersStore = useUsersStore();
+    await usersStore.getProfile();
     
     if (route.name !== 'usersNew') {
       await usersStore.getById(route.params.id.toString());
-      await usersStore.getProfile();
     }
 
     const data = {
@@ -77,12 +77,13 @@ export default defineComponent({
   },
   methods: {
     validate: async function () {
-      if (!(await this.usersForm.value.validate()).valid || typeof this.user.email === 'undefined') {
+      if (!(await this.usersForm.validate()).valid || typeof this.user.email === 'undefined') {
         this.tab = 1;
         return;
       }
 
-      this.usersSend(this.user.email);
+      const user = await this.usersSend(this.user.email);
+      this.$router.push({name: 'usersEdit', params: {id: user.id}})
     },
   }, 
 });

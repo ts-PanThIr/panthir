@@ -56,6 +56,12 @@ services:
     networks:
       - symfony
 
+  mailer:
+    image: schickling/mailcatcher
+    ports: [ "1025", "1080" ]
+    networks:
+      - symfony
+
 #  mysql:
 #    image: mysql:8.0
 #    container_name: ${COMPOSE_PROJECT_NAME}_mysql

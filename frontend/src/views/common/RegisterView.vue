@@ -1,16 +1,3 @@
-<script setup="async" lang="ts">
-import { router } from '~/router';
-import { useUsersStore } from '~/stores';
-console.log(router.currentRoute.value.name);
-
-// const configVars = inject('configVars') as IConfigVars;
-
-const userStore = useUsersStore();
-if (router.currentRoute.value.name === 'resetPassword') {
-  await userStore.getByToken(router.currentRoute.value.params.token);
-}
-const { user } = userStore;
-</script>
 <template>
   <v-container fluid>
     <v-card class="mx-auto mt-16" elevation="15" max-width="400">
@@ -77,23 +64,36 @@ const { user } = userStore;
 </template>
 
 <script lang="ts">
-export default {
-  data: () => ({
-    first: null,
-    last: null,
-    email: null,
-    password: null,
-    terms: false,
-    passwordRules: [
-      (v: string): boolean | string => !!v || 'Password is required',
-    ],
-    emailRules: [
-      (v: string): boolean | string => !!v || 'E-mail is required',
-      (v: string): boolean | string =>
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-        'E-mail must be valid',
-    ],
-    form: false,
-  }),
-};
+import { router } from '~/router';
+import { defineComponent } from 'vue';
+import { useUsersStore } from '~/stores';
+
+export default defineComponent({
+  setup: async function () {
+    console.log(router.currentRoute.value.name);
+    const userStore = useUsersStore();
+    if (router.currentRoute.value.name === 'resetPassword') {
+      await userStore.getByToken(router.currentRoute.value.params.token as string);
+    }
+    const { user } = userStore;
+
+    const data = {
+      first: null,
+      last: null,
+      email: null,
+      
+      password: null,
+      terms: false,
+      passwordRules: [
+        (v) => !!v || 'Password is required',
+      ],
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+      ]
+    }
+    
+    return { user, ...data }
+  },
+});
 </script>

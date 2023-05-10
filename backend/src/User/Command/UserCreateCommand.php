@@ -13,9 +13,9 @@ use Symfony\Component\Console\Question\Question;
 
 // the name of the command is what users type after "php bin/console"
 #[AsCommand(
-    name: 'app:create-user',
+    name: 'app:user-create',
     description: 'Creates a new user.',
-    aliases: ['app:add-user'],
+    aliases: ['app:user-add'],
     hidden: false
 )]
 class UserCreateCommand extends Command

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\Shared\EventSubscriber;
 
 use App\Shared\Notify\Notify;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

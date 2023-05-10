@@ -63,13 +63,14 @@ export const useUsersStore = defineStore('users', {
       this.profileList = data.data.data
     },
 
-    async addUser (email: string, clientId: null | number = null): Promise<void> {
+    async addUser (email: string, clientId: null | number = null): Promise<IUser> {
       const formData = FormHelper.jsonToFormData({
         email: email,
         client: clientId,
       });
       const data = await this.$http.post(`${this.$apiUrl}/api/user/`, formData);
       this.list.push(data.data.data as IUser)
+      return data.data.data as IUser;
     },
   },
 });
