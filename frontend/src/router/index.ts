@@ -165,7 +165,6 @@ router.beforeEach(
     from: RouteLocationNormalized,
     next: NavigationGuardNext,
   ) => {
-    debugger
     if (!(['login', 'resetPassword'].includes(to.name as string)) && !useAuthStore().user && to.meta.requiresAuth) {
       next({ name: 'login' });
     }

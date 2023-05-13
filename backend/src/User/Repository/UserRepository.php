@@ -3,7 +3,7 @@
 namespace App\User\Repository;
 
 use App\Shared\RepositoryTraits\CountableTrait;
-use App\User\DTO\UserSearchDTO;
+use App\Shared\DTO\UserSearchDTO;
 use App\User\Entity\UserEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

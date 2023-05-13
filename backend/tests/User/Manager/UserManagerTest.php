@@ -1,7 +1,7 @@
 <?php
 
 use App\Shared\Exception\ManagerException;
-use App\User\DTO\UserDTO;
+use App\Shared\DTO\UserDTO;
 use App\User\Entity\UserEntity;
 use App\User\Manager\UserManager;
 use Doctrine\ORM\EntityManagerInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Person\DTO;
+namespace App\Shared\DTO;
 
 use App\Person\Entity\PersonContactEntity;
 use App\Person\Entity\PersonEntity;

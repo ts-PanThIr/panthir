@@ -5,7 +5,7 @@ namespace App\User\Manager;
 use App\Shared\AbstractManager;
 use App\Shared\Exception\ManagerException;
 use App\Shared\Notify\Notify;
-use App\User\DTO\UserDTO;
+use App\Shared\DTO\UserDTO;
 use App\User\Entity\UserEntity;
 use App\User\UserRoles;
 use Doctrine\ORM\EntityManagerInterface;

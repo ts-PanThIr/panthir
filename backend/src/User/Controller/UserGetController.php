@@ -4,7 +4,7 @@ namespace App\User\Controller;
 
 use App\Shared\APIController;
 use App\Shared\Notify\Notify;
-use App\User\DTO\UserSearchDTO;
+use App\Shared\DTO\UserSearchDTO;
 use App\User\Entity\UserEntity;
 use App\User\Manager\UserManager;
 use App\User\UserRoles;

@@ -2,7 +2,7 @@
 
 namespace App\User\Command;
 
-use App\User\DTO\UserDTO;
+use App\Shared\DTO\UserDTO;
 use App\User\Manager\UserManager;
 use App\User\UserRoles;
 use Symfony\Component\Console\Attribute\AsCommand;

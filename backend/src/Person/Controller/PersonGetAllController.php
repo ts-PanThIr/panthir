@@ -2,8 +2,8 @@
 
 namespace App\Person\Controller;
 
-use App\Person\DTO\PersonDTO;
-use App\Person\DTO\PersonSearchDTO;
+use App\Shared\DTO\PersonDTO;
+use App\Shared\DTO\PersonSearchDTO;
 use App\Person\Entity\PersonEntity;
 use App\Person\Repository\PersonRepository;
 use App\Shared\APIController;

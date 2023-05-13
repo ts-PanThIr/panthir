@@ -2,9 +2,9 @@
 
 namespace App\Person\Controller;
 
-use App\Person\DTO\PersonAddressDTO;
-use App\Person\DTO\PersonContactDTO;
-use App\Person\DTO\PersonDTO;
+use App\Shared\DTO\PersonAddressDTO;
+use App\Shared\DTO\PersonContactDTO;
+use App\Shared\DTO\PersonDTO;
 use App\Person\Manager\PersonManager;
 use App\Shared\APIController;
 use App\Shared\Helper\SerializerHelper;
@@ -50,7 +50,7 @@ class PersonPostController extends APIController
         );
 
         $notify->addMessage($notify::WARNING, "teste de warning");
-        $return = $personManager->savePerson($person);
+        $return = $personManager->createPerson($person);
         $entityManager->flush();
         return $this->response(items: $return, groups: ['person']);
     }

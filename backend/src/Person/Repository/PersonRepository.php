@@ -2,7 +2,7 @@
 
 namespace App\Person\Repository;
 
-use App\Person\DTO\PersonSearchDTO;
+use App\Shared\DTO\PersonSearchDTO;
 use App\Person\Entity\PersonEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

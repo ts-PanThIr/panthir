@@ -2,7 +2,7 @@
 
 namespace App\Person\Manager;
 
-use App\Person\DTO\PersonContactDTO;
+use App\Shared\DTO\PersonContactDTO;
 use App\Person\Entity\PersonContactEntity;
 use App\Shared\AbstractManager;
 use App\Shared\Notify\Notify;

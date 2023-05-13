@@ -1,6 +1,6 @@
 <?php
 
-namespace App\User\DTO;
+namespace App\Shared\DTO;
 
 use App\Shared\Transformer\AbstractDTOTransformer;
 use Symfony\Component\HttpFoundation\Request;

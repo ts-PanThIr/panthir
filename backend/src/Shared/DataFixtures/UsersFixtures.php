@@ -2,7 +2,7 @@
 
 namespace App\Shared\DataFixtures;
 
-use App\User\DTO\UserDTO;
+use App\Shared\DTO\UserDTO;
 use App\User\Manager\UserManager;
 use App\User\UserRoles;
 use Doctrine\Bundle\FixturesBundle\Fixture;

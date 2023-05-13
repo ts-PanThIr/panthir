@@ -6,7 +6,7 @@ use App\Person\DTO\PersonDTO;
 use App\Person\Entity\PersonEntity;
 use App\Person\Manager\PersonManager;
 use App\Shared\APIController;
-use App\User\DTO\UserDTO;
+use App\Shared\DTO\UserDTO;
 use App\User\Manager\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
