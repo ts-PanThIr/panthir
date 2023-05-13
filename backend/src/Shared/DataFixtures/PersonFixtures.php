@@ -7,13 +7,19 @@ use App\Shared\DTO\PersonDTO;
 use App\Shared\DTO\UserDTO;
 use App\User\UserRoles;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
-class PersonFixtures extends Fixture
+class PersonFixtures extends Fixture implements FixtureGroupInterface
 {
     public function __construct(private PersonManager $personManager)
     {
+    }
+
+    public static function getGroups(): array
+    {
+        return ['person'];
     }
 
     public function load(ObjectManager $manager): void

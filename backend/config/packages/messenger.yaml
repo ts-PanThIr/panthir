@@ -1,0 +1,40 @@
+framework:
+    messenger:
+        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+        # failure_transport: failed
+
+        transports:
+            password_reset_email:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                failure_transport: password_reset_email_failed
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 0
+#                options:
+#                    exchange:
+#                        name: password_reset_email
+#                    queues:
+#                        registration_email: ~
+
+            password_reset_email_failed:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+#                options:
+#                    exchange:
+#                        name: password_reset_email_failed
+#                    queues:
+#                        registration_email_failed: ~
+
+        routing:
+            # Route your messages to the transports
+            # 'App\Message\YourMessage': async
+            'App\User\Messenger\Model\EmailNotification': password_reset_email
+
+# when@test:
+#    framework:
+#        messenger:
+#            transports:
+#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
+#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
+#                async: 'in-memory://'

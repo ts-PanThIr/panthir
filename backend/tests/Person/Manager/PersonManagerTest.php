@@ -1,6 +1,9 @@
 <?php
 
+namespace App\Tests\Person\Manager;
+
 use App\Person\Manager\PersonManager;
+
 use App\Shared\DTO\PersonDTO;
 use App\Shared\Exception\ManagerException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -15,6 +18,6 @@ class PersonManagerTest extends KernelTestCase
 
         /** @var PersonManager $personManager */
         $personManager = $container->get(PersonManager::class);
-        $personManager->savePerson((new PersonDTO()));
+        $personManager->createPerson((new PersonDTO()));
     }
 }

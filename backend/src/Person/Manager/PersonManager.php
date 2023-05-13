@@ -78,15 +78,7 @@ class PersonManager extends AbstractManager
      */
     public function createPerson(PersonDTO $personDTO): ?PersonEntity
     {
-        if($personDTO->getId()) {
-            $person = $this->entityManager->getRepository(PersonEntity::class)->find($personDTO->getId());
-            if (!empty($person)) {
-                throw new ManagerException("The Id to update the person register is invalid.", 400);
-            }
-        }
-        else{
-            $person = new PersonEntity();
-        }
+        $person = new PersonEntity();
         $person
             ->setName($personDTO->getName())
             ->setAdditionalInformation($personDTO->getAdditionalInformation())
@@ -96,7 +88,6 @@ class PersonManager extends AbstractManager
             ->setSurname($personDTO->getSurname())
         ;
         $this->entityManager->persist($person);
-
 
         if(!empty($personDTO->getAddresses())){
             /** @var PersonAddressDTO $address */

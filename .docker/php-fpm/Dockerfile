@@ -49,6 +49,10 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; \
       pecl install xdebug && docker-php-ext-enable xdebug; \
     fi;
 
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
+
 RUN docker-php-ext-configure gd --with-jpeg --with-freetype
 
 RUN docker-php-ext-install \

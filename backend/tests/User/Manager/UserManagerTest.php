@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Tests\User\Manager;
+
 use App\Shared\Exception\ManagerException;
 use App\Shared\DTO\UserDTO;
 use App\User\Entity\UserEntity;

@@ -22,8 +22,11 @@ services:
       - ./backend:/var/www/
     networks:
       - symfony
+      - redis
     extra_hosts:
       - host.docker.internal:host-gateway
+    depends_on:
+      - redis
 
   nginx:
     container_name: ${COMPOSE_PROJECT_NAME}_nginx
@@ -38,6 +41,7 @@ services:
       - ./backend:/var/www:rw
     depends_on:
       - php-fpm
+      - redis
     networks:
       - symfony
 
@@ -61,6 +65,17 @@ services:
     ports: [ "1025", "1080" ]
     networks:
       - symfony
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+#    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - cache:/data
+    networks:
+      - redis
 
 #  mysql:
 #    image: mysql:8.0
@@ -88,10 +103,25 @@ services:
 #      - mysql
 #    networks:
 #      - symfony
+  rediscommander:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    ports:
+      - '8081:8081'
+    #    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - cache:/data
+    networks:
+      - redis
+    environment:
+      REDIS_HOSTS: local:redis:6379
 
 volumes:
   db_data:
 #  backend:
+  cache:
+    driver: local
 
 networks:
   symfony:
+  redis:

@@ -1,7 +1,5 @@
 - [DevTools](#dev-tools)
   - [xdebug](#how-to-turn-on-xdebug-on-phpstorm)
-  - [PhpStan](#phpstan)
-  - [Deptrac](#deptrac)
 
 ## dev tools
 There are some tools to keep the code quality and create some standards of coding.
@@ -25,15 +23,15 @@ Configure the xdebug at settings -> PHP -> Debug
 
 now you can start to use xdebug
 
-### PHPStan
-PHPStan scans your whole codebase and looks for both obvious & tricky bugs. 
-Even in those rarely executed if statements that certainly aren't covered by tests.
+### Usefull commands
+Run fixtures, --append is option to avoid removing old data. you can run by groups too: 
 
-> php vendor/bin/phpstan analyse src tests
+--group=group1 --group=group2
+> php bin/console doctrine:fixtures:load --append
 
-### Deptrac
-Deptrac is a static code analysis tool for PHP that helps you communicate, 
-visualize and enforce architectural decisions in your projects. 
-You can freely define your architectural layers over classes and which rules should apply to them.
+Run messenger, after the consume keyword you should specify which transport you want to run. 
+-vv is optional for debugging
+> php bin/console messenger:consume async
 
-> php vendor/bin/deptrac analyse
+Run PHPUnit tests
+> php bin/phpunit

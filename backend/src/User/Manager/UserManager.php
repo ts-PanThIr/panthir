@@ -7,11 +7,11 @@ use App\Shared\Exception\ManagerException;
 use App\Shared\Notify\Notify;
 use App\Shared\DTO\UserDTO;
 use App\User\Entity\UserEntity;
+use App\User\Messenger\Model\EmailNotification;
 use App\User\UserRoles;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserManager extends AbstractManager
@@ -21,7 +21,7 @@ class UserManager extends AbstractManager
         Notify                       $notify,
         protected readonly  UserPasswordHasherInterface $passwordHasher,
         protected           JWTTokenManagerInterface    $JWTManager,
-        protected           MailerInterface             $mailer
+        protected           MessageBusInterface         $bus
     )
     {
         parent::__construct(entityManager: $entityManager, notify: $notify);
@@ -56,6 +56,7 @@ class UserManager extends AbstractManager
                 base64_encode(random_bytes(10))
             );
             $user->setPasswordResetToken($resetToken);
+            $this->bus->dispatch(new EmailNotification(userEmail: $user->getEmail(), resetPasswordtoken: $user->getPasswordResetToken()));
         } else{
             $hashedPassword = $this->passwordHasher->hashPassword(
                 $user,
@@ -68,8 +69,6 @@ class UserManager extends AbstractManager
         if(!empty($userDTO->getRoles())){
             $user->setRoles($userDTO->getRoles());
         }
-
-        //todo hook to send email to the invited user
         $this->entityManager->persist($user);
 
         return $user;
@@ -92,17 +91,7 @@ class UserManager extends AbstractManager
         $this->entityManager->persist($user);
         $this->notify->addMessage($this->notify::INFO, 'Sending E-mail to reset user password');
 
-        $email = (new TemplatedEmail())
-//            ->from('hello@example.com')
-            ->to($user->getEmail())
-            ->subject('Password recover')
-            ->htmlTemplate('emails/resetPassword.html.twig')
-            ->context([
-                'url' => 'http://localhost:5173/' . 'account/resetPassword/' . $user->getPasswordResetToken(),
-            ])
-        ;
-
-        $this->mailer->send($email);
+        $this->bus->dispatch(new EmailNotification(userEmail: $user->getEmail(), resetPasswordtoken: $user->getPasswordResetToken()));
 
         return $user;
     }
