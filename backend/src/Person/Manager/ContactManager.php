@@ -5,26 +5,33 @@ namespace App\Person\Manager;
 use App\Shared\DTO\PersonContactDTO;
 use App\Person\Entity\PersonContactEntity;
 use App\Shared\AbstractManager;
-use App\Shared\Notify\Notify;
+use App\Shared\Exception\InvalidFieldException;
+use App\Shared\Exception\ManagerException;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ContactManager extends AbstractManager
 {
     public function __construct(
-        Notify                  $notify,
-        EntityManagerInterface  $entityManager
+        EntityManagerInterface  $entityManager,
+        private readonly ValidatorInterface     $validator
     )
     {
-        parent::__construct(entityManager: $entityManager, notify: $notify);
+        parent::__construct(entityManager: $entityManager);
     }
 
-    public function saveContact(PersonContactDTO $contactDTO): ?PersonContactEntity
+    public function saveContact(PersonContactDTO $contactDTO): PersonContactEntity
     {
+        $errors = $this->validator->validate($contactDTO);
+
+        if (count($errors) > 0) {
+            throw new InvalidFieldException((string) $errors, 400);
+        }
+
         if($contactDTO->getId()) {
             $contact = $this->entityManager->getRepository(PersonContactEntity::class)->find($contactDTO->getId());
             if (empty($contact)) {
-                $this->notify->addMessage($this->notify::ERROR, "Invalid Contact Id.");
-                return null;
+                throw new ManagerException("Invalid Contact Id.", 400);
             }
         }
         else{
@@ -39,7 +46,6 @@ class ContactManager extends AbstractManager
         ;
 
         $this->entityManager->persist($contact);
-        $this->notify->addMessage($this->notify::INFO, "Contact saved");
         return $contact;
     }
 }

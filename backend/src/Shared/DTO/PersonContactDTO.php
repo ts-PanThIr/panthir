@@ -6,6 +6,7 @@ use App\Person\Entity\PersonContactEntity;
 use App\Person\Entity\PersonEntity;
 use App\Shared\Transformer\AbstractDTOTransformer;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PersonContactDTO extends AbstractDTOTransformer
 {
@@ -13,14 +14,18 @@ class PersonContactDTO extends AbstractDTOTransformer
     private ?int $id = null;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $name;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $email;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $phone;
 
+    #[Assert\NotBlank]
     private PersonEntity $personEntity;
 
     /**

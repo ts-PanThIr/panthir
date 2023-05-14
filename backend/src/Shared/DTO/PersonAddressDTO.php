@@ -6,6 +6,7 @@ use App\Person\Entity\PersonAddressEntity;
 use App\Person\Entity\PersonEntity;
 use App\Shared\Transformer\AbstractDTOTransformer;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PersonAddressDTO extends AbstractDTOTransformer
 {
@@ -13,29 +14,37 @@ class PersonAddressDTO extends AbstractDTOTransformer
     private ?int $id = null;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $name;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $country;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $district;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $city;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $address;
 
     #[Groups(['person'])]
     private ?string $addressComplement = null;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $number;
 
     #[Groups(['person'])]
+    #[Assert\NotBlank]
     private string $zip;
 
+    #[Assert\NotBlank]
     private PersonEntity $personEntity;
 
     /**

@@ -5,26 +5,33 @@ namespace App\Person\Manager;
 use App\Shared\DTO\PersonAddressDTO;
 use App\Person\Entity\PersonAddressEntity;
 use App\Shared\AbstractManager;
-use App\Shared\Notify\Notify;
+use App\Shared\Exception\InvalidFieldException;
+use App\Shared\Exception\ManagerException;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AddressManager extends AbstractManager
 {
     public function __construct(
-        Notify                  $notify,
-        EntityManagerInterface  $entityManager
+        EntityManagerInterface  $entityManager,
+        private readonly ValidatorInterface     $validator
     )
     {
-        parent::__construct(entityManager: $entityManager, notify: $notify);
+        parent::__construct(entityManager: $entityManager);
     }
 
-    public function saveAddress(PersonAddressDTO $addressDTO): ?PersonAddressEntity
+    public function saveAddress(PersonAddressDTO $addressDTO): PersonAddressEntity
     {
+        $errors = $this->validator->validate($addressDTO);
+
+        if (count($errors) > 0) {
+            throw new InvalidFieldException((string) $errors, 400);
+        }
+
         if($addressDTO->getId()) {
             $address = $this->entityManager->getRepository(PersonAddressEntity::class)->find($addressDTO->getId());
             if (empty($address)) {
-                $this->notify->addMessage($this->notify::ERROR, "Invalid Address Id.");
-                return null;
+                throw new ManagerException("Invalid Address Id.", 400);
             }
         }
         else{
@@ -44,7 +51,6 @@ class AddressManager extends AbstractManager
         ;
 
         $this->entityManager->persist($address);
-        $this->notify->addMessage($this->notify::INFO, "Address saved");
         return $address;
     }
 }

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Tests\User\Manager;
+namespace App\Tests\Integration\User;
 
-use App\Shared\Exception\ManagerException;
 use App\Shared\DTO\UserDTO;
+use App\Shared\Exception\ManagerException;
+use App\Tests\Integration\CustomKernelTestCase;
 use App\User\Entity\UserEntity;
 use App\User\Manager\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Faker\Factory;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class UserManagerTest extends KernelTestCase
+class UserManagerTest extends CustomKernelTestCase
 {
     public function testEmptyUserException()
     {
@@ -38,7 +37,7 @@ class UserManagerTest extends KernelTestCase
     {
         self::bootKernel();
         $container = static::getContainer();
-        $email = Factory::create()->email();
+        $email = $this->faker->email();
 
         $em = $container->get(EntityManagerInterface::class);
         /** @var UserManager $userManager */
@@ -58,7 +57,7 @@ class UserManagerTest extends KernelTestCase
     {
         self::bootKernel();
         $container = static::getContainer();
-        $email = Factory::create()->email();
+        $email = $this->faker->email();
 
         $em = $container->get(EntityManagerInterface::class);
 
@@ -77,7 +76,7 @@ class UserManagerTest extends KernelTestCase
         $this->expectException(ManagerException::class);
         self::bootKernel();
         $container = static::getContainer();
-        $email = Factory::create()->email();
+        $email = $this->faker->email();
 
         $em = $container->get(EntityManagerInterface::class);
 

@@ -50,7 +50,7 @@ class PersonPostController extends APIController
         );
 
         $notify->addMessage($notify::WARNING, "teste de warning");
-        $return = $personManager->createPerson($person);
+        $return = $personManager->savePerson($person);
         $entityManager->flush();
         return $this->response(items: $return, groups: ['person']);
     }

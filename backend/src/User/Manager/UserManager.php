@@ -17,14 +17,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserManager extends AbstractManager
 {
     public function __construct(
-        EntityManagerInterface       $entityManager,
-        Notify                       $notify,
+        EntityManagerInterface                          $entityManager,
+        private readonly Notify                         $notify,
         protected readonly  UserPasswordHasherInterface $passwordHasher,
         protected           JWTTokenManagerInterface    $JWTManager,
         protected           MessageBusInterface         $bus
     )
     {
-        parent::__construct(entityManager: $entityManager, notify: $notify);
+        parent::__construct(entityManager: $entityManager);
     }
 
 

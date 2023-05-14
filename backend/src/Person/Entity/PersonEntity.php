@@ -32,9 +32,9 @@ class PersonEntity
     #[Groups(['person'])]
     private string $document;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['person'])]
-    private string $secondaryDocument;
+    private ?string $secondaryDocument = null;
 
     #[ORM\OneToOne(targetEntity: PersonAddressEntity::class)]
     #[ORM\JoinColumn(name: "main_address_id", referencedColumnName: "id")]
@@ -130,12 +130,12 @@ class PersonEntity
         return $this;
     }
 
-    public function getSecondaryDocument(): string
+    public function getSecondaryDocument(): ?string
     {
         return $this->secondaryDocument;
     }
 
-    public function setSecondaryDocument(string $secondaryDocument): static
+    public function setSecondaryDocument(?string $secondaryDocument): static
     {
         $this->secondaryDocument = $secondaryDocument;
         return $this;
