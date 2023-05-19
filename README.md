@@ -1,4 +1,4 @@
-# 🐳 Docker + PHP 8 + PostgreSQL + Nginx + Symfony 6 (Messenger, mailer) + redis
+# 🐳 Docker + PHP 8 + PostgreSQL + Vue 3 + Typescript + Nginx + Symfony 6 (Messenger, mailer) + Redis
 
 ## Description
 
