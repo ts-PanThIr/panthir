@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Integration\User;
+namespace Tests\Integration\User;
 
-use App\Shared\DTO\UserDTO;
+use App\Domain\User\Entity\UserEntity;
+use App\Domain\User\Manager\UserFactory;
+use App\Shared\DTO\UserPOPO;
 use App\Shared\Exception\ManagerException;
-use App\Tests\Integration\CustomKernelTestCase;
-use App\User\Entity\UserEntity;
-use App\User\Manager\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Tests\Integration\CustomKernelTestCase;
 
 class UserManagerTest extends CustomKernelTestCase
 {
@@ -17,9 +17,9 @@ class UserManagerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var UserManager $userManager */
-        $userManager = $container->get(UserManager::class);
-        $userManager->createUser((new UserDTO('')));
+        /** @var UserFactory $userManager */
+        $userManager = $container->get(UserFactory::class);
+        $userManager->createUser((new UserPOPO('')));
     }
 
     public function testBadEmailUserException()
@@ -28,9 +28,9 @@ class UserManagerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var UserManager $userManager */
-        $userManager = $container->get(UserManager::class);
-        $userManager->createUser((new UserDTO('asd')));
+        /** @var \App\Domain\User\Manager\UserFactory $userManager */
+        $userManager = $container->get(UserFactory::class);
+        $userManager->createUser((new UserPOPO('asd')));
     }
 
     public function testEmptyPasswordUserCreation()
@@ -40,9 +40,9 @@ class UserManagerTest extends CustomKernelTestCase
         $email = $this->faker->email();
 
         $em = $container->get(EntityManagerInterface::class);
-        /** @var UserManager $userManager */
-        $userManager = $container->get(UserManager::class);
-        $user = $userManager->createUser((new UserDTO($email)));
+        /** @var UserFactory $userManager */
+        $userManager = $container->get(UserFactory::class);
+        $user = $userManager->createUser((new UserPOPO($email)));
         $em->flush();
 
         /** @var UserEntity $bd_user */
@@ -61,9 +61,9 @@ class UserManagerTest extends CustomKernelTestCase
 
         $em = $container->get(EntityManagerInterface::class);
 
-        /** @var UserManager $userManager */
-        $userManager = $container->get(UserManager::class);
-        $userManager->createUser((new UserDTO(email: $email, password: 'teste')));
+        /** @var UserFactory $userManager */
+        $userManager = $container->get(UserFactory::class);
+        $userManager->createUser((new UserPOPO(email: $email, password: 'teste')));
         $em->flush();
 
         /** @var UserEntity $bd_user */
@@ -80,11 +80,11 @@ class UserManagerTest extends CustomKernelTestCase
 
         $em = $container->get(EntityManagerInterface::class);
 
-        /** @var UserManager $userManager */
-        $userManager = $container->get(UserManager::class);
-        $userManager->createUser((new UserDTO(email: $email)));
+        /** @var \App\Domain\User\Manager\UserFactory $userManager */
+        $userManager = $container->get(UserFactory::class);
+        $userManager->createUser((new UserPOPO(email: $email)));
         $em->flush();
 
-        $userManager->createUser((new UserDTO(email: $email)));
+        $userManager->createUser((new UserPOPO(email: $email)));
     }
 }

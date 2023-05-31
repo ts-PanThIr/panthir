@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Tests\Integration\Person;
+namespace Tests\Integration\Person;
 
-use App\Person\Entity\PersonEntity;
-use App\Person\Manager\PersonManager;
-use App\Shared\DTO\PersonAddressDTO;
-use App\Shared\DTO\PersonContactDTO;
-use App\Shared\DTO\PersonDTO;
+use App\Domain\Person\Entity\PersonEntity;
+use App\Domain\Person\Manager\PersonFactory;
+use App\Shared\DTO\PersonAddressPOPO;
+use App\Shared\DTO\PersonContactPOPO;
+use App\Shared\DTO\PersonPOPO;
 use App\Shared\Exception\InvalidFieldException;
 use App\Shared\Exception\ManagerException;
-use App\Tests\Integration\CustomKernelTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tests\Integration\CustomKernelTestCase;
 
 class PersonManagerTest extends CustomKernelTestCase
 {
@@ -20,9 +20,9 @@ class PersonManagerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var PersonManager $personManager */
-        $personManager = $container->get(PersonManager::class);
-        $personManager->savePerson((new PersonDTO()));
+        /** @var PersonFactory $personManager */
+        $personManager = $container->get(PersonFactory::class);
+        $personManager->savePerson((new PersonPOPO()));
     }
 
     public function testInvalidIdPersonException()
@@ -31,10 +31,10 @@ class PersonManagerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var PersonManager $personManager */
-        $personManager = $container->get(PersonManager::class);
+        /** @var PersonFactory $personManager */
+        $personManager = $container->get(PersonFactory::class);
         $personManager->savePerson(
-            (new PersonDTO())
+            (new PersonPOPO())
                 ->setId(9999999)
                 ->setName($this->faker->firstName())
                 ->setSurname($this->faker->lastName())
@@ -47,10 +47,10 @@ class PersonManagerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var PersonManager $personManager */
-        $personManager = $container->get(PersonManager::class);
+        /** @var \App\Domain\Person\Manager\PersonFactory $personManager */
+        $personManager = $container->get(PersonFactory::class);
         $personEntity = $personManager->savePerson(
-            (new PersonDTO())
+            (new PersonPOPO())
             ->setName($this->faker->firstName())
             ->setSurname($this->faker->lastName())
             ->setDocument($this->faker->taxpayerIdentificationNumber())
@@ -66,17 +66,17 @@ class PersonManagerTest extends CustomKernelTestCase
         $container = static::getContainer();
 
         try {
-            /** @var PersonManager $personManager */
-            $personManager = $container->get(PersonManager::class);
+            /** @var \App\Domain\Person\Manager\PersonFactory $personManager */
+            $personManager = $container->get(PersonFactory::class);
             $personManager->savePerson(
-                (new PersonDTO())
+                (new PersonPOPO())
                     ->setName($this->faker->firstName())
                     ->setSurname($this->faker->lastName())
                     ->setDocument($this->faker->taxpayerIdentificationNumber())
-                    ->setAddresses(new ArrayCollection([new PersonAddressDTO()]))
+                    ->setAddresses(new ArrayCollection([new PersonAddressPOPO()]))
             );
         } catch (\Exception $e) {
-            $this->assertFalse(str_contains($e->getMessage(),PersonDTO::class));
+            $this->assertFalse(str_contains($e->getMessage(),PersonPOPO::class));
             $this->assertInstanceOf(InvalidFieldException::class, $e);
         }
     }
@@ -87,17 +87,17 @@ class PersonManagerTest extends CustomKernelTestCase
         $container = static::getContainer();
 
         try {
-            /** @var PersonManager $personManager */
-            $personManager = $container->get(PersonManager::class);
+            /** @var PersonFactory $personManager */
+            $personManager = $container->get(PersonFactory::class);
             $personManager->savePerson(
-                (new PersonDTO())
+                (new PersonPOPO())
                     ->setName($this->faker->firstName())
                     ->setSurname($this->faker->lastName())
                     ->setDocument($this->faker->taxpayerIdentificationNumber())
-                    ->setContacts(new ArrayCollection([new PersonContactDTO()]))
+                    ->setContacts(new ArrayCollection([new PersonContactPOPO()]))
             );
         } catch (\Exception $e) {
-            $this->assertFalse(str_contains($e->getMessage(), PersonDTO::class));
+            $this->assertFalse(str_contains($e->getMessage(), PersonPOPO::class));
             $this->assertInstanceOf(InvalidFieldException::class, $e);
         }
     }
@@ -107,21 +107,21 @@ class PersonManagerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var PersonManager $personManager */
-        $personManager = $container->get(PersonManager::class);
+        /** @var PersonFactory $personManager */
+        $personManager = $container->get(PersonFactory::class);
         $personEntity = $personManager->savePerson(
-            (new PersonDTO())
+            (new PersonPOPO())
                 ->setName($this->faker->firstName())
                 ->setSurname($this->faker->lastName())
                 ->setDocument($this->faker->taxpayerIdentificationNumber())
                 ->setContacts( new ArrayCollection([
-                    (new PersonContactDTO())
+                    (new PersonContactPOPO())
                         ->setName($this->faker->domainName())
                         ->setPhone($this->faker->phoneNumber())
                         ->setEmail($this->faker->email())
                 ]))
                 ->setAddresses( new ArrayCollection([
-                    (new PersonAddressDTO())
+                    (new PersonAddressPOPO())
                         ->setName($this->faker->domainName())
                         ->setZip($this->faker->randomNumber(4) . '-' . $this->faker->randomNumber(3))
                         ->setNumber($this->faker->randomNumber(4))

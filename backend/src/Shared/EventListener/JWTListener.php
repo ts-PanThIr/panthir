@@ -2,7 +2,7 @@
 
 namespace App\Shared\EventListener;
 
-use App\User\Entity\UserEntity;
+use App\Domain\User\Entity\UserEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 

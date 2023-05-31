@@ -8,6 +8,7 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
+        public: false
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
@@ -35,22 +36,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }
 
-    App\Shared\DataFixtures\:
-        resource: '../src/Shared/DataFixtures/*'
-        tags:
-            - {name: doctrine.fixture.orm}
+    Panthir\:
+        resource: '../src/{Application,Domain,Infrastructure}'
+        exclude:
+            - '../src/Infrastructure/{POPO,Kernel.php}'
+            - '../src/Domain/{Person,User,Common}/{Model,ValueObject}'
 
-    App\Shared\:
-        resource: '../src/Shared/{Service,Notify,Helper,*.php}'
-
-    App\User\:
-        resource: '../src/User/*'
-        exclude: '../src/User/{DependencyInjection,Entity,Tests,Kernel.php}'
-
-    App\Person\:
-        resource: '../src/Person/*'
-        exclude: '../src/Person/{DependencyInjection,Entity,Tests,Kernel.php}'
-
-    App\Financial\:
-        resource: '../src/Financial/*'
-        exclude: '../src/Financial/{DependencyInjection,Entity,Tests,Kernel.php}'
+    Panthir\UI\Controller\:
+        resource: '../src/UI/Controller/'
+        tags: [ 'controller.service_arguments' ]
