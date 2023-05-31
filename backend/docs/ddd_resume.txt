@@ -1,0 +1,24 @@
+Intro
+    Stick to real names, like hireEmployee() instead of register
+
+Domain
+    MUST NOT DEPEND ON ANYTHING OUTSIDE THIS LAYER
+    Business logic /invariants, entities, domain services and interfaces to allow communication with outside.
+
+    Em um sistema de e-commerce pode haver um Domain Service chamado "CarrinhoService",
+    que é responsável por calcular o valor total do carrinho de compras,
+    aplicar descontos ou promoções, verificar a disponibilidade de produtos no estoque,
+    entre outras operações relacionadas ao carrinho. Essas operações envolvem a interação de várias entidades, como produtos,
+    clientes e estoque. Logo não são responsabilidade exclusiva de uma única entidade.
+
+Infraestructure
+    contains concretions of the interfaces of Domain layer.
+    CAN ONLY DEPEND ON DOMAIN LAYER
+
+Application
+    Facilitates the communication betwen Domain and UI layers. May call domain services, but cannot contain any logic
+    CAN ONLY DEPEND ON DOMAIN AND INFRAESTRUCTURE LAYERS
+
+UI
+    entrypoint to the api, like controller and commands
+    CAN ONLY TALK TO APPLICATION LAYER

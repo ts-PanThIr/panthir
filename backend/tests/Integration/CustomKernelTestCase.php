@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Integration;
+namespace Tests\Integration;
 
 use Faker\Factory;
 use Faker\Generator;

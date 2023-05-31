@@ -29,7 +29,7 @@ framework:
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
-            'App\User\Messenger\Model\EmailNotification': password_reset_email
+            'Panthir\Infrastructure\Messenger\Model\EmailNotification': password_reset_email
 
 # when@test:
 #    framework:

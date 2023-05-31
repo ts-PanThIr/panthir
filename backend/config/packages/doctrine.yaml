@@ -15,23 +15,18 @@ doctrine:
 #                dir: '%kernel.project_dir%/src/Shared/Entity'
 #                prefix: 'App\Shared\Entity'
 #                alias: Shared
-            App\User:
+
+            Panthir\User:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/User/Entity'
-                prefix: 'App\User\Entity'
+                dir: '%kernel.project_dir%/src/Domain/User/Model'
+                prefix: 'Panthir\Domain\User\Model'
                 alias: User
 
             App\Person:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Person/Entity'
+                dir: '%kernel.project_dir%/src/Domain/Person/Model'
                 prefix: 'App\Person\Entity'
                 alias: Person
-
-            App\Financial:
-                is_bundle: false
-                dir: '%kernel.project_dir%/src/Financial/Entity'
-                prefix: 'App\Financial\Entity'
-                alias: Financial
 
 #when@test:
 #    doctrine:
