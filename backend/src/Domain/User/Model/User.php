@@ -8,6 +8,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Panthir\Domain\Common\Model\CountableTrait;
 use Panthir\Domain\Common\ValueObject\AggregateRoot;
 use Panthir\Domain\User\ValueObject\UserId;
+use Panthir\Domain\User\ValueObject\UserRoles;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
