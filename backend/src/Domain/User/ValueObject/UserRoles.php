@@ -1,6 +1,6 @@
 <?php
 
-namespace Panthir\Domain\User;
+namespace Panthir\Domain\User\ValueObject;
 
 class UserRoles
 {
