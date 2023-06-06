@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Domain\User\Command;
+namespace Panthir\UI\Command\User;
 
-use App\Domain\User\Manager\UserFactory;
-use App\Domain\User\UserRoles;
-use App\Shared\DTO\UserPOPO;
+use Panthir\Application\Common\Handler\HandlerRunner;
+use Panthir\Application\UseCase\User\POPO\RegisterPOPO;
+use Panthir\Application\UseCase\User\UserCreateHandler;
+use Panthir\Domain\User\ValueObject\UserRoles;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,9 +21,9 @@ use Symfony\Component\Console\Question\Question;
 )]
 class UserCreateCommand extends Command
 {
-    public function __construct(private readonly UserFactory $userManager)
+    public function __construct(private UserCreateHandler $userCreateHandler)
     {
-        parent::__construct();
+        parent::__construct('app:user-create');
     }
 
     protected function configure(): void
@@ -54,28 +55,14 @@ class UserCreateCommand extends Command
 
         $output->writeln('Username: ' . $email);
 
-        $this->userManager->createUser(
-            new UserPOPO(
+        HandlerRunner::run($this->userCreateHandler,
+            new RegisterPOPO(
                 email: $email,
                 roles: UserRoles::PROFILE_ADMIN,
                 password: $password
             )
         );
-        $this->userManager->flush();
 
-        // this method must return an integer number with the "exit status code"
-        // of the command. You can also use these constants to make code more readable
-
-        // return this if there was no problem running the command
-        // (it's equivalent to returning int(0))
         return Command::SUCCESS;
-
-        // or return this if some error happened during the execution
-        // (it's equivalent to returning int(1))
-        // return Command::FAILURE;
-
-        // or return this to indicate incorrect command usage; e.g. invalid options
-        // or missing arguments (it's equivalent to returning int(2))
-        // return Command::INVALID
     }
 }

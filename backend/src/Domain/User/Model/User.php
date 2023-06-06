@@ -24,7 +24,7 @@ final class User  extends AggregateRoot implements UserInterface, PasswordAuthen
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue('NONE')]
-    private int $id;
+    private string $id;
 
     private function __construct(
         protected $uuid,
