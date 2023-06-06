@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Domain\User\Command;
+namespace Panthir\UI\Command\User;
 
-use App\Domain\User\Manager\UserFactory;
-use App\Shared\DTO\UserPOPO;
+use Panthir\Application\Common\Handler\HandlerRunner;
+use Panthir\Application\UseCase\User\PasswordRecoveryHandler;
+use Panthir\Application\UseCase\User\POPO\PasswordRecoveryPOPO;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,9 +19,9 @@ use Symfony\Component\Console\Question\Question;
 )]
 class UserSendResetPasswordEmailCommand extends Command
 {
-    public function __construct(private readonly UserFactory $userManager)
+    public function __construct(private PasswordRecoveryHandler $passwordRecoveryHandler)
     {
-        parent::__construct();
+        parent::__construct('app:user-send-reset-password-email');
     }
 
     protected function configure(): void
@@ -42,12 +43,12 @@ class UserSendResetPasswordEmailCommand extends Command
         $question = new Question('Please enter the email of the user [john@doe.com]: ', 'john@doe.com');
         $email = $helper->ask($input, $output, $question);
 
-        $this->userManager->sendPasswordRecoverNotification(
-            new UserPOPO(
-                email: $email,
+        HandlerRunner::run($this->passwordRecoveryHandler,
+            new PasswordRecoveryPOPO(
+                email: $email
             )
         );
-        $this->userManager->flush();
+
         return Command::SUCCESS;
 
     }

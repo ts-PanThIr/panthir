@@ -5,7 +5,7 @@ namespace Panthir\UI\Controller\Person;
 use App\Domain\Person\Manager\PersonFactory;
 use App\Shared\DTO\PersonPOPO;
 use Doctrine\ORM\EntityManagerInterface;
-use Panthir\Application\SerializerHelper;
+use Panthir\Application\Services\SerializerHelper;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

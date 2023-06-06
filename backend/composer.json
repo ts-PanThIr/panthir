@@ -23,6 +23,7 @@
         "symfony/mailer": "6.1.*",
         "symfony/messenger": "6.1.*",
         "symfony/monolog-bundle": "^3.8",
+        "symfony/password-hasher": "6.1.*",
         "symfony/property-info": "6.1.*",
         "symfony/proxy-manager-bridge": "6.1.*",
         "symfony/redis-messenger": "6.1.*",
@@ -48,10 +49,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Panthir\\Application\\": "src/Application",
-            "Panthir\\Infrastructure\\": "src/Infrastructure",
-            "Panthir\\UI\\": "src/UI",
-            "Panthir\\Domain\\": "src/Domain"
+            "Panthir\\Application\\": "src/Application/",
+            "Panthir\\Infrastructure\\": "src/Infrastructure/",
+            "Panthir\\UI\\": "src/UI/",
+            "Panthir\\Domain\\": "src/Domain/"
         }
     },
     "autoload-dev": {

@@ -2,7 +2,7 @@
 
 namespace Panthir\UI\Controller;
 
-use App\Shared\Notify\NotifyInterface;
+use Panthir\Application\Services\Notify\NotifyInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

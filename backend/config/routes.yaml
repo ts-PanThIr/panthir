@@ -3,15 +3,11 @@
 #    type: attribute
 
 user:
-    resource: '../src/User/Controller/'
+    resource: '../src/UI/Controller/User'
     type: annotation
 
 person:
-    resource: '../src/Person/Controller/'
-    type: annotation
-
-financial:
-    resource: '../src/Financial/Controller/'
+    resource: '../src/UI/Controller/Person'
     type: annotation
 
 api_login_check:

@@ -2,11 +2,11 @@
 
 namespace Panthir\UI\Controller\User;
 
-use App\Domain\User\Manager\UserFactory;
-use App\Domain\User\UserRoles;
 use App\Shared\DTO\UserSearchPOPO;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Panthir\Domain\User\Repository\UserRepositoryInterface;
+use Panthir\Domain\User\ValueObject\UserRoles;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,16 +20,15 @@ class UserGetController extends APIController
     public function getAll(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $searchDTO = UserSearchPOPO::transformFromObject($request);
-        $users = $entityManager->getRepository(UserEntity::class)->search($searchDTO);
+        $users = $entityManager->getRepository(UserRepositoryInterface::class)->search($searchDTO);
         return $this->response(items: $users, groups:['user', 'countable']);
     }
 
     #[Route(path: "/token/{token}", name: "app_users_get_byToken", methods: 'GET')]
-    public function getByToken(UserFactory $userManager, Request $request, Notify $notify): JsonResponse
+    public function getByToken(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $searchDTO = UserSearchPOPO::transformFromObject($request);
-        $this->notify->addMessage($notify::ERROR, 'test de erro');
-        $users = $userManager->search($searchDTO);
+        $users = $entityManager->getRepository(UserRepositoryInterface::class)->search($searchDTO);
         return $this->response(items: $users, groups:['user']);
     }
 
@@ -48,7 +47,7 @@ class UserGetController extends APIController
     #[Route(path: "/{id}", name: "app_users_getById", methods: 'GET')]
     public function getById(EntityManagerInterface $entityManager, string $id): JsonResponse
     {
-        $user = $entityManager->getRepository(UserEntity::class)->find($id);
+        $user = $entityManager->getRepository(UserRepositoryInterface::class)->find($id);
         return $this->response(items: $user, groups:['user']);
     }
 }

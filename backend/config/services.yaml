@@ -37,11 +37,23 @@ services:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }
 
     Panthir\:
-        resource: '../src/{Application,Domain,Infrastructure}'
+        resource: '../src/{Domain,Infrastructure,Application}'
         exclude:
-            - '../src/Infrastructure/{POPO,Kernel.php}'
+            - '../src/Infrastructure/Kernel.php'
             - '../src/Domain/{Person,User,Common}/{Model,ValueObject}'
+#            - '../src/Application/UseCase/'
+
+    Panthir\UI\Command\:
+        resource: '../src/UI/Command/'
 
     Panthir\UI\Controller\:
         resource: '../src/UI/Controller/'
         tags: [ 'controller.service_arguments' ]
+
+#    Panthir\Application\UseCase\:
+#        resource: '../src/Application/UseCase/'
+#        factory: ['Panthir\Application\Common\Handler\AbstractHandler', 'create']
+
+#    Panthir\Application\UseCase\:
+#        resource: '../src/Application/UseCase/'
+#        factory: [null, 'factory']
