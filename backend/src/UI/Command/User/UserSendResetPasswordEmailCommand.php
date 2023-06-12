@@ -4,7 +4,7 @@ namespace Panthir\UI\Command\User;
 
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\UseCase\User\PasswordRecoveryHandler;
-use Panthir\Application\UseCase\User\POPO\PasswordRecoveryPOPO;
+use Panthir\Application\UseCase\User\POPO\Input\PasswordRecoveryPOPO;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

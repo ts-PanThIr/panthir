@@ -10,23 +10,17 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-#            App\Shared:
-#                is_bundle: false
-#                dir: '%kernel.project_dir%/src/Shared/Entity'
-#                prefix: 'App\Shared\Entity'
-#                alias: Shared
-
             Panthir\User:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Domain/User/Model'
                 prefix: 'Panthir\Domain\User\Model'
                 alias: User
 
-            App\Person:
+            Panthir\Customer:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Domain/Person/Model'
-                prefix: 'App\Person\Entity'
-                alias: Person
+                dir: '%kernel.project_dir%/src/Domain/Customer/Model'
+                prefix: 'Panthir\Domain\Customer\Model'
+                alias: Customer
 
 #when@test:
 #    doctrine:

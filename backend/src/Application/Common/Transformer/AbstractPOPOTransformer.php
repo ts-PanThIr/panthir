@@ -7,7 +7,7 @@ use Panthir\Application\Common\POPO\AbstractPOPO;
 
 abstract class AbstractPOPOTransformer extends AbstractPOPO
 {
-    public static function transformFromObject($object)
+    public static function transformFromObject(object $object)
     {
         throw new \Exception("Unimplemented");
     }

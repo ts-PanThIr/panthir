@@ -6,16 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Panthir\Domain\Common\Model\CountableTrait;
-use Panthir\Domain\Common\ValueObject\AggregateRoot;
-use Panthir\Domain\User\ValueObject\UserId;
 use Panthir\Domain\User\ValueObject\UserRoles;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 #[ORM\Table(name: '`user`')]
-final class User  extends AggregateRoot implements UserInterface, PasswordAuthenticatedUserInterface
+final class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use CountableTrait;
     use BlameableEntity;
@@ -26,8 +24,8 @@ final class User  extends AggregateRoot implements UserInterface, PasswordAuthen
     #[ORM\GeneratedValue('NONE')]
     private string $id;
 
-    private function __construct(
-        protected $uuid,
+    public function __construct(
+        protected UuidInterface $uuid,
 
         #[ORM\Column(length: 180, unique: true)]
         private string $email,
@@ -42,30 +40,9 @@ final class User  extends AggregateRoot implements UserInterface, PasswordAuthen
         private ?string $password,
     )
     {
-        parent::__construct($uuid);
         $this->id = $uuid->__toString();
     }
 
-    public static function create(
-        UserId $userId,
-        string $email,
-        array $roles = [],
-        ?string $passwordResetToken = null,
-        ?string $password = null
-    ): User
-    {
-        $user =  new self(
-            uuid: $userId,
-            email: $email,
-            roles: $roles,
-            passwordResetToken: $passwordResetToken,
-            password: $password
-        );
-
-        return $user;
-    }
-
-    #[Groups(['user'])]
     public function getProfile(): string
     {
         return UserRoles::getProfileByRoles($this->getRoles());
@@ -82,7 +59,6 @@ final class User  extends AggregateRoot implements UserInterface, PasswordAuthen
         return $this->id;
     }
 
-    #[Groups(['user'])]
     public function getEmail(): string
     {
         return $this->email;
@@ -100,7 +76,6 @@ final class User  extends AggregateRoot implements UserInterface, PasswordAuthen
         return (string) $this->email;
     }
 
-    #[Groups(['user'])]
     public function getRoles(): array
     {
         $roles = $this->roles;

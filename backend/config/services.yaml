@@ -32,7 +32,7 @@ services:
             - '@Redis'
 
     app.event.jwt_created_listener:
-        class: App\Shared\EventListener\JWTListener
+        class: Panthir\Infrastructure\EventListener\JWTListener
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }
 
@@ -40,7 +40,7 @@ services:
         resource: '../src/{Domain,Infrastructure,Application}'
         exclude:
             - '../src/Infrastructure/Kernel.php'
-            - '../src/Domain/{Person,User,Common}/{Model,ValueObject}'
+            - '../src/Domain/{Customer,User,Common}/{Model,ValueObject}'
 #            - '../src/Application/UseCase/'
 
     Panthir\UI\Command\:
