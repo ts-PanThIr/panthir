@@ -2,11 +2,11 @@
 
 namespace Panthir\Infrastructure\Repository\User;
 
-use App\Shared\DTO\UserSearchPOPO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Panthir\Domain\User\Repository\UserRepositoryInterface;
+use Panthir\Application\UseCase\User\POPO\Output\UserSearchDTO;
 use Panthir\Domain\User\Model\User;
+use Panthir\Domain\User\Repository\UserRepositoryInterface;
 use Panthir\Infrastructure\Repository\CountableTrait;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -52,7 +52,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         $this->getEntityManager()->flush();
     }
 
-    public function search(UserSearchPOPO $search): array
+    public function search(UserSearchDTO $search): array
     {
         $qb = $this->createQueryBuilder('u');
         $qb->where('1=1');

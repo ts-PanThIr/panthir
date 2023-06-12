@@ -2,12 +2,13 @@
 
 namespace Panthir\Application\UseCase\User;
 
-use App\Shared\DTO\UserPOPO;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
 use Panthir\Application\Common\POPO\POPOInterface;
+use Panthir\Application\UseCase\User\POPO\Input\PasswordRecoveryPOPO;
 use Panthir\Domain\User\DomainServices\PasswordResetTokenGenerator;
 use Panthir\Domain\User\Model\User;
 use Panthir\Infrastructure\CommonBundle\Exception\HandlerException;
@@ -28,7 +29,7 @@ class PasswordRecoveryHandler extends AbstractHandler implements BeforeExecutedH
     }
 
     /**
-     * @param UserPOPO $model
+     * @param PasswordRecoveryPOPO $model
      * @return void
      * @throws HandlerException
      */
@@ -44,7 +45,7 @@ class PasswordRecoveryHandler extends AbstractHandler implements BeforeExecutedH
     }
 
     /**
-     * @param UserPOPO $userDTO
+     * @param PasswordRecoveryPOPO $userDTO
      * @return User
      * @throws JWTEncodeFailureException
      */

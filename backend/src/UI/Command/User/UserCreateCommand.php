@@ -3,7 +3,7 @@
 namespace Panthir\UI\Command\User;
 
 use Panthir\Application\Common\Handler\HandlerRunner;
-use Panthir\Application\UseCase\User\POPO\RegisterPOPO;
+use Panthir\Application\UseCase\User\POPO\Input\RegisterPOPO;
 use Panthir\Application\UseCase\User\UserCreateHandler;
 use Panthir\Domain\User\ValueObject\UserRoles;
 use Symfony\Component\Console\Attribute\AsCommand;

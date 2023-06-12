@@ -8,14 +8,14 @@ use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\AfterExecutedHandlerInterface;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
 use Panthir\Application\Common\POPO\POPOInterface;
-use Panthir\Application\UseCase\User\POPO\RegisterPOPO;
+use Panthir\Application\UseCase\User\POPO\Input\RegisterPOPO;
 use Panthir\Domain\User\DomainServices\PasswordHashGenerator;
 use Panthir\Domain\User\DomainServices\PasswordResetTokenGenerator;
 use Panthir\Domain\User\Model\User;
-use Panthir\Domain\User\ValueObject\UserId;
 use Panthir\Domain\User\ValueObject\UserRoles;
 use Panthir\Infrastructure\CommonBundle\Exception\HandlerException;
 use Panthir\Infrastructure\Messenger\Model\EmailNotification;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandlerInterface, AfterExecutedHandlerInterface
@@ -65,8 +65,8 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
             $hashedPassword = $this->passwordHasher->__invoke($model->getPassword());
         }
 
-        $this->user = User::create(
-            userId: new UserId(),
+        $this->user = new User(
+            uuid: Uuid::uuid4(),
             email: $model->getEmail(),
             roles: empty($model->getRoles()) ? UserRoles::PROFILE_VIEWER : $model->getRoles(),
             passwordResetToken: $resetToken,
