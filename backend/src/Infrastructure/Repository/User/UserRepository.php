@@ -4,7 +4,7 @@ namespace Panthir\Infrastructure\Repository\User;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Panthir\Application\UseCase\User\POPO\Output\UserSearchDTO;
+use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Domain\User\Model\User;
 use Panthir\Domain\User\Repository\UserRepositoryInterface;
 use Panthir\Infrastructure\Repository\CountableTrait;
@@ -52,7 +52,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         $this->getEntityManager()->flush();
     }
 
-    public function search(UserSearchDTO $search): array
+    public function search(DTOInterface $search): array
     {
         $qb = $this->createQueryBuilder('u');
         $qb->where('1=1');

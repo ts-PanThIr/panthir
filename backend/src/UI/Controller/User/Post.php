@@ -2,7 +2,6 @@
 
 namespace Panthir\UI\Controller\User;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\UseCase\User\Normalizer\DTO\RegisterDTO;
 use Panthir\Application\UseCase\User\UserCreateHandler;
@@ -18,10 +17,9 @@ class Post extends APIController
 {
     #[Route(path: "/", name: "app_user_post", methods: 'POST')]
     public function post(
-        UserCreateHandler      $userCreateHandler,
-        Request                $request,
-        EntityManagerInterface $entityManager,
-        HandlerRunner $runner
+        UserCreateHandler   $userCreateHandler,
+        Request             $request,
+        HandlerRunner       $runner,
     ): JsonResponse
     {
         $serializer = new Serializer(normalizers: [new ObjectNormalizer()]);
@@ -34,7 +32,6 @@ class Post extends APIController
         );
 
         $return = $runner($userCreateHandler, $user);
-        $entityManager->flush();
         return $this->response(items: $return);
     }
 }

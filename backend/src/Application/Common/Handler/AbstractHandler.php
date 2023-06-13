@@ -3,7 +3,6 @@
 namespace Panthir\Application\Common\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Panthir\Application\Common\POPO\POPOInterface;
 
 abstract class AbstractHandler implements CommonHandlerInterface
 {

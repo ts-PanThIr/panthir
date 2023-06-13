@@ -2,20 +2,18 @@
 
 namespace Tests\Application\User;
 
-use Tests\Application\CustomApplicationTestCase;
+use Tests\Application\CustomApplicationAuthCase;
 
-class PostTest extends CustomApplicationTestCase
+class PostTest extends CustomApplicationAuthCase
 {
-    public function testSomething(): void
+    public function testCreateSuccess(): void
     {
-        // test e.g. the profile page
-        self::$authClient->request('POST', '/api/user/', [
+        static::$client->request('POST', '/api/user/', [
             'email' => 'teste1@teste.com'
         ]);
 
-        $content = self::$authClient->getResponse();
-
+        $content = json_decode(static::$client->getResponse()->getContent(), true);
+        $this->assertEquals(array_keys($content['data']), ['email', 'profile', 'id']);
         $this->assertResponseStatusCodeSame(200);
-
     }
 }

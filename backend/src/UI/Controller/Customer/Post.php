@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\Services\SerializerHelper;
 use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
-use Panthir\Application\UseCase\Customer\POPO\Input\CustomerPOPO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,8 @@ class Post extends APIController
         CustomerCreateHandler  $customerCreateHandler,
         Request                $request,
         EntityManagerInterface $entityManager,
-        SerializerHelper       $serializerHelper
+        SerializerHelper       $serializerHelper,
+        HandlerRunner          $handlerRunner
     ): JsonResponse
     {
         $defaultContext = [
@@ -38,14 +39,14 @@ class Post extends APIController
             normalizers: [new ObjectNormalizer(defaultContext: $defaultContext)]
         );
 
-        /** @var CustomerPOPO $customer */
+        /** @var CustomerCreateDTO $customer */
         $customer = $serializer->denormalize(
             data: $request->request->all(),
-            type: CustomerPOPO::class
+            type: CustomerCreateDTO::class
         );
 
-        $return = HandlerRunner::run($customerCreateHandler, $customer);
+        $return = $handlerRunner($customerCreateHandler, $customer);
         $entityManager->flush();
-        return $this->response(items: $return, groups: ['customer']);
+        return $this->response(items: $return);
     }
 }

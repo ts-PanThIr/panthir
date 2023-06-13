@@ -3,6 +3,7 @@
 namespace Panthir\UI\Controller\Customer;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Panthir\Domain\Customer\Model\Customer;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ class PersonGetController extends APIController
         string $id
     ): JsonResponse
     {
-        $person = $entityManager->getRepository(PersonEntity::class)->find($id);
+        $person = $entityManager->getRepository(Customer::class)->find($id);
         return $this->response(items: $person, groups: ['person']);
     }
 }

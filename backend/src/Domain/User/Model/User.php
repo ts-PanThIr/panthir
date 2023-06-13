@@ -7,11 +7,12 @@ use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Panthir\Domain\Common\Model\CountableTrait;
 use Panthir\Domain\User\ValueObject\UserRoles;
+use Panthir\Infrastructure\Repository\User\UserRepository;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 final class User implements UserInterface, PasswordAuthenticatedUserInterface
 {

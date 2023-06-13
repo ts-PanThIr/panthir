@@ -5,7 +5,7 @@ namespace Tests\Integration\Application\UseCase\Customer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
-use Panthir\Application\UseCase\Customer\POPO\Input\CustomerPOPO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\Domain\Customer\Model\Customer;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Tests\Integration\CustomKernelTestCase;
@@ -24,7 +24,7 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
         /** @var CustomerCreateHandler $userHandler */
         $userHandler = $container->get(CustomerCreateHandler::class);
         $runner = $container->get(HandlerRunner::class);
-        $runner::run($userHandler, (new CustomerPOPO('','', '')));
+        $runner::__invoke($userHandler, (new CustomerCreateDTO('','', '')));
     }
 
     public function testPersonCreateSuccess()
@@ -39,7 +39,7 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
         /** @var CustomerCreateHandler $userHandler */
         $userHandler = $container->get(CustomerCreateHandler::class);
         $runner = $container->get(HandlerRunner::class);
-        $return = $runner::run($userHandler, (new CustomerPOPO(
+        $return = $runner::__invoke($userHandler, (new CustomerCreateDTO(
             name: $this->faker->firstName(),
             surname: $this->faker->lastName(),
             document: $this->faker->taxpayerIdentificationNumber()
@@ -55,10 +55,10 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
         $container = static::getContainer();
 
         try {
-            /** @var \App\Domain\Person\Manager\PersonFactory $personManager */
-            $personManager = $container->get(PersonFactory::class);
+            /** @var \App\Domain\Person\Manager\PersonFactory $userHandler */
+            $userHandler = $container->get(CustomerCreateHandler::class);
             $personManager->savePerson(
-                (new CustomerCreatePOPO())
+                (new CustomerCreateDTO())
                     ->setName($this->faker->firstName())
                     ->setSurname($this->faker->lastName())
                     ->setDocument($this->faker->taxpayerIdentificationNumber())

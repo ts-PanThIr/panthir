@@ -1,13 +1,13 @@
 <?php
 
-namespace Panthir\Application\UseCase\User\Normalizer;
+namespace Panthir\Application\UseCase\Customer\Normalizer;
 
-use Panthir\Application\UseCase\User\UserCreateHandler;
+use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
 use Panthir\Domain\User\Model\User;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class UserCreateNormalizer implements NormalizerInterface, DenormalizerInterface
+class CustomerCreateNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     /**
      * @param User $object
@@ -26,16 +26,16 @@ class UserCreateNormalizer implements NormalizerInterface, DenormalizerInterface
 
     public function supportsNormalization(mixed $data, string $format = null)
     {
-        return $data instanceof User && UserCreateHandler::class === $format;
+        return $data instanceof User && CustomerCreateHandler::class === $format;
     }
 
     public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
     {
-        return null;
+        return $data instanceof User;
     }
 
     public function supportsDenormalization(mixed $data, string $type, string $format = null)
     {
-        return false;
+        // TODO: Implement supportsDenormalization() method.
     }
 }

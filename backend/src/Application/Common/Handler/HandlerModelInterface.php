@@ -2,8 +2,8 @@
 
 namespace Panthir\Application\Common\Handler;
 
-use Panthir\Application\Common\POPO\POPOInterface;
+use Panthir\Application\Common\DTO\DTOInterface;
 
-interface HandlerModelInterface extends POPOInterface
+interface HandlerModelInterface extends DTOInterface
 {
 }

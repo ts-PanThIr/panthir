@@ -3,12 +3,11 @@
 namespace Panthir\Application\UseCase\Customer;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
-use Panthir\Application\Common\POPO\POPOInterface;
-use Panthir\Application\UseCase\Customer\POPO\Input\CustomerAddressPOPO;
-use Panthir\Application\UseCase\Customer\POPO\Input\CustomerContactPOPO;
-use Panthir\Application\UseCase\Customer\POPO\Input\CustomerPOPO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
 use Panthir\Domain\Customer\Model\Customer;
 use Panthir\Domain\Customer\Model\CustomerAddress;
 use Panthir\Domain\Customer\Model\CustomerContact;
@@ -32,11 +31,11 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     }
 
     /**
-     * @param CustomerPOPO $model
+     * @param DTOInterface $model
      * @return void
      * @throws HandlerException
      */
-    public function beforeExecuted(POPOInterface $model): void
+    public function beforeExecuted(DTOInterface $model): void
     {
         $errors = $this->validator->validate($model);
 
@@ -54,11 +53,11 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     }
 
     /**
-     * @param CustomerPOPO $model
+     * @param DTOInterface $model
      * @return Customer
      * @throws HandlerException|InvalidFieldException
      */
-    public function execute(POPOInterface $model): Customer
+    public function execute(DTOInterface $model): Customer
     {
         $this->customer = new Customer(
             uuid: Uuid::uuid4(),
@@ -76,14 +75,14 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
         $this->entityManager->persist($this->customer);
 
         if (!empty($model->getAddresses())) {
-            /** @var CustomerAddressPOPO $address */
+            /** @var CustomerAddressDTO $address */
             foreach ($model->getAddresses() as $address) {
                 $this->saveAddress($address);
             }
         }
 
         if (!empty($model->getContacts())) {
-            /** @var CustomerContactPOPO $contact */
+            /** @var CustomerContactDTO $contact */
             foreach ($model->getContacts() as $contact) {
                 $this->saveContact($contact);
             }
@@ -95,7 +94,7 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     /**
      * @throws InvalidFieldException
      */
-    private function saveAddress(CustomerAddressPOPO $model): void
+    private function saveAddress(CustomerAddressDTO $model): void
     {
         $errors = $this->validator->validate($model);
 
@@ -132,7 +131,7 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     /**
      * @throws InvalidFieldException
      */
-    private function saveContact(CustomerContactPOPO $contactDTO): void
+    private function saveContact(CustomerContactDTO $contactDTO): void
     {
         $errors = $this->validator->validate($contactDTO);
 
