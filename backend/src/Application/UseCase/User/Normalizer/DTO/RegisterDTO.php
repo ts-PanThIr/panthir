@@ -1,13 +1,11 @@
 <?php
 
-namespace Panthir\Application\UseCase\User\POPO\Input;
+namespace Panthir\Application\UseCase\User\Normalizer\DTO;
 
 use Panthir\Application\Common\POPO\AbstractPOPO;
 use Panthir\Application\Common\POPO\POPOInterface;
-use Panthir\Application\Common\Transformer\TransformFromRequestInterface;
-use Symfony\Component\HttpFoundation\Request;
 
-class RegisterPOPO extends AbstractPOPO implements TransformFromRequestInterface, POPOInterface
+class RegisterDTO extends AbstractPOPO implements POPOInterface
 {
     public function __construct(
         private readonly string  $email,
@@ -17,13 +15,6 @@ class RegisterPOPO extends AbstractPOPO implements TransformFromRequestInterface
         private readonly ?string $passwordResetToken = null
     )
     {
-    }
-
-    public static function transformFromRequest(Request $object): self
-    {
-        return new self(
-            email: $object->query->get('email')
-        );
     }
 
     public function getEmail(): string

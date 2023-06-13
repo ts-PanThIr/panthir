@@ -4,7 +4,7 @@ namespace Panthir\UI\Controller\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
-use Panthir\Application\UseCase\User\POPO\Input\RegisterPOPO;
+use Panthir\Application\UseCase\User\Normalizer\DTO\RegisterDTO;
 use Panthir\Application\UseCase\User\UserCreateHandler;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,20 +20,21 @@ class Post extends APIController
     public function post(
         UserCreateHandler      $userCreateHandler,
         Request                $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        HandlerRunner $runner
     ): JsonResponse
     {
         $serializer = new Serializer(normalizers: [new ObjectNormalizer()]);
 
         /** TODO can this user insert this role level? */
-        /** @var RegisterPOPO $user */
+        /** @var RegisterDTO $user */
         $user = $serializer->denormalize(
             data: $request->request->all(),
-            type: RegisterPOPO::class
+            type: RegisterDTO::class
         );
 
-        $return = HandlerRunner::run($userCreateHandler, $user);
+        $return = $runner($userCreateHandler, $user);
         $entityManager->flush();
-        return $this->response(items: $return, groups: ['user']);
+        return $this->response(items: $return);
     }
 }

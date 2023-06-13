@@ -1,11 +1,11 @@
 <?php
 
-namespace Panthir\Application\UseCase\User\POPO\Input;
+namespace Panthir\Application\UseCase\User\Normalizer\DTO;
 
 use Panthir\Application\Common\POPO\AbstractPOPO;
 use Panthir\Application\Common\POPO\POPOInterface;
 
-class PasswordRecoveryPOPO extends AbstractPOPO implements POPOInterface
+class PasswordRecoveryDTO extends AbstractPOPO implements POPOInterface
 {
     public function __construct(
         private readonly string  $email

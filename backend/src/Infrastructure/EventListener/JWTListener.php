@@ -4,7 +4,7 @@ namespace Panthir\Infrastructure\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
-use Panthir\Domain\User\Repository\UserRepositoryInterface;
+use Panthir\Domain\User\Model\User;
 
 class JWTListener
 {
@@ -17,7 +17,7 @@ class JWTListener
     public function onJWTDecoded(JWTDecodedEvent $event): void
     {
         $payload = $event->getPayload();
-        $user = $this->entityManager->getRepository(UserRepositoryInterface::class)->findOneBy(["email" => $payload['username']]);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(["email" => $payload['username']]);
 
         $payload['userId'] = $user->getId();
 
