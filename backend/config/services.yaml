@@ -41,7 +41,7 @@ services:
         exclude:
             - '../src/Infrastructure/Kernel.php'
             - '../src/Domain/{Customer,User,Common}/{Model,ValueObject}'
-#            - '../src/Application/UseCase/'
+            - '../src/Application/UseCase/User/Normalizer/UserCreateNormalizer'
 
     Panthir\UI\Command\:
         resource: '../src/UI/Command/'
@@ -50,10 +50,8 @@ services:
         resource: '../src/UI/Controller/'
         tags: [ 'controller.service_arguments' ]
 
-#    Panthir\Application\UseCase\:
-#        resource: '../src/Application/UseCase/'
-#        factory: ['Panthir\Application\Common\Handler\AbstractHandler', 'create']
 
-#    Panthir\Application\UseCase\:
-#        resource: '../src/Application/UseCase/'
-#        factory: [null, 'factory']
+    Panthir\Application\UseCase\User\Normalizer\UserCreateNormalizer:
+        class : Panthir\Application\UseCase\User\Normalizer\UserCreateNormalizer
+#        resource: '../src/Application/*/Normalizer/*Normalizer.php'
+        tags: [ 'serializer.normalizer', 'serializer.denormalizer' ]

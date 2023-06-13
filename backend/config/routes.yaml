@@ -2,13 +2,13 @@
 #    resource: ../src/User/Controller/
 #    type: attribute
 
-user:
-    resource: '../src/UI/Controller/User'
+controllers:
+    resource: '../src/UI/Controller'
     type: annotation
 
-person:
-    resource: '../src/UI/Controller/Person'
-    type: annotation
+#person:
+#    resource: '../src/UI/Controller/Person'
+#    type: annotation
 
 api_login_check:
     path: /api/login_check

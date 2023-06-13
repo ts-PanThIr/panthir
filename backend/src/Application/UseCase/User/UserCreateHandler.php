@@ -8,7 +8,7 @@ use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\AfterExecutedHandlerInterface;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
 use Panthir\Application\Common\POPO\POPOInterface;
-use Panthir\Application\UseCase\User\POPO\Input\RegisterPOPO;
+use Panthir\Application\UseCase\User\Normalizer\DTO\RegisterDTO;
 use Panthir\Domain\User\DomainServices\PasswordHashGenerator;
 use Panthir\Domain\User\DomainServices\PasswordResetTokenGenerator;
 use Panthir\Domain\User\Model\User;
@@ -33,7 +33,7 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
     }
 
     /**
-     * @param RegisterPOPO $model
+     * @param RegisterDTO $model
      * @return void
      * @throws HandlerException
      */
@@ -51,7 +51,7 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
     }
 
     /**
-     * @param RegisterPOPO $model
+     * @param RegisterDTO $model
      * @return User
      * @throws JWTEncodeFailureException
      */
