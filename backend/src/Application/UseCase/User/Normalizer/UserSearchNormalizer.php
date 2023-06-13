@@ -4,10 +4,9 @@ namespace Panthir\Application\UseCase\User\Normalizer;
 
 use Panthir\Application\UseCase\User\UserSearchHandler;
 use Panthir\Domain\User\Model\User;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class UserSearchNormalizer implements NormalizerInterface, DenormalizerInterface
+class UserSearchNormalizer implements NormalizerInterface
 {
     /**
      * @param User $object
@@ -37,15 +36,5 @@ class UserSearchNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsNormalization(mixed $data, string $format = null)
     {
         return is_array($data) && UserSearchHandler::class === $format;
-    }
-
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
-    {
-        return null;
-    }
-
-    public function supportsDenormalization(mixed $data, string $type, string $format = null)
-    {
-        return false;
     }
 }

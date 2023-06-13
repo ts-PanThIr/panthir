@@ -7,6 +7,8 @@ use Panthir\Application\UseCase\Customer\POPO\Output\CustomerSearchPOPO;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route(path: '/api/customer')]
 class GetAll extends APIController
@@ -16,6 +18,18 @@ class GetAll extends APIController
         EntityManagerInterface $entityManager,
     ): JsonResponse
     {
+        $serializer = new Serializer(normalizers: [new ObjectNormalizer()]);
+
+        /** @var CustomerSearchDTO $user */
+        $searchDTO = $serializer->denormalize(
+            data: $request->query->all(),
+            type: UserSearchDTO::class
+        );
+
+        $users = $runner($userSearchHandler, $searchDTO);
+        return $this->response(items: $users);
+
+
         $search = new CustomerSearchPOPO();
 
         /** @var PersonRepository $person */

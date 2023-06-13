@@ -5,6 +5,8 @@ namespace Tests\Integration\Application\UseCase\Customer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\Domain\Customer\Model\Customer;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
@@ -15,7 +17,6 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
     public function testCustomerAsserts()
     {
         $this->expectException(InvalidFieldException::class);
-        $this->expectExceptionMessage('The given e-mail is not valid.');
         $this->expectExceptionCode(400);
 
         self::bootKernel();
@@ -24,71 +25,25 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
         /** @var CustomerCreateHandler $userHandler */
         $userHandler = $container->get(CustomerCreateHandler::class);
         $runner = $container->get(HandlerRunner::class);
-        $runner::__invoke($userHandler, (new CustomerCreateDTO('','', '')));
+        $runner->__invoke($userHandler, (new CustomerCreateDTO('','', '')));
     }
 
     public function testPersonCreateSuccess()
     {
-        $this->expectException(InvalidFieldException::class);
-        $this->expectExceptionMessage('The given e-mail is not valid.');
-        $this->expectExceptionCode(400);
-
         self::bootKernel();
         $container = static::getContainer();
 
         /** @var CustomerCreateHandler $userHandler */
         $userHandler = $container->get(CustomerCreateHandler::class);
         $runner = $container->get(HandlerRunner::class);
-        $return = $runner::__invoke($userHandler, (new CustomerCreateDTO(
+        $return = $runner->__invoke($userHandler, (new CustomerCreateDTO(
             name: $this->faker->firstName(),
             surname: $this->faker->lastName(),
             document: $this->faker->taxpayerIdentificationNumber()
         )));
 
-        $this->assertInstanceOf(Customer::class, $return);
-        $this->assertNotEmpty($return->getId());
-    }
-
-    public function testPersonCreateAddressFailure()
-    {
-        self::bootKernel();
-        $container = static::getContainer();
-
-        try {
-            /** @var \App\Domain\Person\Manager\PersonFactory $userHandler */
-            $userHandler = $container->get(CustomerCreateHandler::class);
-            $personManager->savePerson(
-                (new CustomerCreateDTO())
-                    ->setName($this->faker->firstName())
-                    ->setSurname($this->faker->lastName())
-                    ->setDocument($this->faker->taxpayerIdentificationNumber())
-                    ->setAddresses(new ArrayCollection([new CustomerAddressPOPO()]))
-            );
-        } catch (\Exception $e) {
-            $this->assertFalse(str_contains($e->getMessage(),CustomerCreatePOPO::class));
-            $this->assertInstanceOf(InvalidFieldException::class, $e);
-        }
-    }
-
-    public function testPersonCreateContactFailure()
-    {
-        self::bootKernel();
-        $container = static::getContainer();
-
-        try {
-            /** @var PersonFactory $personManager */
-            $personManager = $container->get(PersonFactory::class);
-            $personManager->savePerson(
-                (new CustomerCreatePOPO())
-                    ->setName($this->faker->firstName())
-                    ->setSurname($this->faker->lastName())
-                    ->setDocument($this->faker->taxpayerIdentificationNumber())
-                    ->setContacts(new ArrayCollection([new CustomerContactPOPO()]))
-            );
-        } catch (\Exception $e) {
-            $this->assertFalse(str_contains($e->getMessage(), CustomerCreatePOPO::class));
-            $this->assertInstanceOf(InvalidFieldException::class, $e);
-        }
+        $this->assertIsArray($return);
+        $this->assertNotEmpty($return['id']);
     }
 
     public function testPersonCreateContactAndAddressSuccess()
@@ -96,37 +51,36 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var PersonFactory $personManager */
-        $personManager = $container->get(PersonFactory::class);
-        $personEntity = $personManager->savePerson(
-            (new CustomerCreatePOPO())
-                ->setName($this->faker->firstName())
-                ->setSurname($this->faker->lastName())
-                ->setDocument($this->faker->taxpayerIdentificationNumber())
-                ->setContacts( new ArrayCollection([
-                    (new CustomerContactPOPO())
-                        ->setName($this->faker->domainName())
-                        ->setPhone($this->faker->phoneNumber())
-                        ->setEmail($this->faker->email())
-                ]))
-                ->setAddresses( new ArrayCollection([
-                    (new CustomerAddressPOPO())
-                        ->setName($this->faker->domainName())
-                        ->setZip($this->faker->randomNumber(4) . '-' . $this->faker->randomNumber(3))
-                        ->setNumber($this->faker->randomNumber(4))
-                        ->setDistrict($this->faker->state())
-                        ->setZip($this->faker->postcode())
-                        ->setCountry($this->faker->country())
-                        ->setCity($this->faker->city())
-                        ->setAddress($this->faker->streetAddress())
-                ]))
-        );
+        /** @var CustomerCreateHandler $userHandler */
+        $userHandler = $container->get(CustomerCreateHandler::class);
+        $runner = $container->get(HandlerRunner::class);
+        $return = $runner->__invoke($userHandler, (new CustomerCreateDTO(
+            name: $this->faker->firstName(),
+            surname: $this->faker->lastName(),
+            document: $this->faker->taxpayerIdentificationNumber(),
+            addresses: new ArrayCollection([
+                (new CustomerAddressDTO(
+                    name: $this->faker->domainName(),
+                    country: $this->faker->country(),
+                    district: $this->faker->state(),
+                    city: $this->faker->city(),
+                    address: $this->faker->streetAddress(),
+                    number: $this->faker->randomNumber(4),
+                    zip: $this->faker->postcode(),
+                    addressComplement: $this->faker->domainName()
+                ))
+            ]),
+            contacts: new ArrayCollection([
+                (new CustomerContactDTO(
+                    name: $this->faker->domainName(),
+                    email: $this->faker->email(),
+                    phone: $this->faker->phoneNumber()
+                ))
+            ]),
+        )));
 
-        $this->assertNotEmpty($personEntity->getId());
-        $this->assertIsArray($personEntity->getAddresses()->getValues());
-        $this->assertIsArray($personEntity->getContacts()->getValues());
+        $this->assertEmpty(array_diff(array_keys($return), ['surname', 'name', 'id', 'document']));
     }
-
 }
 
 

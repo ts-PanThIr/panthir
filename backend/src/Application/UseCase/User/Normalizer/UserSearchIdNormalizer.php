@@ -2,11 +2,11 @@
 
 namespace Panthir\Application\UseCase\User\Normalizer;
 
-use Panthir\Application\UseCase\User\UserCreateHandler;
+use Panthir\Application\UseCase\User\UserSearchHandler;
 use Panthir\Domain\User\Model\User;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class UserCreateNormalizer implements NormalizerInterface
+class UserSearchIdNormalizer implements NormalizerInterface
 {
     /**
      * @param User $object
@@ -18,13 +18,13 @@ class UserCreateNormalizer implements NormalizerInterface
     {
         return [
             'email' => $object->getEmail(),
-            'profile' => $object->getProfile(),
-            'id' => $object->getId()
+            'id' => $object->getId(),
+            'profile' => $object->getProfile()
         ];
     }
 
     public function supportsNormalization(mixed $data, string $format = null)
     {
-        return $data instanceof User && UserCreateHandler::class === $format;
+        return $data instanceof User && UserSearchHandler::class === $format;
     }
 }

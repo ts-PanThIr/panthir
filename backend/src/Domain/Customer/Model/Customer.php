@@ -31,10 +31,10 @@ final class Customer
         private string $document,
 
         #[ORM\OneToMany(mappedBy: "customer", targetEntity: CustomerAddress::class, cascade: ["persist"])]
-        private Collection $addresses,
+        private Collection $addresses = new ArrayCollection(),
 
-        #[ORM\OneToMany(mappedBy: "customer", targetEntity: CustomerAddress::class, cascade: ["persist"])]
-        private Collection $contacts,
+        #[ORM\OneToMany(mappedBy: "customer", targetEntity: CustomerContact::class, cascade: ["persist"])]
+        private Collection $contacts = new ArrayCollection(),
 
         #[ORM\Column(nullable: true)]
         private ?string $secondaryDocument = null,
@@ -56,11 +56,9 @@ final class Customer
     )
     {
         $this->id = $uuid->__toString();
-        $this->addresses = new ArrayCollection();
-        $this->contacts = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }

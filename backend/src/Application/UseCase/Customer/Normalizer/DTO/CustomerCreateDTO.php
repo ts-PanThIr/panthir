@@ -4,8 +4,8 @@ namespace Panthir\Application\UseCase\Customer\Normalizer\DTO;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Panthir\Application\Common\DTO\DTOInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CustomerCreateDTO implements DTOInterface
@@ -25,9 +25,9 @@ class CustomerCreateDTO implements DTOInterface
 
         private readonly ?CustomerContactDTO $mainContact = null,
 
-        private readonly ?ArrayCollection    $addresses = null,
+        private readonly Collection          $addresses = new ArrayCollection(),
 
-        private readonly ?ArrayCollection    $contacts = null,
+        private readonly Collection          $contacts = new ArrayCollection(),
 
         private readonly ?DateTime           $birthDate = null,
 
@@ -55,22 +55,22 @@ class CustomerCreateDTO implements DTOInterface
         return $this->additionalInformation;
     }
 
-    public function getMainAddress(): CustomerAddressDTO
+    public function getMainAddress(): ?CustomerAddressDTO
     {
         return $this->mainAddress;
     }
 
-    public function getMainContact(): CustomerContactDTO
+    public function getMainContact(): ?CustomerContactDTO
     {
         return $this->mainContact;
     }
 
-    public function getAddresses(): ?ArrayCollection
+    public function getAddresses(): Collection
     {
         return $this->addresses;
     }
 
-    public function getContacts(): ?ArrayCollection
+    public function getContacts(): Collection
     {
         return $this->contacts;
     }
@@ -101,19 +101,5 @@ class CustomerCreateDTO implements DTOInterface
     public function getSecondaryDocument(): ?string
     {
         return $this->secondaryDocument;
-    }
-
-    public static function transformFromRequest(Request $object): self
-    {
-        return new CustomerCreateDTO(
-            name: $object->getName(),
-            surname: $object->getSurname(),
-            document: $object->getDocument(),
-            addresses: CustomerAddressDTO::transformFromObjectsToCollection($object->getAddresses()),
-            contacts: CustomerContactDTO::transformFromObjectsToCollection($object->getContacts()),
-            birthDate: $object->getRawBirthDate(),
-            secondaryDocument: $object->getSecondaryDocument(),
-            additionalInformation: $object->getAdditionalInformation()
-        );
     }
 }
