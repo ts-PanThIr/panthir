@@ -12,9 +12,7 @@ Abstract class CustomApplicationCase extends WebTestCase
 
     protected function setUp(): void
     {
-        if(null === self::$client){
-            self::$client = static::createClient();
-            self::$client->enableProfiler();
-        }
+        self::$client = static::createClient();
+        self::$client->enableProfiler();
     }
 }

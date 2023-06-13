@@ -36,7 +36,7 @@ final class CustomerContact
         $this->id = $uuid->__toString();
     }
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }

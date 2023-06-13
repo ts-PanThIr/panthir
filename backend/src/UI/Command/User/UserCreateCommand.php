@@ -3,7 +3,7 @@
 namespace Panthir\UI\Command\User;
 
 use Panthir\Application\Common\Handler\HandlerRunner;
-use Panthir\Application\UseCase\User\POPO\Input\RegisterPOPO;
+use Panthir\Application\UseCase\User\Normalizer\DTO\RegisterDTO;
 use Panthir\Application\UseCase\User\UserCreateHandler;
 use Panthir\Domain\User\ValueObject\UserRoles;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -21,7 +21,10 @@ use Symfony\Component\Console\Question\Question;
 )]
 class UserCreateCommand extends Command
 {
-    public function __construct(private UserCreateHandler $userCreateHandler)
+    public function __construct(
+        private readonly UserCreateHandler $userCreateHandler,
+        private readonly HandlerRunner     $handlerRunner
+    )
     {
         parent::__construct('app:user-create');
     }
@@ -55,13 +58,13 @@ class UserCreateCommand extends Command
 
         $output->writeln('Username: ' . $email);
 
-        HandlerRunner::run($this->userCreateHandler,
-            new RegisterPOPO(
+        $this->handlerRunner->__invoke($this->userCreateHandler, (
+            new RegisterDTO(
                 email: $email,
                 roles: UserRoles::PROFILE_ADMIN,
                 password: $password
             )
-        );
+        ));
 
         return Command::SUCCESS;
     }

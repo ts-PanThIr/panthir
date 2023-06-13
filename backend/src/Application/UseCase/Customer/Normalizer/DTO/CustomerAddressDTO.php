@@ -81,22 +81,4 @@ class CustomerAddressDTO implements DTOInterface
     {
         return $this->zip;
     }
-
-    /**
-     * @param CustomerAddress $object
-     * @return CustomerAddressDTO
-     */
-    public static function transformFromObject(object $object): CustomerAddressDTO
-    {
-        return new CustomerAddressDTO(
-            name: $object->getName(),
-            country: $object->getCountry(),
-            district: $object->getDistrict(),
-            city: $object->getCity(),
-            address: $object->getAddress(),
-            number: $object->getNumber(),
-            zip: $object->getZip(),
-            addressComplement: $object->getAddressComplement()
-        );
-    }
 }

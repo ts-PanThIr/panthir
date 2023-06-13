@@ -27,6 +27,9 @@ class Notify implements NotifyInterface
         if(empty($data)){
             return '{"data": "", "notify": '.json_encode($this->messages).'}';
         }
-        return '{"data":'.$data.', "notify": '.json_encode($this->messages).'}';
+        if(in_array(substr($data, 0, 1), ['{', '['])) {
+            return '{"data":'.$data.', "notify": '.json_encode($this->messages).'}';
+        }
+        return '{"data":"'.$data.'", "notify": '.json_encode($this->messages).'}';
     }
 }

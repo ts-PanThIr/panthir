@@ -7,7 +7,7 @@ use Panthir\Application\Common\DTO\DTOInterface;
 class UserSearchDTO implements DTOInterface
 {
     public function __construct(
-        private ?int $id = null,
+        private ?string $id = null,
         private ?string $token = null,
         private ?int $limit = null,
         private ?int $page = null,
@@ -17,7 +17,7 @@ class UserSearchDTO implements DTOInterface
     {
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

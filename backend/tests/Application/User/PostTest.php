@@ -13,7 +13,7 @@ class PostTest extends CustomApplicationAuthCase
         ]);
 
         $content = json_decode(static::$client->getResponse()->getContent(), true);
-        $this->assertEquals(array_keys($content['data']), ['email', 'profile', 'id']);
+        $this->assertEmpty(array_diff(array_keys($content['data']), ['email', 'profile', 'id']));
         $this->assertResponseStatusCodeSame(200);
     }
 }

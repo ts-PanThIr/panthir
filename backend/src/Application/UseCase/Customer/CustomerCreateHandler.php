@@ -8,6 +8,7 @@ use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\Domain\Customer\Model\Customer;
 use Panthir\Domain\Customer\Model\CustomerAddress;
 use Panthir\Domain\Customer\Model\CustomerContact;
@@ -33,7 +34,7 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     /**
      * @param DTOInterface $model
      * @return void
-     * @throws HandlerException
+     * @throws InvalidFieldException
      */
     public function beforeExecuted(DTOInterface $model): void
     {
@@ -53,9 +54,9 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     }
 
     /**
-     * @param DTOInterface $model
+     * @param CustomerCreateDTO $model
      * @return Customer
-     * @throws HandlerException|InvalidFieldException
+     * @throws InvalidFieldException
      */
     public function execute(DTOInterface $model): Customer
     {
@@ -64,11 +65,9 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
             name: $model->getName(),
             surname: $model->getSurname(),
             document: $model->getDocument(),
-            addresses: $model->getName(),
-            contacts: $model->getName(),
             secondaryDocument: $model->getSecondaryDocument(),
-            mainAddress: $model->getName(),
-            mainContact: $model->getName(),
+            mainAddress: $model->getMainContact(),
+            mainContact: $model->getMainAddress(),
             birthDate: $model->getRawBirthDate(),
             additionalInformation: $model->getAdditionalInformation()
         );
@@ -77,14 +76,16 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
         if (!empty($model->getAddresses())) {
             /** @var CustomerAddressDTO $address */
             foreach ($model->getAddresses() as $address) {
-                $this->saveAddress($address);
+                $dbAddress = $this->saveAddress($address);
+                $this->customer->addAddresses($dbAddress);
             }
         }
 
         if (!empty($model->getContacts())) {
             /** @var CustomerContactDTO $contact */
             foreach ($model->getContacts() as $contact) {
-                $this->saveContact($contact);
+                $dbContact = $this->saveContact($contact);
+                $this->customer->addContacts($dbContact);
             }
         }
 
@@ -94,7 +95,7 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     /**
      * @throws InvalidFieldException
      */
-    private function saveAddress(CustomerAddressDTO $model): void
+    private function saveAddress(CustomerAddressDTO $model): CustomerAddress
     {
         $errors = $this->validator->validate($model);
 
@@ -126,12 +127,14 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
         );
 
         $this->entityManager->persist($address);
+
+        return $address;
     }
 
     /**
      * @throws InvalidFieldException
      */
-    private function saveContact(CustomerContactDTO $contactDTO): void
+    private function saveContact(CustomerContactDTO $contactDTO): CustomerContact
     {
         $errors = $this->validator->validate($contactDTO);
 
@@ -158,5 +161,7 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
         );
 
         $this->entityManager->persist($contact);
+
+        return $contact;
     }
 }

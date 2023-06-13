@@ -4,7 +4,7 @@ namespace Tests\Integration\Application\UseCase\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
-use Panthir\Application\UseCase\User\POPO\Input\RegisterPOPO;
+use Panthir\Application\UseCase\User\Normalizer\DTO\RegisterDTO;
 use Panthir\Application\UseCase\User\UserCreateHandler;
 use Panthir\Domain\User\Model\User;
 use Panthir\Infrastructure\CommonBundle\Exception\HandlerException;
@@ -24,7 +24,7 @@ class UserCreateHandlerTest extends CustomKernelTestCase
         /** @var UserCreateHandler $userHandler */
         $userHandler = $container->get(UserCreateHandler::class);
         $runner = $container->get(HandlerRunner::class);
-        $runner->__invoke($userHandler, (new RegisterPOPO('')));
+        $runner->__invoke($userHandler, (new RegisterDTO('')));
     }
 
     public function testBadEmailUserException()
@@ -35,10 +35,10 @@ class UserCreateHandlerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-
         /** @var UserCreateHandler $userHandler */
         $userHandler = $container->get(UserCreateHandler::class);
-        HandlerRunner::run($userHandler, (new RegisterPOPO('asd')));
+        $runner = $container->get(HandlerRunner::class);
+        $runner->__invoke($userHandler, (new RegisterDTO('asd')));
     }
 
     public function testEmptyPasswordUserCreation()
@@ -50,14 +50,15 @@ class UserCreateHandlerTest extends CustomKernelTestCase
         $em = $container->get(EntityManagerInterface::class);
         /** @var UserCreateHandler $userHandler */
         $userHandler = $container->get(UserCreateHandler::class);
-        $return = HandlerRunner::run($userHandler, (new RegisterPOPO($email)));
+        $runner = $container->get(HandlerRunner::class);
+        $return = $runner->__invoke($userHandler, (new RegisterDTO($email)));
 
         /** @var User $bd_user */
         $bd_user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
         $this->assertNotEmpty($bd_user->getEmail());
         $this->assertNotEmpty($bd_user->getPassword());
         $this->assertNotEmpty($bd_user->getPasswordResetToken());
-        $this->assertEquals($return->getEmail(), $bd_user->getEmail());
+        $this->assertEquals($return['email'], $bd_user->getEmail());
     }
 
     public function testNotEmptyPassword()
@@ -70,7 +71,8 @@ class UserCreateHandlerTest extends CustomKernelTestCase
 
         /** @var UserCreateHandler $userHandler */
         $userHandler = $container->get(UserCreateHandler::class);
-        HandlerRunner::run($userHandler, (new RegisterPOPO(email: $email, password: 'teste')));
+        $runner = $container->get(HandlerRunner::class);
+        $runner->__invoke($userHandler, (new RegisterDTO(email: $email, password: 'teste')));
 
         /** @var User $bd_user */
         $bd_user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
@@ -89,8 +91,9 @@ class UserCreateHandlerTest extends CustomKernelTestCase
 
         /** @var UserCreateHandler $userHandler */
         $userHandler = $container->get(UserCreateHandler::class);
-        HandlerRunner::run($userHandler, (new RegisterPOPO(email: $email)));
 
-        HandlerRunner::run($userHandler, (new RegisterPOPO(email: $email)));
+        $runner = $container->get(HandlerRunner::class);
+        $runner->__invoke($userHandler, (new RegisterDTO(email: $email)));
+        $runner->__invoke($userHandler, (new RegisterDTO(email: $email)));
     }
 }
