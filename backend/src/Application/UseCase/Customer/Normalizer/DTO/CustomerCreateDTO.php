@@ -1,41 +1,39 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\POPO\Input;
+namespace Panthir\Application\UseCase\Customer\Normalizer\DTO;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Panthir\Application\Common\POPO\POPOInterface;
-use Panthir\Application\Common\Transformer\AbstractPOPOTransformer;
-use Panthir\Application\Common\Transformer\TransformFromRequestInterface;
+use Panthir\Application\Common\DTO\DTOInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CustomerPOPO extends AbstractPOPOTransformer implements TransformFromRequestInterface, POPOInterface
+class CustomerCreateDTO implements DTOInterface
 {
     public function __construct(
 
         #[Assert\NotBlank]
-        private readonly string               $name,
+        private readonly string              $name,
 
         #[Assert\NotBlank]
-        private readonly string               $surname,
+        private readonly string              $surname,
 
         #[Assert\NotBlank]
-        private readonly string               $document,
+        private readonly string              $document,
 
-        private readonly ?CustomerAddressPOPO $mainAddress = null,
+        private readonly ?CustomerAddressDTO $mainAddress = null,
 
-        private readonly ?CustomerContactPOPO $mainContact = null,
+        private readonly ?CustomerContactDTO $mainContact = null,
 
-        private readonly ?ArrayCollection     $addresses = null,
+        private readonly ?ArrayCollection    $addresses = null,
 
-        private readonly ?ArrayCollection     $contacts = null,
+        private readonly ?ArrayCollection    $contacts = null,
 
-        private readonly ?DateTime            $birthDate = null,
+        private readonly ?DateTime           $birthDate = null,
 
-        private readonly ?string              $secondaryDocument = null,
+        private readonly ?string             $secondaryDocument = null,
 
-        private readonly ?string              $additionalInformation = null
+        private readonly ?string             $additionalInformation = null
     )
     {
     }
@@ -57,12 +55,12 @@ class CustomerPOPO extends AbstractPOPOTransformer implements TransformFromReque
         return $this->additionalInformation;
     }
 
-    public function getMainAddress(): CustomerAddressPOPO
+    public function getMainAddress(): CustomerAddressDTO
     {
         return $this->mainAddress;
     }
 
-    public function getMainContact(): CustomerContactPOPO
+    public function getMainContact(): CustomerContactDTO
     {
         return $this->mainContact;
     }
@@ -107,12 +105,12 @@ class CustomerPOPO extends AbstractPOPOTransformer implements TransformFromReque
 
     public static function transformFromRequest(Request $object): self
     {
-        return new CustomerPOPO(
+        return new CustomerCreateDTO(
             name: $object->getName(),
             surname: $object->getSurname(),
             document: $object->getDocument(),
-            addresses: CustomerAddressPOPO::transformFromObjectsToCollection($object->getAddresses()),
-            contacts: CustomerContactPOPO::transformFromObjectsToCollection($object->getContacts()),
+            addresses: CustomerAddressDTO::transformFromObjectsToCollection($object->getAddresses()),
+            contacts: CustomerContactDTO::transformFromObjectsToCollection($object->getContacts()),
             birthDate: $object->getRawBirthDate(),
             secondaryDocument: $object->getSecondaryDocument(),
             additionalInformation: $object->getAdditionalInformation()

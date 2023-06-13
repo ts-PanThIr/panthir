@@ -4,10 +4,10 @@ namespace Panthir\Application\UseCase\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
+use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\AfterExecutedHandlerInterface;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
-use Panthir\Application\Common\POPO\POPOInterface;
 use Panthir\Application\UseCase\User\Normalizer\DTO\RegisterDTO;
 use Panthir\Domain\User\DomainServices\PasswordHashGenerator;
 use Panthir\Domain\User\DomainServices\PasswordResetTokenGenerator;
@@ -37,7 +37,7 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
      * @return void
      * @throws HandlerException
      */
-    public function beforeExecuted(POPOInterface $model): void
+    public function beforeExecuted(DTOInterface $model): void
     {
         if (!filter_var($model->getEmail(), FILTER_VALIDATE_EMAIL)) {
             throw new HandlerException("The given e-mail is not valid.", 400);
@@ -55,7 +55,7 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
      * @return User
      * @throws JWTEncodeFailureException
      */
-    public function execute(POPOInterface $model): User
+    public function execute(DTOInterface $model): User
     {
         $resetToken = null;
         if(empty($model->getPassword())){
@@ -79,10 +79,10 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
     }
 
     /**
-     * @param POPOInterface $model
+     * @param RegisterDTO $model
      * @return void
      */
-    public function afterExecuted(POPOInterface $model): void
+    public function afterExecuted(DTOInterface $model): void
     {
         if(empty($this->user->getPasswordResetToken())){
             return;

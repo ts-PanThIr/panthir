@@ -50,8 +50,16 @@ services:
         resource: '../src/UI/Controller/'
         tags: [ 'controller.service_arguments' ]
 
+    Panthir\Application\UseCase\User\Normalizer\:
+#        class : Panthir\Application\UseCase\User\Normalizer\UserCreateNormalizer
+        resource: '../src/Application/UseCase/User/Normalizer/*Normalizer.php'
+        exclude:
+            - '../src/Application/UseCase/User/Normalizer/*DTO.php'
+        tags: [ 'serializer.normalizer', 'serializer.denormalizer' ]
 
-    Panthir\Application\UseCase\User\Normalizer\UserCreateNormalizer:
-        class : Panthir\Application\UseCase\User\Normalizer\UserCreateNormalizer
-#        resource: '../src/Application/*/Normalizer/*Normalizer.php'
+    Panthir\Application\UseCase\Customer\Normalizer\:
+#        class : Panthir\Application\UseCase\Customer\Normalizer\UserCreateNormalizer
+        exclude:
+            - '../src/Application/UseCase/Customer/Normalizer/*DTO.php'
+        resource: '../src/Application/UseCase/Customer/Normalizer/*Normalizer.php'
         tags: [ 'serializer.normalizer', 'serializer.denormalizer' ]

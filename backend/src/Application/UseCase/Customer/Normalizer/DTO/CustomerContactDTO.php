@@ -1,12 +1,12 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\POPO\Input;
+namespace Panthir\Application\UseCase\Customer\Normalizer\DTO;
 
-use Panthir\Application\Common\Transformer\AbstractPOPOTransformer;
+use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Domain\Customer\Model\CustomerContact;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CustomerContactPOPO extends AbstractPOPOTransformer
+class CustomerContactDTO implements DTOInterface
 {
     public function __construct(
         #[Assert\NotBlank]
@@ -45,11 +45,11 @@ class CustomerContactPOPO extends AbstractPOPOTransformer
 
     /**
      * @param CustomerContact $object
-     * @return CustomerContactPOPO
+     * @return CustomerContactDTO
      */
-    public static function transformFromObject(object $object): CustomerContactPOPO
+    public static function transformFromObject(object $object): CustomerContactDTO
     {
-        return new CustomerContactPOPO(
+        return new CustomerContactDTO(
             name: $object->getName(),
             email: $object->getEmail(),
             phone: $object->getPhone()

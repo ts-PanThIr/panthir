@@ -5,10 +5,10 @@ namespace Panthir\Application\UseCase\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
+use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
-use Panthir\Application\Common\POPO\POPOInterface;
-use Panthir\Application\UseCase\User\POPO\Input\PasswordRecoveryPOPO;
+use Panthir\Application\UseCase\User\Normalizer\DTO\PasswordRecoveryDTO;
 use Panthir\Domain\User\DomainServices\PasswordResetTokenGenerator;
 use Panthir\Domain\User\Model\User;
 use Panthir\Infrastructure\CommonBundle\Exception\HandlerException;
@@ -29,11 +29,11 @@ class PasswordRecoveryHandler extends AbstractHandler implements BeforeExecutedH
     }
 
     /**
-     * @param PasswordRecoveryPOPO $model
+     * @param PasswordRecoveryDTO $model
      * @return void
      * @throws HandlerException
      */
-    public function beforeExecuted(POPOInterface $model): void
+    public function beforeExecuted(DTOInterface $model): void
     {
         /** @var User $user */
         $user = $this->entityManager->getRepository(User::class)->findOneBy(["email" => $model->getEmail()]);
@@ -45,11 +45,11 @@ class PasswordRecoveryHandler extends AbstractHandler implements BeforeExecutedH
     }
 
     /**
-     * @param PasswordRecoveryPOPO $userDTO
+     * @param PasswordRecoveryDTO $userDTO
      * @return User
      * @throws JWTEncodeFailureException
      */
-    public function execute(POPOInterface $userDTO): User
+    public function execute(DTOInterface $userDTO): User
     {
         $this->user->setPasswordResetToken($this->passwordResetTokenGenerator->__invoke());
 

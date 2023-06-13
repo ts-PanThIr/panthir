@@ -2,7 +2,7 @@
 
 namespace Panthir\Application\Common\Handler;
 
-use Panthir\Application\Common\POPO\POPOInterface;
+use Panthir\Application\Common\DTO\DTOInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class HandlerRunner
@@ -15,25 +15,23 @@ class HandlerRunner
     }
 
     /** TODO unit testing here */
-    public function __invoke(CommonHandlerInterface $hadler, POPOInterface $model): object
+    public function __invoke(CommonHandlerInterface $handler, DTOInterface $model): mixed
     {
-        if($hadler instanceof BeforeExecutedHandlerInterface) {
-            $hadler->beforeExecuted($model);
+        if($handler instanceof BeforeExecutedHandlerInterface) {
+            $handler->beforeExecuted($model);
         }
 
-        $returnedObject = $hadler->execute($model);
+        $returnedObject = $handler->execute($model);
 
-        if($hadler instanceof AfterExecutedHandlerInterface) {
-            $hadler->afterExecuted($model);
+        if($handler instanceof AfterExecutedHandlerInterface) {
+            $handler->afterExecuted($model);
         }
 
-        $hadler->flush();
+        $handler->flush();
 
-        $user = $this->serializer->normalize(
+        return $this->serializer->normalize(
             $returnedObject,
-            $hadler::class
+            $handler::class
         );
-
-        return $returnedObject;
     }
 }

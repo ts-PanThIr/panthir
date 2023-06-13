@@ -2,12 +2,12 @@
 
 namespace Panthir\Application\UseCase\User\Normalizer;
 
-use Panthir\Application\UseCase\User\UserCreateHandler;
+use Panthir\Application\UseCase\User\UserSearchHandler;
 use Panthir\Domain\User\Model\User;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class UserCreateNormalizer implements NormalizerInterface, DenormalizerInterface
+class UserSearchNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     /**
      * @param User $object
@@ -17,16 +17,26 @@ class UserCreateNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function normalize(mixed $object, string $format = null, array $context = [])
     {
-        return [
-            'email' => $object->getEmail(),
-            'profile' => $object->getProfile(),
-            'id' => $object->getId()
-        ];
+        if(empty($object)) return [];
+
+        /**
+         * @var $r User
+         */
+        $arr = [];
+        foreach ($object as $r) {
+            $arr[] = [
+                'email' => $r->getEmail(),
+                'id' => $r->getId(),
+                'profile' => $r->getProfile()
+            ];
+        }
+
+        return $arr;
     }
 
     public function supportsNormalization(mixed $data, string $format = null)
     {
-        return $data instanceof User && UserCreateHandler::class === $format;
+        return is_array($data) && UserSearchHandler::class === $format;
     }
 
     public function denormalize(mixed $data, string $type, string $format = null, array $context = [])

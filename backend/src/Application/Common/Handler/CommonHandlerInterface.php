@@ -2,9 +2,9 @@
 
 namespace Panthir\Application\Common\Handler;
 
-use Panthir\Application\Common\POPO\POPOInterface;
+use Panthir\Application\Common\DTO\DTOInterface;
 
 interface CommonHandlerInterface
 {
-    function execute(POPOInterface $object): object;
+    function execute(DTOInterface $object): mixed;
 }

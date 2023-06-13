@@ -23,7 +23,8 @@ class UserCreateHandlerTest extends CustomKernelTestCase
 
         /** @var UserCreateHandler $userHandler */
         $userHandler = $container->get(UserCreateHandler::class);
-        HandlerRunner::run($userHandler, (new RegisterPOPO('')));
+        $runner = $container->get(HandlerRunner::class);
+        $runner->__invoke($userHandler, (new RegisterPOPO('')));
     }
 
     public function testBadEmailUserException()

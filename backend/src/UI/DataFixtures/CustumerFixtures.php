@@ -8,11 +8,14 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
-use Panthir\Application\UseCase\Customer\POPO\Input\CustomerPOPO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 
 class CustumerFixtures extends Fixture implements FixtureGroupInterface
 {
-    public function __construct(private CustomerCreateHandler $customerCreateHandler)
+    public function __construct(
+        private readonly HandlerRunner $handlerRunner,
+        private CustomerCreateHandler  $customerCreateHandler
+    )
     {
     }
 
@@ -25,9 +28,18 @@ class CustumerFixtures extends Fixture implements FixtureGroupInterface
     {
         for ($i = 0; $i < 20; $i++) {
             $faker = Factory::create();
-            HandlerRunner::run($this->customerCreateHandler,
-                new CustomerPOPO(
-                    name: $faker->name,
+            $this->handlerRunner->__invoke($this->customerCreateHandler,
+                new CustomerCreateDTO(
+                    name: $faker->firstName,
+                    surname: $faker->lastName,
+                    document: $faker->lastName,
+//                    mainAddress: $faker->name,
+//                    mainContact: $faker->name,
+                    addresses: $faker->name,
+                    contacts: $faker->name,
+                    birthDate: $faker->name,
+                    secondaryDocument: $faker->name,
+                    additionalInformation: $faker->name
                 )
             );
         }
