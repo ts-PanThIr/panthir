@@ -7,7 +7,7 @@ export interface IAddressItem {
   district?: string;
   city?: string;
   address?: string;
-  complement?: string;
+  addressComplement?: string;
   number?: string;
 }
 
@@ -18,7 +18,7 @@ const newAddress: IAddressItem = {
   district: '',
   city: '',
   address: '',
-  complement: '',
+  addressComplement: '',
   number: '',
 };
 

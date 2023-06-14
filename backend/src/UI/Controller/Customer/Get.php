@@ -2,36 +2,31 @@
 
 namespace Panthir\UI\Controller\Customer;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Panthir\Domain\Customer\Model\Customer;
+use Panthir\Application\Common\Handler\HandlerRunner;
+use Panthir\Application\UseCase\Customer\CustomerSearchHandler;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerSearchDTO;
+use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
-#[Route(path: '/api/person')]
+#[Route(path: '/api/customer')]
 class Get extends APIController
 {
     #[Route(path: "/{id}", name: "app_person_get", methods: 'GET')]
     public function get(
-        EntityManagerInterface $entityManager,
-        string $id
+        string                $id,
+        HandlerRunner         $runner,
+        CustomerSearchHandler $customerSearchHandler
     ): JsonResponse
     {
-        $serializer = new Serializer(normalizers: [new ObjectNormalizer()]);
+        $searchDTO = new CustomerSearchDTO(id: $id);
 
-        /** @var UserSearchDTO $user */
-        $searchDTO = $serializer->denormalize(
-            data: $request->query->all(),
-            type: UserSearchDTO::class
-        );
+        $customer = $runner($customerSearchHandler, $searchDTO);
+        if (null === $customer) {
+            throw new InvalidFieldException("The given Id is invalid", 400);
+        }
 
-        $users = $runner($userSearchHandler, $searchDTO);
-        return $this->response(items: $users);
-
-        $person = $entityManager->getRepository(Customer::class)->find($id);
-        return $this->response(items: $person, groups: ['person']);
+        return $this->response(items: $customer);
     }
 }

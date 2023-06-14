@@ -50,7 +50,7 @@ export default defineComponent({
       this.loading = true;
 
       axios
-        .get(`${this.configVars.$apiUrl}/api/person/`, {
+        .get(`${this.configVars.$apiUrl}/api/customer/`, {
           params: { name: this.search },
         })
         .then(d => {

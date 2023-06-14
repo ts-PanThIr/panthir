@@ -62,7 +62,7 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
                 (new CustomerAddressDTO(
                     name: $this->faker->domainName(),
                     country: $this->faker->country(),
-                    district: $this->faker->state(),
+                    district: (method_exists($this->faker, 'state')) ? $this->faker->state() : $this->faker->city(),
                     city: $this->faker->city(),
                     address: $this->faker->streetAddress(),
                     number: $this->faker->randomNumber(4),

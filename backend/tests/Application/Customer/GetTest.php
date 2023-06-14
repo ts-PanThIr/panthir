@@ -12,7 +12,7 @@ class GetTest extends CustomApplicationAuthCase
 
         $content = json_decode(static::$client->getResponse()->getContent(), true);
         $this->assertNotEmpty($content['data']);
-        $this->assertEmpty(array_diff(array_keys($content['data'][0]), ['email', 'profile', 'id']));
+        $this->assertEmpty(array_diff(array_keys($content['data'][0]), ['name', 'surname', 'id', 'document', 'secondaryDocument', 'birthDate']));
         $this->assertResponseStatusCodeSame(200);
     }
 }

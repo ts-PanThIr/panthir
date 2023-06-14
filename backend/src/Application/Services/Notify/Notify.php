@@ -11,7 +11,8 @@ class Notify implements NotifyInterface
 
     private array $messages = array();
 
-    public function addMessage($type, $text){
+    public function addMessage($type, $text)
+    {
         $this->messages[] = array(
             "type" => $type,
             "text" => $text
@@ -24,12 +25,19 @@ class Notify implements NotifyInterface
      */
     public function newReturn($data): string
     {
-        if(empty($data)){
-            return '{"data": "", "notify": '.json_encode($this->messages).'}';
-        }
-        if(in_array(substr($data, 0, 1), ['{', '['])) {
-            return '{"data":'.$data.', "notify": '.json_encode($this->messages).'}';
-        }
-        return '{"data":"'.$data.'", "notify": '.json_encode($this->messages).'}';
+        $return = [
+            'data' => $data,
+            'notify' => $this->messages
+        ];
+
+        return json_encode($return);
+    }
+
+    public function getTreeToSerialize($data): array
+    {
+        return [
+            'data' => $data,
+            'notify' => $this->messages
+        ];
     }
 }

@@ -2,10 +2,12 @@
 
 namespace Panthir\UI\Controller\Customer;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Panthir\Application\UseCase\Customer\POPO\Output\CustomerSearchPOPO;
+use Panthir\Application\Common\Handler\HandlerRunner;
+use Panthir\Application\UseCase\Customer\CustomerSearchHandler;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerSearchDTO;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -15,7 +17,9 @@ class GetAll extends APIController
 {
     #[Route(path: "/", name: "app_customer_get_all", methods: 'GET')]
     public function get(
-        EntityManagerInterface $entityManager,
+        HandlerRunner         $runner,
+        CustomerSearchHandler $customerSearchHandler,
+        Request               $request
     ): JsonResponse
     {
         $serializer = new Serializer(normalizers: [new ObjectNormalizer()]);
@@ -23,20 +27,10 @@ class GetAll extends APIController
         /** @var CustomerSearchDTO $user */
         $searchDTO = $serializer->denormalize(
             data: $request->query->all(),
-            type: UserSearchDTO::class
+            type: CustomerSearchDTO::class
         );
 
-        $users = $runner($userSearchHandler, $searchDTO);
+        $users = $runner($customerSearchHandler, $searchDTO);
         return $this->response(items: $users);
-
-
-        $search = new CustomerSearchPOPO();
-
-        /** @var PersonRepository $person */
-        $person = $entityManager->getRepository(PersonEntity::class)->search($search);
-
-        $personDTO = CustomerCreatePOPO::transformFromObjects($person);
-
-        return $this->response(items: $personDTO, groups: ['person']);
     }
 }

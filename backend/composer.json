@@ -58,7 +58,7 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "App\\Shared\\DataFixtures\\": "src/Shared/DataFixtures/"
+            "Panthir\\UI\\DataFixtures\\": "src/UI/DataFixtures/"
         }
     },
     "replace": {

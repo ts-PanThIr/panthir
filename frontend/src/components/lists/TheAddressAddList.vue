@@ -81,7 +81,7 @@
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
-                v-model="item.complement"
+                v-model="item.addressComplement"
                 label="Complement"
                 density="compact"
               />
