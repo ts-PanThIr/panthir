@@ -131,8 +131,7 @@ export default {
     if (route.name !== 'personNew') {
       await personStore.getOne(route.params.id);
     }
-    const person = personStore.person;
-    const personSend = personStore.send;
+    const { person, send: personSend } = personStore
     return { person, personStore, personSend };
   },
   data: () => ({
@@ -156,7 +155,9 @@ export default {
         return;
       }
 
-      this.personSend();
+      const person = await this.personSend();
+      this.$router.push({name: 'personEdit', params: {id: person.id}})
+      
     },
   },
 };

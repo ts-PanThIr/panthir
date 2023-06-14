@@ -12,7 +12,6 @@ use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\Domain\Customer\Model\Customer;
 use Panthir\Domain\Customer\Model\CustomerAddress;
 use Panthir\Domain\Customer\Model\CustomerContact;
-use Panthir\Infrastructure\CommonBundle\Exception\HandlerException;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;

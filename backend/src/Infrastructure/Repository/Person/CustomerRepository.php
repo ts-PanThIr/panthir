@@ -2,9 +2,9 @@
 
 namespace Panthir\Infrastructure\Repository\Person;
 
-use App\Shared\DTO\PersonSearchDTO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerSearchDTO;
 use Panthir\Domain\Customer\Model\Customer;
 use Panthir\Domain\Customer\Repository\CustomerRepositoryInterface;
 
@@ -23,7 +23,7 @@ class CustomerRepository extends ServiceEntityRepository implements CustomerRepo
         parent::__construct($registry, Customer::class);
     }
 
-    public function search(PersonSearchDTO $search): array
+    public function search(CustomerSearchDTO $search): array
     {
         $qb = $this->createQueryBuilder('p')
             ->select('p, addresses')

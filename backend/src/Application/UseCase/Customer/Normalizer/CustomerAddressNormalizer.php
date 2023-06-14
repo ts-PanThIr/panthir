@@ -1,0 +1,37 @@
+<?php
+
+namespace Panthir\Application\UseCase\Customer\Normalizer;
+
+use Panthir\Application\UseCase\Customer\CustomerSearchHandler;
+use Panthir\Domain\Customer\Model\CustomerAddress;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
+class CustomerAddressNormalizer  implements NormalizerInterface
+{
+
+    /**
+     * @param CustomerAddress $object
+     * @param string|null $format
+     * @param array $context
+     * @return array
+     */
+    public function normalize(mixed $object, string $format = null, array $context = [])
+    {
+        return [
+            'id' => $object->getId(),
+            'name' => $object->getName(),
+            'city' => $object->getCity(),
+            'addressComplement' => $object->getAddressComplement(),
+            'address' => $object->getAddress(),
+            'country' => $object->getCountry(),
+            'district' => $object->getDistrict(),
+            'number' => $object->getNumber(),
+            'zip' => $object->getZip()
+        ];
+    }
+
+    public function supportsNormalization(mixed $data, string $format = null)
+    {
+        return $data instanceof CustomerAddress && CustomerSearchHandler::class === $format;
+    }
+}

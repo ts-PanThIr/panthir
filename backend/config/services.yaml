@@ -18,6 +18,10 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     Doctrine\ORM\EntityManagerInterface: '@doctrine.orm.entity_manager'
 
+    Panthir\UI\DataFixtures\:
+        resource: '../src/UI/DataFixtures'
+        tags: [ doctrine.fixture.orm ]
+
     Redis:
         class: Redis
         calls:

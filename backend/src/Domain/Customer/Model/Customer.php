@@ -7,9 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Panthir\Infrastructure\Repository\Person\CustomerRepository;
 use Ramsey\Uuid\UuidInterface;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\Table(name: 'customer')]
 final class Customer
 {

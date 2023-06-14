@@ -30,7 +30,7 @@ class Post extends APIController
         $defaultContext = [
             AbstractNormalizer::CALLBACKS => [
                 'contacts' => [$serializerHelper, 'collectionCallback'],
-                'birthDate' => [$serializerHelper, 'dateCallback'],
+//                'birthDate' => [$serializerHelper, 'dateCallback'],
                 'addresses' => [$serializerHelper, 'collectionCallback']
             ],
         ];

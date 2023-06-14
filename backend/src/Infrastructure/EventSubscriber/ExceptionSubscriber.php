@@ -8,8 +8,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use UnhandledMatchError;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
@@ -32,25 +32,25 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $exception = $event->getThrowable();
         if ($exception instanceof \Exception) {
-            if ($exception->getCode() === 500 && $this->env === 'PROD') {
+            $message = "Undefined error";
+            $code = 500;
 
-                $this->logger->error($exception->getMessage());
-                $this->notify->addMessage($this->notify::ERROR, "Undefined error");
-                $returnable = $this->notify->newReturn("Undefined error");
-
-                $customResponse = JsonResponse::fromJsonString(
-                    $returnable, 500, array('Symfony-Debug-Toolbar-Replace' => 1)
-                );
-
-                $event->allowCustomResponseCode();
-                $event->setResponse($customResponse);
-                return;
+            if ($exception instanceof NotFoundHttpException) {
+                $message = $exception->getMessage();
+                $code = 404;
             }
 
-            $this->notify->addMessage($this->notify::ERROR, $exception->getMessage());
+            if ($exception instanceof CustomExceptionInterface) {
+                $message = $exception->getMessage();
+                $code = $exception->getCode();
+            }
+
+            $this->logger->error($message);
+            $this->notify->addMessage($this->notify::ERROR,$message);
+            $returnable = $this->notify->newReturn($message);
+
             $customResponse = JsonResponse::fromJsonString(
-                $this->notify->newReturn($exception->getMessage()), $exception->getCode(),
-                array('Symfony-Debug-Toolbar-Replace' => 1)
+                $returnable, $code, array('Symfony-Debug-Toolbar-Replace' => 1)
             );
 
             $event->allowCustomResponseCode();
