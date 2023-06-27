@@ -59,12 +59,12 @@ export default {
           },
         ],
       },
-      // {
-      //   group: true,
-      //   icon: 'fas fa-money-bill-wave-alt',
-      //   title: 'Financial',
-      //   items: [{ title: 'Titles', routeName: 'financialEdit' }],
-      // },
+      {
+        group: true,
+        icon: 'fas fa-money-bill-wave-alt',
+        title: 'Financial',
+        items: [{ title: 'Titles', routeName: 'financialEdit' }],
+      },
       {
         title: 'Users',
         icon: 'fa fa-user',

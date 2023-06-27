@@ -37,12 +37,11 @@ export default {
   props: {
     installments: { type: Array, default: null },
   },
-  async setup() {},
   methods: {
     formatValue(e) {
-      return Intl.NumberFormat(this.locale, {
+      return Intl.NumberFormat(this.configVars.$locale, {
         style: 'currency',
-        currency: this.currency,
+        currency: this.configVars.$currency,
       }).format(e);
     },
   },

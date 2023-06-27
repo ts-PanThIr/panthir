@@ -19,7 +19,6 @@
         <v-text-field
           v-model="title.title"
           v-mask="'SSS-######'"
-          :rules="[v => !!v || 'Item is required']"
           label="Title"
           required
         />
@@ -27,7 +26,6 @@
       <v-col cols="4">
         <v-text-field
           v-model="title.account"
-          :rules="[v => !!v || 'Item is required']"
           label="Account"
           required
         />
@@ -35,7 +33,6 @@
       <v-col cols="4">
         <v-text-field
           v-model="title.counterpartAccount"
-          :rules="[v => !!v || 'Item is required']"
           label="Counterpart account"
           required
         />
@@ -55,11 +52,11 @@
           <v-col cols="3">
             <v-select
               v-model="title.quantityInstallments"
-              :items="paymentConditions"
+              :items="quantityInstallments"
               item-title="name"
               return-object
               label="Quantity Installments"
-              :rules="[v => (!!v && !!v.id) || 'Item is required']"
+              :rules="[v => (!!v) || 'Item is required']"
             />
           </v-col>
           <v-col cols="3">
@@ -142,17 +139,12 @@ export default {
   },
   directives: { mask },
   async setup() {
-    const paymentConditions = await useFinancialStore().getPaymentCondition();
-    const { title, totalValue, installments } = storeToRefs(
-      useFinancialStore(),
-    );
-    const createInstallments = useFinancialStore().createInstallments;
+    const { title, totalValue, installments, quantityInstallments } = storeToRefs(useFinancialStore());
     return {
       installments,
       title,
       totalValue,
-      createInstallments,
-      paymentConditions,
+      quantityInstallments
     };
   },
   data: () => ({
@@ -164,7 +156,8 @@ export default {
       if (!(await this.$refs.titleForm.validate()).valid) {
         return;
       }
-      this.createInstallments();
+      const store = useFinancialStore();
+      await store.createInstallments();
     },
   },
 };
