@@ -4,7 +4,7 @@ namespace Panthir\UI\Command\User;
 
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\UseCase\User\Normalizer\DTO\PasswordRecoveryDTO;
-use Panthir\Application\UseCase\User\PasswordRecoveryHandler;
+use Panthir\Application\UseCase\User\CreatePasswordRecoveryTokenHandler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,8 +20,8 @@ use Symfony\Component\Console\Question\Question;
 class UserSendResetPasswordEmailCommand extends Command
 {
     public function __construct(
-        private readonly PasswordRecoveryHandler $passwordRecoveryHandler,
-        private readonly HandlerRunner           $handlerRunner
+        private readonly CreatePasswordRecoveryTokenHandler $passwordRecoveryHandler,
+        private readonly HandlerRunner                      $handlerRunner
     )
     {
         parent::__construct('app:user-send-reset-password-email');

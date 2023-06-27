@@ -7,13 +7,10 @@ use Panthir\Application\Common\DTO\DTOInterface;
 class PasswordRecoveryDTO implements DTOInterface
 {
     public function __construct(
-        private readonly string  $email
+        public readonly string  $email,
+        public readonly ?string $password = null,
+        public readonly ?string $passwordResetToken = null
     )
     {
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
     }
 }

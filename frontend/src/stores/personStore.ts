@@ -19,6 +19,11 @@ interface IPerson {
   id?: number;
 }
 
+interface IPersonSearch {
+  limit?: number | null;
+  page?: number | null;
+}
+
 interface PostReturn {
   document: string;
   name: string;
@@ -27,7 +32,7 @@ interface PostReturn {
 }
 
 interface IState {
-  list: IAddressItem[];
+  list: IPerson[];
   person: IPerson;
   primaryAddress?: number; // must be the index~
   primaryContact?: number;
@@ -44,12 +49,15 @@ export const usePersonStore = defineStore({
     primaryContact: undefined,
   }),
   actions: {
-    async getAll(): Promise<void> {
-      const path = `${this.$apiUrl}/api/customer`;
-      const params = { individual: this.person.individual };
-
+    async getAll({limit = null, page = null}: IPersonSearch): Promise<void> {
+      const params = {
+        params: {
+          limit,
+          page
+        }
+      }
       this.list = await this.$http
-        .get(path, { params })
+        .get(`${this.$apiUrl}/api/customer/`, params)
         .then((d: AxiosResponse) => {
           return d.data.data;
         });

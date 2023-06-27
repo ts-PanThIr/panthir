@@ -7,6 +7,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerSearchDTO;
 use Panthir\Domain\Customer\Model\Customer;
 use Panthir\Domain\Customer\Repository\CustomerRepositoryInterface;
+use Panthir\Infrastructure\Repository\CountableTrait;
 
 /**
  * @extends ServiceEntityRepository<Customer>
@@ -18,6 +19,8 @@ use Panthir\Domain\Customer\Repository\CustomerRepositoryInterface;
  */
 class CustomerRepository extends ServiceEntityRepository implements CustomerRepositoryInterface
 {
+    use CountableTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Customer::class);
@@ -26,9 +29,22 @@ class CustomerRepository extends ServiceEntityRepository implements CustomerRepo
     public function search(CustomerSearchDTO $search): array
     {
         $qb = $this->createQueryBuilder('p')
-            ->select('p, addresses')
-            ->leftJoin('p.addresses', 'addresses')
+//            ->select('p, addresses')
+//            ->leftJoin('p.addresses', 'addresses')
         ;
-        return $qb->getQuery()->getResult();
+
+        if (!empty($search->page) && !empty($search->limit)){
+            $qb->setFirstResult(($search->page - 1) * $search->limit)
+                ->setMaxResults($search->limit);
+        }
+
+        $results = $qb->getQuery()->getResult();
+        $total = $this->countAllResults($qb, 'p.id');
+
+        if (!empty($results)) {
+            $results[0]->setTotalItems($total);
+        }
+
+        return $results;
     }
 }

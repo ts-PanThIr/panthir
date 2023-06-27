@@ -9,36 +9,14 @@ class CustomerContactDTO implements DTOInterface
 {
     public function __construct(
         #[Assert\NotBlank]
-        private readonly string $name,
+        public readonly string $name,
 
         #[Assert\NotBlank]
-        private readonly string $email,
+        public readonly string $email,
 
         #[Assert\NotBlank]
-        private readonly string $phone
+        public readonly string $phone
     )
     {
-    }
-
-    private ?int $id = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function getPhone(): string
-    {
-        return $this->phone;
     }
 }

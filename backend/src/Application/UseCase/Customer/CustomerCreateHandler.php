@@ -61,28 +61,28 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     {
         $this->customer = new Customer(
             uuid: Uuid::uuid4(),
-            name: $model->getName(),
-            surname: $model->getSurname(),
-            document: $model->getDocument(),
-            secondaryDocument: $model->getSecondaryDocument(),
-            mainAddress: $model->getMainContact(),
-            mainContact: $model->getMainAddress(),
+            name: $model->name,
+            surname: $model->surname,
+            document: $model->document,
+            secondaryDocument: $model->secondaryDocument,
+            mainAddress: $model->mainContact,
+            mainContact: $model->mainAddress,
             birthDate: $model->getRawBirthDate(),
-            additionalInformation: $model->getAdditionalInformation()
+            additionalInformation: $model->additionalInformation
         );
         $this->entityManager->persist($this->customer);
 
-        if (!empty($model->getAddresses())) {
+        if (!empty($model->addresses)) {
             /** @var CustomerAddressDTO $address */
-            foreach ($model->getAddresses() as $address) {
+            foreach ($model->addresses as $address) {
                 $dbAddress = $this->saveAddress($address);
                 $this->customer->addAddresses($dbAddress);
             }
         }
 
-        if (!empty($model->getContacts())) {
+        if (!empty($model->contacts)) {
             /** @var CustomerContactDTO $contact */
-            foreach ($model->getContacts() as $contact) {
+            foreach ($model->contacts as $contact) {
                 $dbContact = $this->saveContact($contact);
                 $this->customer->addContacts($dbContact);
             }
@@ -114,15 +114,15 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
 
         $address = new CustomerAddress(
             uuid: Uuid::uuid4(),
-            name: $model->getName(),
-            country: $model->getCountry(),
-            district: $model->getDistrict(),
-            city: $model->getCity(),
-            address: $model->getAddress(),
-            number: $model->getNumber(),
-            zip: $model->getZip(),
+            name: $model->name,
+            country: $model->country,
+            district: $model->district,
+            city: $model->city,
+            address: $model->address,
+            number: $model->number,
+            zip: $model->zip,
             customer: $this->customer,
-            addressComplement: $model->getAddressComplement()
+            addressComplement: $model->addressComplement
         );
 
         $this->entityManager->persist($address);
@@ -153,9 +153,9 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
 
         $contact = new CustomerContact(
             uuid: Uuid::uuid4(),
-            name: $contactDTO->getName(),
-            phone: $contactDTO->getPhone(),
-            email: $contactDTO->getEmail(),
+            name: $contactDTO->name,
+            phone: $contactDTO->phone,
+            email: $contactDTO->email,
             customer: $this->customer
         );
 

@@ -2,7 +2,7 @@
 
 namespace Panthir\Infrastructure\Messenger\Handler;
 
-use Panthir\Infrastructure\Messenger\Model\EmailNotification;
+use Panthir\Infrastructure\Messenger\DTO\EmailNotification;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -17,11 +17,11 @@ class EmailNotificationHandler
     public function __invoke(EmailNotification $message): void
     {
         $email = (new TemplatedEmail())
-            ->to($message->getUserEmail())
+            ->to($message->userEmail)
             ->subject('Password recover')
             ->htmlTemplate('emails/resetPassword.html.twig')
             ->context([
-                'url' => 'http://localhost:5173/' . 'account/resetPassword/' . $message->getResetPasswordtoken(),
+                'url' => 'http://localhost:5173/' . 'account/resetPassword/' . $message->resetPasswordtoken,
             ])
         ;
 

@@ -15,8 +15,8 @@ class UserSearchHandler extends AbstractHandler
      */
     public function execute(DTOInterface $model): mixed
     {
-        if($model->getId()) {
-            $user = $this->entityManager->getRepository(User::class)->find($model->getId());
+        if($model->id) {
+            $user = $this->entityManager->getRepository(User::class)->find($model->id);
             return $user;
         }
         $users = $this->entityManager->getRepository(User::class)->search($model);

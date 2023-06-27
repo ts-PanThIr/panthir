@@ -5,9 +5,11 @@ export { default as TheMainMenu } from '~/components/layout/TheMainMenu.vue';
 export { default as TheMainLayout } from '~/components/layout/TheMainLayout.vue';
 export { default as TheEmptyLayout } from '~/components/layout/TheEmptyLayout.vue';
 export { default as BaseGrid } from '~/components/layout/BaseGrid.vue';
+export { default as BaseMap } from '~/components/layout/BaseMap.vue';
 export { default as TheMenuItem } from '~/components/layout/TheMenuItem.vue';
 export { default as TheCardTitle } from '~/components/layout/TheCardTitle.vue';
 export { default as TheSpinner } from '~/components/layout/TheSpinner.vue';
+export { default as TheFrontOfficeLayout } from '~/components/layout/TheFrontOfficeLayout.vue';
 
 //listing
 export { default as TheDatepicker } from '~/components/form/TheDatepicker.vue';

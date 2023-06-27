@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Blameable\Traits\BlameableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Panthir\Domain\Common\Model\CountableTrait;
 use Panthir\Infrastructure\Repository\Person\CustomerRepository;
 use Ramsey\Uuid\UuidInterface;
 
@@ -14,6 +17,10 @@ use Ramsey\Uuid\UuidInterface;
 #[ORM\Table(name: 'customer')]
 final class Customer
 {
+    use CountableTrait;
+    use BlameableEntity;
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue('NONE')]

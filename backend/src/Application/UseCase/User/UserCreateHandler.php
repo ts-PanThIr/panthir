@@ -14,7 +14,7 @@ use Panthir\Domain\User\DomainServices\PasswordResetTokenGenerator;
 use Panthir\Domain\User\Model\User;
 use Panthir\Domain\User\ValueObject\UserRoles;
 use Panthir\Infrastructure\CommonBundle\Exception\HandlerException;
-use Panthir\Infrastructure\Messenger\Model\EmailNotification;
+use Panthir\Infrastructure\Messenger\DTO\EmailNotification;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -39,11 +39,11 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
      */
     public function beforeExecuted(DTOInterface $model): void
     {
-        if (!filter_var($model->getEmail(), FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($model->email, FILTER_VALIDATE_EMAIL)) {
             throw new HandlerException("The given e-mail is not valid.", 400);
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(["email" => $model->getEmail()]);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(["email" => $model->email]);
         if(!empty($user)) {
             throw new HandlerException("There's already one user registered with this e-mail.", 400);
         }
@@ -58,17 +58,17 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
     public function execute(DTOInterface $model): User
     {
         $resetToken = null;
-        if(empty($model->getPassword())){
+        if(empty($model->password)){
             $resetToken = $this->passwordResetTokenGenerator->__invoke();
             $hashedPassword = $this->passwordHasher->__invoke(base64_encode(random_bytes(10)));
         } else{
-            $hashedPassword = $this->passwordHasher->__invoke($model->getPassword());
+            $hashedPassword = $this->passwordHasher->__invoke($model->password);
         }
 
         $this->user = new User(
             uuid: Uuid::uuid4(),
-            email: $model->getEmail(),
-            roles: empty($model->getRoles()) ? UserRoles::PROFILE_VIEWER : $model->getRoles(),
+            email: $model->email,
+            roles: empty($model->roles) ? UserRoles::PROFILE_VIEWER : $model->roles,
             passwordResetToken: $resetToken,
             password: $hashedPassword
         );

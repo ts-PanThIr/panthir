@@ -1,23 +1,24 @@
 <template>
-  <v-container fluid>
-    <v-card class="pa-2">
-      <v-card-title>
-        <h3 class="text-center">Hi this is home!</h3>
-      </v-card-title>
-      <v-card-text>
-        <p>You're NOT logged in</p>
-        <p>
-          <router-link to="/users"> Manage Users </router-link>
-        </p>
-      </v-card-text>
-    </v-card>
-  </v-container>
+  <v-card class="overflow-visible">
+    <the-card-title
+      text="Hi this is home!"
+      icon="fa fa-person"
+      bg-color="bg-secondary-gradient"
+      text-color="white"
+    >
+    </the-card-title>
+    <v-card-text>
+      Hi this is home!
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { TheCardTitle } from '~/components';
 
 export default defineComponent({
   name: 'HomeView',
+  components: {TheCardTitle}
 });
 </script>

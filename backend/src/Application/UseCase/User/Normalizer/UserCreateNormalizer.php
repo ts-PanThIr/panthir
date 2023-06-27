@@ -2,6 +2,8 @@
 
 namespace Panthir\Application\UseCase\User\Normalizer;
 
+use Panthir\Application\UseCase\User\CreatePasswordRecoveryTokenHandler;
+use Panthir\Application\UseCase\User\UpdatePasswordHandler;
 use Panthir\Application\UseCase\User\UserCreateHandler;
 use Panthir\Domain\User\Model\User;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -25,6 +27,11 @@ class UserCreateNormalizer implements NormalizerInterface
 
     public function supportsNormalization(mixed $data, string $format = null)
     {
-        return $data instanceof User && UserCreateHandler::class === $format;
+        return $data instanceof User &&
+            in_array($format, [
+                UserCreateHandler::class,
+                CreatePasswordRecoveryTokenHandler::class,
+                UpdatePasswordHandler::class
+            ]);
     }
 }

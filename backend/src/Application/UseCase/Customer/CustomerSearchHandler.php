@@ -15,8 +15,8 @@ class CustomerSearchHandler extends AbstractHandler
      */
     public function execute(DTOInterface $model): mixed
     {
-        if($model->getId()) {
-            return $this->entityManager->getRepository(Customer::class)->find($model->getId());
+        if($model->id) {
+            return $this->entityManager->getRepository(Customer::class)->find($model->id);
         }
         return $this->entityManager->getRepository(Customer::class)->search($model);
     }

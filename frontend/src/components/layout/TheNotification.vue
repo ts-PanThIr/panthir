@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useNotificationStore } from '~/stores';
+import {EMessageType, useNotificationStore} from '~/stores';
 
 export default defineComponent({
   name: 'TheNotification',
@@ -43,13 +43,7 @@ export default defineComponent({
       type: String,
       default: 'info',
       validator: (value: string) => {
-        const acceptedValues = [
-          'info',
-          'primary',
-          'danger',
-          'warning',
-          'success',
-        ];
+        const acceptedValues: string[] = Object.values(EMessageType);
         return acceptedValues.indexOf(value) !== -1;
       },
     },

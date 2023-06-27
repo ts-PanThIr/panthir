@@ -14,9 +14,11 @@ import {
   LoginView,
   RegisterView,
   FinancialEditView,
+  ResetPasswordView,
+  FOHomeView
 } from '~/views';
 
-import { TheEmptyLayout, TheMainLayout } from '~/components';
+import { TheEmptyLayout, TheMainLayout, TheFrontOfficeLayout } from '~/components';
 import { useAuthStore, useInterfaceStore } from '~/stores';
 
 export const router = createRouter({
@@ -24,95 +26,111 @@ export const router = createRouter({
   linkActiveClass: 'active',
   routes: [
     {
-      path: '/users',
-      component: TheMainLayout,
+      path: '/bo',
       meta: {
         middleware: { requiresAuth: true },
       },
       children: [
         {
-          path: '',
-          name: 'usersList',
-          component: UserListView,
-          meta: {
-            pageTitle: 'Users list'
-          }
+          path: 'home',
+          component: TheMainLayout,
+          children: [
+            {
+              path: '',
+              name: 'BOHome',
+              component: HomeView,
+              meta: {
+                pageTitle: 'Home'
+              }
+            },
+          ],
         },
         {
-          path: 'new',
-          name: 'usersNew',
-          component: UserEditView,
-          meta: {
-            pageTitle: 'Create user'
-          }
+          path: 'users',
+          component: TheMainLayout,
+          children: [
+            {
+              path: '',
+              name: 'usersList',
+              component: UserListView,
+              meta: {
+                pageTitle: 'Users list'
+              }
+            },
+            {
+              path: 'new',
+              name: 'usersNew',
+              component: UserEditView,
+              meta: {
+                pageTitle: 'Create user'
+              }
+            },
+            {
+              path: 'edit/:id',
+              name: 'usersEdit',
+              component: UserEditView,
+              meta: {
+                pageTitle: 'Edit user'
+              }
+            },
+          ],
         },
         {
-          path: 'edit/:id',
-          name: 'usersEdit',
-          component: UserEditView,
-          meta: {
-            pageTitle: 'Edit user'
-          }
+          path: 'person',
+          component: TheMainLayout,
+          children: [
+            {
+              path: '',
+              name: 'personList',
+              component: PersonListView,
+              meta: {
+                pageTitle: 'Person list'
+              }
+            },
+            {
+              path: 'edit/:id',
+              name: 'personEdit',
+              component: PersonEditView,
+              meta: {
+                pageTitle: 'Edit person'
+              }
+            },
+            {
+              path: 'new',
+              name: 'personNew',
+              component: PersonEditView,
+              meta: {
+                pageTitle: 'Create person'
+              }
+            },
+          ],
         },
-      ],
+        {
+          path: 'financial',
+          component: TheMainLayout,
+          children: [
+            {
+              path: 'new',
+              name: 'financialEdit',
+              component: FinancialEditView,
+              meta: {
+                pageTitle: 'Edite title'
+              }
+            },
+          ],
+        },
+      ]
     },
     {
-      path: '/person',
-      component: TheMainLayout,
-      meta: {
-        middleware: { requiresAuth: true },
-      },
-      children: [
-        {
-          path: '',
-          name: 'personList',
-          component: PersonListView,
-          meta: {
-            pageTitle: 'Person list'
-          }
-        },
-        {
-          path: 'edit/:id',
-          name: 'personEdit',
-          component: PersonEditView,
-          meta: {
-            pageTitle: 'Edit person'
-          }
-        },
-        {
-          path: 'new',
-          name: 'personNew',
-          component: PersonEditView,
-          meta: {
-            pageTitle: 'Create person'
-          }
-        },
-      ],
-    },
-    {
-      path: '/financial',
-      component: TheMainLayout,
-      meta: {
-        middleware: { requiresAuth: true },
-      },
-      children: [
-        {
-          path: 'new',
-          name: 'financialEdit',
-          component: FinancialEditView,
-          meta: {
-            pageTitle: 'Edite title'
-          }
-        },
-      ],
-    },
-    {
-      path: '/account',
+      path: '/auth',
       component: TheEmptyLayout,
+      meta: {
+        middleware: { requiresAuth: false },
+      },
       children: [
         {
           path: '',
-          redirect: 'login',
+          redirect: () => { return { name: 'login' } },
           meta: {
             pageTitle: 'Authentication'
           }
@@ -136,23 +154,34 @@ export const router = createRouter({
         {
           path: 'resetPassword/:token',
           name: 'resetPassword',
-          component: RegisterView,
+          component: ResetPasswordView,
           meta: {
-            pageTitle: 'Password recover'
+            pageTitle: 'Password reset'
           }
         },
-      ],
+      ]
     },
     {
       path: '/',
-      component: TheEmptyLayout,
+      component: TheFrontOfficeLayout,
+      meta: {
+        middleware: { requiresAuth: false },
+      },
       children: [
         {
           path: '',
-          name: 'home',
-          component: HomeView,
+          name: 'FOHome',
+          component: FOHomeView,
         },
-      ],
+        {
+          path: 'resetPassword/:token',
+          name: 'map',
+          component: ResetPasswordView,
+          meta: {
+            pageTitle: 'Password reset'
+          }
+        },
+      ]
     },
     // catch all redirect to home page
     { path: '/:pathMatch(.*)*', redirect: '/' },

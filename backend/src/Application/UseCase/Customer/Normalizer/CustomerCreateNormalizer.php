@@ -14,7 +14,7 @@ class CustomerCreateNormalizer implements NormalizerInterface
      * @param array $context
      * @return array
      */
-    public function normalize(mixed $object, string $format = null, array $context = [])
+    public function normalize(mixed $object, string $format = null, array $context = []): array
     {
         return [
             'name' => $object->getName(),
@@ -24,7 +24,7 @@ class CustomerCreateNormalizer implements NormalizerInterface
         ];
     }
 
-    public function supportsNormalization(mixed $data, string $format = null)
+    public function supportsNormalization(mixed $data, string $format = null): bool
     {
         return $data instanceof Customer && CustomerCreateHandler::class === $format;
     }

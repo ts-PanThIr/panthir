@@ -5,6 +5,7 @@ namespace Panthir\Infrastructure\Repository\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Panthir\Application\Common\DTO\DTOInterface;
+use Panthir\Application\UseCase\User\Normalizer\DTO\UserSearchDTO;
 use Panthir\Domain\User\Model\User;
 use Panthir\Domain\User\Repository\UserRepositoryInterface;
 use Panthir\Infrastructure\Repository\CountableTrait;
@@ -52,19 +53,28 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @param UserSearchDTO $search
+     * @return array
+     */
     public function search(DTOInterface $search): array
     {
         $qb = $this->createQueryBuilder('u');
         $qb->where('1=1');
 
-        if (!empty($search->getPage()) && !empty($search->getLimit())){
-            $qb->setFirstResult(($search->getPage() - 1) * $search->getLimit())
-                ->setMaxResults($search->getLimit());
+        if (!empty($search->page) && !empty($search->limit)){
+            $qb->setFirstResult(($search->page - 1) * $search->limit)
+                ->setMaxResults($search->limit);
         }
 
-        if (!empty($search->getEmail())){
+        if (!empty($search->email)){
             $qb->andWhere('u.email = :email')
-                ->setParameter(':email', $search->getEmail());
+                ->setParameter(':email', $search->email);
+        }
+
+        if (!empty($search->token)){
+            $qb->andWhere('u.passwordResetToken = :token')
+                ->setParameter(':token', $search->token);
         }
 
         $results = $qb->getQuery()->getResult();

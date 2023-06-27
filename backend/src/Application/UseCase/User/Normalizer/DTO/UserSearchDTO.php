@@ -7,43 +7,13 @@ use Panthir\Application\Common\DTO\DTOInterface;
 class UserSearchDTO implements DTOInterface
 {
     public function __construct(
-        private ?string $id = null,
-        private ?string $token = null,
-        private ?int $limit = null,
-        private ?int $page = null,
-        private ?string $email = null,
-        private ?string $profile = null
+        public readonly ?string $id = null,
+        public readonly ?string $token = null,
+        public readonly ?int $limit = null,
+        public readonly ?int $page = null,
+        public readonly ?string $email = null,
+        public readonly ?string $profile = null
     )
     {
-    }
-
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
-
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-    public function getLimit(): ?int
-    {
-        return $this->limit;
-    }
-
-    public function getPage(): ?int
-    {
-        return $this->page;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function getProfile(): ?string
-    {
-        return $this->profile;
     }
 }

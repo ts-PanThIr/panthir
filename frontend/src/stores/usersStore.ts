@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-import { FormHelper } from '~/helpers';
+import {defineStore} from 'pinia';
+import {FormHelper} from '~/helpers';
 
 type TState = {
   profileList: string[];
@@ -18,6 +18,12 @@ interface IUserSearch {
   profile?: string | null;
   limit?: number | null;
   page?: number | null;
+}
+
+interface IPasswordReset {
+  email: string;
+  password: string;
+  token: string;
 }
 
 export const useUsersStore = defineStore('users', {
@@ -55,7 +61,7 @@ export const useUsersStore = defineStore('users', {
 
     async getByToken(token: string): Promise<void> {
       const data = await this.$http.get(`${this.$apiUrl}/api/users/token/${token}`);
-      console.log(data)
+      this.user = data.data.data[0]
     },
 
     async getProfile(): Promise<void> {
@@ -63,7 +69,16 @@ export const useUsersStore = defineStore('users', {
       this.profileList = data.data.data
     },
 
-    async addUser (email: string, clientId: null | number = null): Promise<IUser> {
+    async resetPassword(obj: IPasswordReset): Promise<IUser> {
+      const data = await this.$http.put(`${this.$apiUrl}/api/user/resetPassword`, {
+        email: obj.email,
+        password: obj.password,
+        passwordResetToken: obj.token
+      });
+      return data.data.data as IUser;
+    },
+
+    async addUser(email: string, clientId: null | number = null): Promise<IUser> {
       const formData = FormHelper.jsonToFormData({
         email: email,
         client: clientId,

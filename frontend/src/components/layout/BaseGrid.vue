@@ -35,9 +35,15 @@
                 :text="r"
                 :name="i"
               >
-                <td :key="i">
-                  {{ r ? r : '-' }}
+                <td :key="i" :title="r">
+                  <span v-if="i === 'id'">
+                    {{ r ? r.substring(0,4)+" .." : '-' }}
+                  </span>
+                  <span v-else>
+                    {{ r ? r : '-' }}
+                  </span>
                 </td>
+                
               </slot>
             </template>
           </tr>

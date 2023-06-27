@@ -43,14 +43,15 @@ class Get extends APIController
     public function getByToken(
         Request           $request,
         UserSearchHandler $userSearchHandler,
-        HandlerRunner     $runner
+        HandlerRunner     $runner,
+        string            $token
     ): JsonResponse
     {
         $serializer = new Serializer(normalizers: [new ObjectNormalizer()]);
 
         /** @var UserSearchDTO $user */
         $searchDTO = $serializer->denormalize(
-            data: $request->query->all(),
+            data: array_merge(['token' => $token], $request->query->all()) ,
             type: UserSearchDTO::class
         );
 

@@ -23,6 +23,8 @@
         v-model:limit="limit"
         :matrix="people"
         :header="headers"
+        @update:limit="updateList()"
+        @update:page="updateList()"
       >
         <template #action="{ element }">
           <td class="actions to-none pa-1">
@@ -40,20 +42,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { BaseGrid, TheCardTitle } from '~/components';
-import { usePersonStore } from '~/stores';
+import {defineComponent, ref} from 'vue';
+import {BaseGrid, TheCardTitle} from '~/components';
+import {usePersonStore} from '~/stores';
+import {storeToRefs} from "pinia";
 
 export default defineComponent({
   name: 'PersonListView',
-  components: { BaseGrid, TheCardTitle },
+  components: {BaseGrid, TheCardTitle},
   async setup() {
-    const personStore = usePersonStore();
-    await personStore.getAll();
-    const people = personStore.list;
     const data = {
-      limit: 50,
-      page: 1,
+      limit: ref(10),
+      page: ref(1),
       headers: {
         action: '#',
         id: 'Id',
@@ -64,7 +64,22 @@ export default defineComponent({
       },
       search: null,
     };
-    return { people, ...data };
+    const personStore = usePersonStore();
+    await personStore.getAll({limit: data.limit.value, page: data.page.value});
+    const {list: people} = storeToRefs(personStore);
+    return {people, ...data};
   },
+  unmounted() {
+    const personStore = usePersonStore();
+    personStore.$reset()
+  },
+  methods: {
+    updateList: async function () {
+      const personStore = usePersonStore();
+      await personStore.getAll(
+        {limit: this.limit, page: this.page}
+      );
+    },
+  }
 });
 </script>

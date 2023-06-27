@@ -31,7 +31,7 @@ import { ref, defineComponent } from 'vue';
 import type { VContainer } from 'vuetify/components';
 
 export default defineComponent({
-  name: 'TheEmptyLayout',
+  name: 'TheFrontOfficeLayout',
   components: { TheNotifications },
   setup() {
     const data = {
