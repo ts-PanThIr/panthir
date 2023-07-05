@@ -6,24 +6,32 @@
     :label="label"
     :readonly="readonly"
     :rules="rules"
-    @focus="focused = true"
+    @focus="doFocus($event)"
     @blur="focused = false"
     @keydown="isNumber($event)"
   />
 </template>
 
 <script>
+import { nextTick } from 'vue'
 export default {
   name: 'TheCurrencyInput',
   props: {
     modelValue: Number,
     label: String,
     color: String,
-    readonly: { type: Boolean, default: false },
+    readonly: {type: Boolean, default: false},
     rules: {
       type: Array,
       required: false,
     },
+    format: {
+      type: Object,
+      default: {
+        style: 'currency',
+        currency: 'EUR',
+      }
+    }
   },
   emits: ['update:modelValue'],
   data() {
@@ -33,27 +41,21 @@ export default {
   },
   computed: {
     dateModel: {
-      get: function () {
+      get: function() {
         if (this.focused) {
           return this.modelValue;
         }
-        return Intl.NumberFormat('pt-PT', {
-          style: 'currency',
-          currency: 'EUR',
-        }).format(this.modelValue);
+        if (this.format.style === 'percent') {
+          return Intl.NumberFormat('pt-PT', this.format).format(Number(this.modelValue / 100));
+        }
+        return Intl.NumberFormat('pt-PT', this.format).format(this.modelValue);
       },
-      set: function (e) {
-        const thousandSeparator = Intl.NumberFormat('pt-PT')
-          .format(11111)
-          .replace(/\p{Number}/gu, '');
-        const decimalSeparator = Intl.NumberFormat('pt-PT')
-          .format(1.1)
-          .replace(/\p{Number}/gu, '');
+      set: function(e) {
+        const thousandSeparator = Intl.NumberFormat('pt-PT').format(11111).replace(/\p{Number}/gu, '');
+        const decimalSeparator = Intl.NumberFormat('pt-PT').format(1.1).replace(/\p{Number}/gu, '');
 
         let decimal = parseFloat(
-          e
-            .replace(new RegExp('\\' + thousandSeparator, 'g'), '')
-            .replace(new RegExp('\\' + decimalSeparator), '.'),
+          e.replace(new RegExp('\\' + thousandSeparator, 'g'), '').replace(new RegExp('\\' + decimalSeparator), '.'),
         );
         if (isNaN(decimal)) decimal = 0;
         this.$emit(`update:modelValue`, Number(decimal.toFixed(2)));
@@ -61,7 +63,12 @@ export default {
     },
   },
   methods: {
-    isNumber: function (e) {
+    doFocus: async function(e) {
+      this.focused = true
+      await nextTick();
+      e.target.select()
+    },
+    isNumber: function(e) {
       const keysAllowed = [
         '0',
         '1',

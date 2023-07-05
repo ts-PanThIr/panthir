@@ -50,13 +50,12 @@
       <v-card-text>
         <v-row>
           <v-col cols="3">
-            <v-select
+            <v-text-field
               v-model="title.quantityInstallments"
-              :items="quantityInstallments"
-              item-title="name"
-              return-object
+              v-mask="'###'"
               label="Quantity Installments"
               :rules="[v => (!!v) || 'Item is required']"
+              @focus="$event.target.select()"
             />
           </v-col>
           <v-col cols="3">
@@ -70,15 +69,17 @@
           <v-col cols="3">
             <the-currency-input
               v-model.lazy="title.fees"
-              label="Fees +"
               color="success"
+              label="Fees %"
+              :rules="[v => (!!v) || 'Item is required']"
+              :format="{ style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }"
             />
           </v-col>
           <v-col cols="3">
             <the-currency-input
               v-model.lazy="title.fine"
-              label="Fine +"
               color="success"
+              label="Fine +"
             />
           </v-col>
           <v-col cols="4">

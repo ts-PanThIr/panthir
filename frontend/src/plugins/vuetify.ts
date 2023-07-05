@@ -31,6 +31,7 @@ export default createVuetify({
       VSelect: {
         variant: 'underlined',
         color: 'textDark',
+        density: 'compact',
       },
       VTextarea: {
         variant: 'underlined',

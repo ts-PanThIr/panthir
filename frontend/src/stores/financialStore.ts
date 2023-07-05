@@ -46,9 +46,9 @@ export const useFinancialStore = defineStore({
   }),
   getters: {
     totalValue: state => {
+      const fees = state.title.fees / 100
       const value =
-        state.title.value +
-        state.title.fees +
+        Number((state.title.value * fees) / (1 - Math.pow(1 + fees, -state.title.quantityInstallments))) +
         state.title.fine +
         state.title.extra -
         state.title.discount;
@@ -71,7 +71,7 @@ export const useFinancialStore = defineStore({
       const quantityInstallments =
         this.title.quantityInstallments;
       const partialValue = Number((this.title.value / quantityInstallments).toFixed(2));
-      const partialFees = Number((this.title.fees / quantityInstallments).toFixed(2)) || 0;
+      const partialFees = Number(this.title.fees);
       const partialFine = Number((this.title.fine / quantityInstallments).toFixed(2)) || 0;
       const partialExtra = Number((this.title.extra / quantityInstallments).toFixed(2)) || 0;
       const partialDiscount = Number((this.title.discount / quantityInstallments).toFixed(2)) || 0;
@@ -85,16 +85,14 @@ export const useFinancialStore = defineStore({
       for (let temp = 0; temp < quantityInstallments; temp++) {
         //get date
         if (temp === 0) {
-          const diffValue =
-            this.title.value - partialValue * quantityInstallments;
-          const diffFees = this.title.fees - partialFees * quantityInstallments;
+          const diffValue = this.title.value - partialValue * quantityInstallments;
           const diffFine = this.title.fine - partialFine * quantityInstallments;
           const diffExtra = this.title.extra - partialExtra * quantityInstallments;
           const diffDiscount = this.title.discount - partialDiscount * quantityInstallments;
 
-          this.installmentAdd({
+          await this.installmentAdd({
             value: Number((partialValue + diffValue).toFixed(2)) || 0,
-            fees: Number((partialFees + diffFees).toFixed(2)) || 0,
+            fees: Number((partialFees).toFixed(2)) || 0,
             fine: Number((partialFine + diffFine).toFixed(2)) || 0,
             extra: Number((partialExtra + diffExtra).toFixed(2)) || 0,
             discount: Number((partialDiscount + diffDiscount).toFixed(2)) || 0,
@@ -104,7 +102,7 @@ export const useFinancialStore = defineStore({
         }
 
         baseDate.add(1, 'months');
-        this.installmentAdd({
+        await this.installmentAdd({
           value: partialValue,
           fees: partialFees,
           fine: partialFine,
@@ -114,7 +112,7 @@ export const useFinancialStore = defineStore({
         });
       }
     },
-    async installmentAdd({value, fees, fine, extra, discount, date}) {
+    async installmentAdd({value, fees, fine, extra, discount, date}): Promise<void> {
       const total = Number((value + fees + fine + extra - discount).toFixed(2));
       this.installments.push({
         value,
