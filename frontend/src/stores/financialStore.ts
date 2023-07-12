@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia';
 import moment from 'moment';
+import {EMessageType, useNotificationStore} from "~/stores/notificationStore";
 
 interface ITitle {
   discount: number;
@@ -11,7 +12,7 @@ interface ITitle {
   entryAt: string;
 }
 
-interface IInstallment {
+export interface IInstallment {
   value: number;
   fees: number;
   fine: number;
@@ -45,15 +46,25 @@ export const useFinancialStore = defineStore({
     quantityInstallments: [...Array(60).keys()],
   }),
   getters: {
-    totalValue: state => {
-      const fees = state.title.fees / 100
+    totalFees (state): number {
+      let totalFees = 0;
+      if (state.title.fees && state.title.value && state.title.quantityInstallments) {
+        const fees = state.title.fees / 100 / 12
+        const divisor = Math.pow(1 + fees, state.title.quantityInstallments);
+        const installment = (state.title.value * fees * divisor) / (divisor - 1);
+        totalFees = ((installment * state.title.quantityInstallments) - state.title.value);
+      }
+      return totalFees;
+    },
+    totalValue (state): number {
       const value =
-        Number((state.title.value * fees) / (1 - Math.pow(1 + fees, -state.title.quantityInstallments))) +
+        state.title.value +
+        this.totalFees +
         state.title.fine +
         state.title.extra -
         state.title.discount;
 
-      return Number(value.toFixed(3)) || null;
+      return Number(value.toFixed(3)) || 0;
     },
   },
   actions: {
@@ -62,67 +73,64 @@ export const useFinancialStore = defineStore({
         this.title.value > 0 &&
         this.title.quantityInstallments > 0
       )) {
-        console.log('error burr');
-        return;
+        useNotificationStore().addMessage({text: 'Check gross or quantity installments values.', type: EMessageType.Danger})
+        return
       }
       this.installments = [];
 
-      // split values
-      const quantityInstallments =
-        this.title.quantityInstallments;
-      const partialValue = Number((this.title.value / quantityInstallments).toFixed(2));
-      const partialFees = Number(this.title.fees);
-      const partialFine = Number((this.title.fine / quantityInstallments).toFixed(2)) || 0;
-      const partialExtra = Number((this.title.extra / quantityInstallments).toFixed(2)) || 0;
-      const partialDiscount = Number((this.title.discount / quantityInstallments).toFixed(2)) || 0;
-
       //get base date based on skipped time
-      const baseDate = moment(this.title.entryAt, 'DD/MM/YYYY').add(
-        30,
-        'days',
-      );
-
-      for (let temp = 0; temp < quantityInstallments; temp++) {
-        //get date
-        if (temp === 0) {
-          const diffValue = this.title.value - partialValue * quantityInstallments;
-          const diffFine = this.title.fine - partialFine * quantityInstallments;
-          const diffExtra = this.title.extra - partialExtra * quantityInstallments;
-          const diffDiscount = this.title.discount - partialDiscount * quantityInstallments;
-
-          await this.installmentAdd({
-            value: Number((partialValue + diffValue).toFixed(2)) || 0,
-            fees: Number((partialFees).toFixed(2)) || 0,
-            fine: Number((partialFine + diffFine).toFixed(2)) || 0,
-            extra: Number((partialExtra + diffExtra).toFixed(2)) || 0,
-            discount: Number((partialDiscount + diffDiscount).toFixed(2)) || 0,
-            date: baseDate.format('DD/MM/YYYY'),
-          });
-          continue;
-        }
-
+      const baseDate = moment(this.title.entryAt, 'DD/MM/YYYY').add(1, 'month');
+      
+      // split values
+      const quantityInstallments = this.title.quantityInstallments;
+      const partialValue = Number((this.totalValue / this.title.quantityInstallments).toFixed(2));
+      const partialFine = Number((this.title.fine / quantityInstallments).toFixed(2));
+      const partialExtra = Number((this.title.extra / quantityInstallments).toFixed(2));
+      const partialDiscount = Number((this.title.discount / quantityInstallments).toFixed(2));
+      
+      const monthlyFeesRate = Number((this.title.fees / 100 / 12));
+      let openDebit = this.title.value;
+      
+      for (let temp = 0; temp < quantityInstallments -1; temp++) {
+        const monthlyFees = (openDebit * monthlyFeesRate);
+        openDebit -= ((partialValue) - monthlyFees)
+        
         baseDate.add(1, 'months');
-        await this.installmentAdd({
-          value: partialValue,
-          fees: partialFees,
+        this.installments.push({
+          value: (partialValue - monthlyFees - partialExtra),
+          fees: monthlyFees,
           fine: partialFine,
           extra: partialExtra,
           discount: partialDiscount,
           date: baseDate.format('DD/MM/YYYY'),
+          total: partialValue
         });
       }
-    },
-    async installmentAdd({value, fees, fine, extra, discount, date}): Promise<void> {
-      const total = Number((value + fees + fine + extra - discount).toFixed(2));
+
+      // not beautiful, but better for performance
+      const monthlyFees = (openDebit * monthlyFeesRate);
+      openDebit -= (partialValue - monthlyFees)
+      
+      //the fixes for float are calculated at the end, but goes on the start of the array
+      const diffValue = this.title.value - (partialValue * quantityInstallments);
+      const diffFine = this.title.fine - (partialFine * quantityInstallments);
+      const diffExtra = this.title.extra - (partialExtra * quantityInstallments);
+      const diffDiscount = this.title.discount - (partialDiscount * quantityInstallments);
+
+      console.log(this.totalValue, openDebit, partialValue)
+      
+      baseDate.add(1, 'months');
       this.installments.push({
-        value,
-        fees,
-        fine,
-        extra,
-        discount,
-        date,
-        total,
+        value: partialValue - monthlyFees + diffValue,
+        fees: monthlyFees,
+        fine: partialFine + diffFine,
+        extra: partialExtra + diffExtra,
+        discount: partialDiscount + diffDiscount,
+        date: baseDate.format('DD/MM/YYYY'),
+        total: partialValue
       });
+      
+      console.log(openDebit);
     },
   },
 });

@@ -6,7 +6,7 @@
           <tr>
             <th>#</th>
             <th>Date</th>
-            <th>Gross</th>
+            <th>Debt paid</th>
             <th>Fees</th>
             <th>Fine</th>
             <th>Extra</th>
@@ -15,7 +15,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in installments" :key="index">
+        <template v-for="(item, index) in installments" :key="index" >
+          <tr>
             <td>{{ index + 1 }}</td>
             <td>{{ item.date }}</td>
             <td>{{ formatValue(item.value) }}</td>
@@ -25,25 +26,50 @@
             <td>{{ formatValue(item.discount) }}</td>
             <td>{{ formatValue(item.total) }}</td>
           </tr>
+          <tr v-if="(index + 1) % 12 === 0">
+            <td class="font-weight-bold">{{ (index + 1) / 12 }}</td>
+            <td class="font-weight-bold"></td>
+            <td class="font-weight-bold">{{ sumColumn(index, 'value') }}</td>
+            <td class="font-weight-bold">{{ sumColumn(index, 'fees') }}</td>
+            <td class="font-weight-bold">{{ sumColumn(index, 'fine') }}</td>
+            <td class="font-weight-bold">{{ sumColumn(index, 'extra') }}</td>
+            <td class="font-weight-bold">{{ sumColumn(index, 'discount') }}</td>
+            <td class="font-weight-bold">{{ sumColumn(index, 'total') }}</td>
+          </tr>
+        </template>
         </tbody>
       </v-table>
     </v-col>
   </v-row>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+import type {IInstallment} from "~/stores";
+
+export default defineComponent({
   name: 'FinancialInstallmentTable',
   props: {
-    installments: { type: Array, default: null },
+    installments: { 
+      type: Array as () => IInstallment[], 
+      default: null 
+    },
   },
   methods: {
-    formatValue(e) {
+    formatValue(e): string {
       return Intl.NumberFormat(this.configVars.$locale, {
         style: 'currency',
         currency: this.configVars.$currency,
       }).format(e);
     },
+    sumColumn(index, name): string {
+      let temp = 0;
+      for (let i = index; i > index - 12 ;i--){
+        temp += this.installments[i][name];
+      }
+      
+      return this.formatValue(temp.toFixed(2));
+    }
   },
-};
+});
 </script>
