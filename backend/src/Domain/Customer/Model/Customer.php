@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Entity;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Panthir\Domain\Common\Model\AbstractPerson;
@@ -14,7 +15,7 @@ use Panthir\Domain\Common\Model\CountableTrait;
 use Panthir\Infrastructure\Repository\Person\CustomerRepository;
 use Ramsey\Uuid\UuidInterface;
 
-#[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\Table(name: 'person')]
 final class Customer extends AbstractPerson
 {

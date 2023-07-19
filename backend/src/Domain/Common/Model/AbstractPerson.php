@@ -2,17 +2,23 @@
 
 namespace Panthir\Domain\Common\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Entity;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Panthir\Domain\Customer\Model\Customer;
+use Panthir\Domain\Supplier\Model\Supplier;
 
+#[Entity]
 #[ORM\Table(name: 'person')]
 #[ORM\InheritanceType("SINGLE_TABLE")]
 #[ORM\DiscriminatorColumn(name: "discriminator", type: "string")]
-//#[ORM\DiscriminatorMap(["person" => "Person"])] 
+#[ORM\DiscriminatorMap([
+    'person' => AbstractPerson::class,
+    'customer' => Customer::class,
+    'supplier' => Supplier::class
+])]
 abstract class AbstractPerson
 {
     use CountableTrait;

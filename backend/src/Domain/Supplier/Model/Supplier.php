@@ -5,6 +5,7 @@ namespace Panthir\Domain\Supplier\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Entity;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Panthir\Domain\Common\Model\AbstractPerson;
@@ -12,7 +13,7 @@ use Panthir\Domain\Common\Model\CountableTrait;
 use Panthir\Infrastructure\Repository\Person\SupplierRepository;
 use Ramsey\Uuid\UuidInterface;
 
-#[ORM\Entity(repositoryClass: SupplierRepository::class)]
+#[Entity(repositoryClass: SupplierRepository::class)]
 #[ORM\Table(name: 'person')]
 final class Supplier extends AbstractPerson
 {
