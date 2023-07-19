@@ -1,14 +1,13 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\Normalizer\DTO;
+namespace Panthir\Application\UseCase\Supplier\Normalizer\DTO;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Panthir\Application\Common\DTO\DTOInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CustomerCreateDTO implements DTOInterface
+class SupplierCreateDTO implements DTOInterface
 {
     public function __construct(
 
@@ -16,7 +15,7 @@ class CustomerCreateDTO implements DTOInterface
         public readonly string              $name,
 
         #[Assert\NotBlank]
-        public readonly string              $surname,
+        public readonly string              $nickname,
 
         #[Assert\NotBlank]
         public readonly string              $document,
@@ -25,25 +24,10 @@ class CustomerCreateDTO implements DTOInterface
 
         public readonly Collection          $contacts = new ArrayCollection(),
 
-        private readonly ?DateTime          $birthDate = null,
-
         public readonly ?string             $secondaryDocument = null,
 
         public readonly ?string             $additionalInformation = null
     )
     {
-    }
-
-    public function getBirthDate(): string
-    {
-        if (empty($this->birthDate)) {
-            return '';
-        }
-        return date_format($this->birthDate, 'd/m/Y');
-    }
-
-    public function getRawBirthDate(): ?DateTime
-    {
-        return $this->birthDate;
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\Normalizer;
+namespace Panthir\Application\UseCase\Supplier\Normalizer;
 
-use Panthir\Application\UseCase\Customer\CustomerSearchHandler;
-use Panthir\Domain\Customer\Model\Customer;
+use Panthir\Application\UseCase\Supplier\SupplierSearchHandler;
+use Panthir\Domain\Supplier\Model\Supplier;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CustomerSearchNormalizer implements NormalizerInterface
+class SupplierSearchNormalizer implements NormalizerInterface
 {
     /**
-     * @param Customer $object
+     * @param Supplier $object
      * @param string|null $format
      * @param array $context
      * @return array
@@ -19,17 +19,16 @@ class CustomerSearchNormalizer implements NormalizerInterface
         if(empty($object)) return [];
 
         /**
-         * @var $r Customer
+         * @var $r Supplier
          */
         $arr = [];
         foreach ($object as $r) {
             $arr[] = [
                 'name' => $r->name,
                 'id' => $r->id,
-                'surname' => $r->surname,
+                'nickName' => $r->nickName,
                 'document' => $r->document,
                 'secondaryDocument' => $r->secondaryDocument,
-                'birthDate' => $r->getBirthDate()
             ];
         }
 
@@ -38,6 +37,6 @@ class CustomerSearchNormalizer implements NormalizerInterface
 
     public function supportsNormalization(mixed $data, string $format = null)
     {
-        return is_array($data) && CustomerSearchHandler::class === $format;
+        return is_array($data) && SupplierSearchHandler::class === $format;
     }
 }

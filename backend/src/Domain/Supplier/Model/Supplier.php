@@ -1,22 +1,20 @@
 <?php
 
-namespace Panthir\Domain\Customer\Model;
+namespace Panthir\Domain\Supplier\Model;
 
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Panthir\Domain\Common\Model\AbstractPerson;
 use Panthir\Domain\Common\Model\CountableTrait;
-use Panthir\Infrastructure\Repository\Person\CustomerRepository;
+use Panthir\Infrastructure\Repository\Person\SupplierRepository;
 use Ramsey\Uuid\UuidInterface;
 
-#[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[ORM\Entity(repositoryClass: SupplierRepository::class)]
 #[ORM\Table(name: 'person')]
-final class Customer extends AbstractPerson
+final class Supplier extends AbstractPerson
 {
     use CountableTrait;
     use BlameableEntity;
@@ -25,19 +23,17 @@ final class Customer extends AbstractPerson
     public function __construct(
         string                        $name,
         string                        $document,
+
         public readonly UuidInterface $uuid,
 
         #[ORM\Column(name: 'surname')]
-        public string                 $surname,
+        public string                 $nickName,
 
-        #[ORM\OneToMany(mappedBy: "person", targetEntity: CustomerAddress::class, cascade: ["persist"])]
+        #[ORM\OneToMany(mappedBy: "person", targetEntity: SupplierAddress::class, cascade: ["persist"])]
         public Collection             $addresses = new ArrayCollection(),
 
-        #[ORM\OneToMany(mappedBy: "person", targetEntity: CustomerContact::class, cascade: ["persist"])]
+        #[ORM\OneToMany(mappedBy: "person", targetEntity: SupplierContact::class, cascade: ["persist"])]
         public Collection             $contacts = new ArrayCollection(),
-
-        #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-        private ?DateTimeInterface    $birthDate = null,
 
         string                        $secondaryDocument = null,
         string                        $additionalInformation = null,
@@ -52,26 +48,7 @@ final class Customer extends AbstractPerson
         );
     }
 
-    public function setBirthDate(?DateTimeInterface $birthDate): Customer
-    {
-        $this->birthDate = $birthDate;
-        return $this;
-    }
-
-    public function getBirthDate(): ?string
-    {
-        if (empty($this->birthDate)) {
-            return null;
-        }
-        return date_format($this->birthDate, 'd/m/Y');
-    }
-
-    public function getRawBirthDate(): ?DateTimeInterface
-    {
-        return $this->birthDate;
-    }
-
-    public function addAddresses(CustomerAddress $address): self
+    public function addAddresses(SupplierAddress $address): self
     {
         if (!$this->addresses->contains($address)) {
             $address->person = $this;
@@ -81,7 +58,7 @@ final class Customer extends AbstractPerson
         return $this;
     }
 
-    public function removeAddresses(CustomerAddress $address): self
+    public function removeAddresses(SupplierAddress $address): self
     {
         if ($this->addresses->contains($address)) {
             $this->addresses->removeElement($address);
@@ -90,7 +67,7 @@ final class Customer extends AbstractPerson
         return $this;
     }
 
-    public function addContacts(CustomerContact $contact): self
+    public function addContacts(SupplierContact $contact): self
     {
         if (!$this->contacts->contains($contact)) {
             $contact->person = $this;
@@ -100,7 +77,7 @@ final class Customer extends AbstractPerson
         return $this;
     }
 
-    public function removeContacts(CustomerContact $contact): self
+    public function removeContacts(SupplierContact $contact): self
     {
         if ($this->contacts->contains($contact)) {
             $this->contacts->removeElement($contact);

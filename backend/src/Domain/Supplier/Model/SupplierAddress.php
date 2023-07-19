@@ -1,18 +1,18 @@
 <?php
 
-namespace Panthir\Domain\Customer\Model;
+namespace Panthir\Domain\Supplier\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Panthir\Domain\Common\Model\AbstractAddress;
-use Panthir\Domain\Customer\ValueObject\AddressType;
+use Panthir\Domain\Supplier\ValueObject\AddressType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'person_address')]
-final class CustomerAddress extends AbstractAddress
+final class SupplierAddress extends AbstractAddress
 {
     public function __construct(
         string                        $name,
@@ -23,15 +23,14 @@ final class CustomerAddress extends AbstractAddress
         string                        $district,
         string                        $number,
         string                        $zip,
-
         public readonly UuidInterface $uuid,
 
         #[ORM\Column(name: 'type')]
         private string                $type,
 
-        #[ManyToOne(targetEntity: Customer::class, inversedBy: "addresses")]
+        #[ManyToOne(targetEntity: Supplier::class, inversedBy: "addresses")]
         #[JoinColumn(name: "person_id", referencedColumnName: "id")]
-        public Customer               $person,
+        public Supplier               $person,
     )
     {
         parent::__construct(

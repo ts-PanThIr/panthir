@@ -1,25 +1,25 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer;
+namespace Panthir\Application\UseCase\Supplier;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
-use Panthir\Domain\Customer\Model\Customer;
-use Panthir\Domain\Customer\Model\CustomerAddress;
-use Panthir\Domain\Customer\Model\CustomerContact;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierAddressDTO;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierContactDTO;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierCreateDTO;
+use Panthir\Domain\Supplier\Model\Supplier;
+use Panthir\Domain\Supplier\Model\SupplierAddress;
+use Panthir\Domain\Supplier\Model\SupplierContact;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHandlerInterface
+class SupplierCreateHandler extends AbstractHandler implements BeforeExecutedHandlerInterface
 {
-    private ?Customer $customer;
+    private ?Supplier $supplier;
 
     public function __construct(
         EntityManagerInterface              $entityManager,
@@ -44,8 +44,8 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
         }
 
 //        if ($model->getId()) {
-//            $this->customer = $this->entityManager->getRepository(Customer::class)->find($model->getId());
-//            if (empty($this->customer)) {
+//            $this->supplier = $this->entityManager->getRepository(Supplier::class)->find($model->getId());
+//            if (empty($this->supplier)) {
 //                throw new HandlerException("The Id to update the person register is invalid.", 400);
 //            }
 //        }
@@ -53,64 +53,63 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     }
 
     /**
-     * @param CustomerCreateDTO $model
-     * @return Customer
+     * @param SupplierCreateDTO $model
+     * @return Supplier
      * @throws InvalidFieldException
      */
-    public function execute(DTOInterface $model): Customer
+    public function execute(DTOInterface $model): Supplier
     {
-        $this->customer = new Customer(
+        $this->supplier = new Supplier(
             name: $model->name,
             document: $model->document,
             uuid: Uuid::uuid4(),
-            surname: $model->surname,
-            birthDate: $model->getRawBirthDate(),
+            nickName: $model->nickname,
             secondaryDocument: $model->secondaryDocument,
-            additionalInformation: $model->additionalInformation
+            additionalInformation: $model->additionalInformation,
         );
-        $this->entityManager->persist($this->customer);
+        $this->entityManager->persist($this->supplier);
 
         if (!empty($model->addresses)) {
-            /** @var CustomerAddressDTO $address */
+            /** @var SupplierAddressDTO $address */
             foreach ($model->addresses as $address) {
                 $dbAddress = $this->saveAddress($address);
-                $this->customer->addAddresses($dbAddress);
+                $this->supplier->addAddresses($dbAddress);
             }
         }
 
         if (!empty($model->contacts)) {
-            /** @var CustomerContactDTO $contact */
+            /** @var SupplierContactDTO $contact */
             foreach ($model->contacts as $contact) {
                 $dbContact = $this->saveContact($contact);
-                $this->customer->addContacts($dbContact);
+                $this->supplier->addContacts($dbContact);
             }
         }
 
-        return $this->customer;
+        return $this->supplier;
     }
 
     /**
      * @throws InvalidFieldException
      */
-    private function saveAddress(CustomerAddressDTO $model): CustomerAddress
+    private function saveAddress(SupplierAddressDTO $model): SupplierAddress
     {
         $errors = $this->validator->validate($model);
 
         if (count($errors) > 0) {
-            throw new InvalidFieldException((string) $errors, 400);
+            throw new InvalidFieldException((string)$errors, 400);
         }
 
 //        if($addressDTO->getId()) {
-//            $address = $this->entityManager->getRepository(CustomerAddress::class)->find($addressDTO->getId());
+//            $address = $this->entityManager->getRepository(SupplierAddress::class)->find($addressDTO->getId());
 //            if (empty($address)) {
 //                throw new HandlerException("Invalid Address Id.", 400);
 //            }
 //        }
 //        else{
-//            $address = new CustomerAddress();
+//            $address = new SupplierAddress();
 //        }
 
-        $address = new CustomerAddress(
+        $address = new SupplierAddress(
             name: $model->name,
             address: $model->address,
             addressComplement: $model->addressComplement,
@@ -121,7 +120,7 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
             zip: $model->zip,
             uuid: Uuid::uuid4(),
             type: $model->getType(),
-            person: $this->customer
+            person: $this->supplier
         );
 
         $this->entityManager->persist($address);
@@ -132,12 +131,12 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
     /**
      * @throws InvalidFieldException
      */
-    private function saveContact(CustomerContactDTO $contactDTO): CustomerContact
+    private function saveContact(SupplierContactDTO $contactDTO): SupplierContact
     {
         $errors = $this->validator->validate($contactDTO);
 
         if (count($errors) > 0) {
-            throw new InvalidFieldException((string) $errors, 400);
+            throw new InvalidFieldException((string)$errors, 400);
         }
 
 //        if($contactDTO->getId()) {
@@ -150,13 +149,13 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
 //            $contact = new PersonContactEntity();
 //        }
 
-        $contact = new CustomerContact(
+        $contact = new SupplierContact(
             name: $contactDTO->name,
             email: $contactDTO->email,
             phone: $contactDTO->phone,
             uuid: Uuid::uuid4(),
             type: $contactDTO->getType(),
-            person: $this->customer,
+            person: $this->supplier,
         );
 
         $this->entityManager->persist($contact);

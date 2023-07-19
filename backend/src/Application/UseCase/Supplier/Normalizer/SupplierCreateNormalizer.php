@@ -1,15 +1,15 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\Normalizer;
+namespace Panthir\Application\UseCase\Supplier\Normalizer;
 
-use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
-use Panthir\Domain\Customer\Model\Customer;
+use Panthir\Application\UseCase\Supplier\SupplierCreateHandler;
+use Panthir\Domain\Supplier\Model\Supplier;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CustomerCreateNormalizer implements NormalizerInterface
+class SupplierCreateNormalizer implements NormalizerInterface
 {
     /**
-     * @param Customer $object
+     * @param Supplier $object
      * @param string|null $format
      * @param array $context
      * @return array
@@ -18,7 +18,7 @@ class CustomerCreateNormalizer implements NormalizerInterface
     {
         return [
             'name' => $object->name,
-            'surname' => $object->surname,
+            'nickName' => $object->nickName,
             'id' => $object->id,
             'document' => $object->document
         ];
@@ -26,6 +26,6 @@ class CustomerCreateNormalizer implements NormalizerInterface
 
     public function supportsNormalization(mixed $data, string $format = null): bool
     {
-        return $data instanceof Customer && CustomerCreateHandler::class === $format;
+        return $data instanceof Supplier && SupplierCreateHandler::class === $format;
     }
 }

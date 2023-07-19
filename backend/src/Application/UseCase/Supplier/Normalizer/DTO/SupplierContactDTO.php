@@ -1,13 +1,13 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\Normalizer\DTO;
+namespace Panthir\Application\UseCase\Supplier\Normalizer\DTO;
 
 use Panthir\Application\Common\DTO\DTOInterface;
-use Panthir\Domain\Customer\ValueObject\ContactType;
+use Panthir\Domain\Supplier\ValueObject\ContactType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CustomerContactDTO implements DTOInterface
+class SupplierContactDTO implements DTOInterface
 {
     public function __construct(
         #[Assert\NotBlank]

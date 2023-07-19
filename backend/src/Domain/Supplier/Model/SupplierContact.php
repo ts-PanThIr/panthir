@@ -1,18 +1,18 @@
 <?php
 
-namespace Panthir\Domain\Customer\Model;
+namespace Panthir\Domain\Supplier\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Panthir\Domain\Common\Model\AbstractContact;
-use Panthir\Domain\Customer\ValueObject\ContactType;
+use Panthir\Domain\Supplier\ValueObject\ContactType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'person_contact')]
-final class CustomerContact extends AbstractContact
+final class SupplierContact extends AbstractContact
 {
     public function __construct(
         string                        $name,
@@ -23,9 +23,9 @@ final class CustomerContact extends AbstractContact
         #[ORM\Column(name: 'type')]
         private string                $type,
 
-        #[ManyToOne(targetEntity: Customer::class, inversedBy: "contacts")]
+        #[ManyToOne(targetEntity: Supplier::class, inversedBy: "contacts")]
         #[JoinColumn(name: "person_id", referencedColumnName: "id")]
-        public Customer               $person,
+        public Supplier               $person,
     )
     {
         parent::__construct(
@@ -42,9 +42,8 @@ final class CustomerContact extends AbstractContact
     }
 
     /** @throws InvalidFieldException */
-    public function setType(string $type): CustomerContact
+    public function setType(string $type): SupplierContact
     {
-        $teste = array_column(ContactType::cases(), $type);
         if (!in_array(ContactType::cases(), array_column(ContactType::cases(), $type))) {
             throw new InvalidFieldException('Invalid type');
         }

@@ -1,16 +1,16 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\Normalizer;
+namespace Panthir\Application\UseCase\Supplier\Normalizer;
 
-use Panthir\Application\UseCase\Customer\CustomerSearchHandler;
-use Panthir\Domain\Customer\Model\CustomerAddress;
+use Panthir\Application\UseCase\Supplier\SupplierSearchHandler;
+use Panthir\Domain\Supplier\Model\SupplierAddress;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CustomerAddressNormalizer  implements NormalizerInterface
+class SupplierAddressNormalizer  implements NormalizerInterface
 {
 
     /**
-     * @param CustomerAddress $object
+     * @param SupplierAddress $object
      * @param string|null $format
      * @param array $context
      * @return array
@@ -33,6 +33,6 @@ class CustomerAddressNormalizer  implements NormalizerInterface
 
     public function supportsNormalization(mixed $data, string $format = null)
     {
-        return $data instanceof CustomerAddress && CustomerSearchHandler::class === $format;
+        return $data instanceof SupplierAddress && SupplierSearchHandler::class === $format;
     }
 }

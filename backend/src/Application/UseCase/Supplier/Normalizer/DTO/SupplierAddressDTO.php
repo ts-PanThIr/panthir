@@ -1,13 +1,13 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\Normalizer\DTO;
+namespace Panthir\Application\UseCase\Supplier\Normalizer\DTO;
 
 use Panthir\Application\Common\DTO\DTOInterface;
-use Panthir\Domain\Customer\ValueObject\AddressType;
+use Panthir\Domain\Supplier\ValueObject\AddressType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CustomerAddressDTO implements DTOInterface
+class SupplierAddressDTO implements DTOInterface
 {
     public function __construct(
         #[Assert\NotBlank]
@@ -32,7 +32,7 @@ class CustomerAddressDTO implements DTOInterface
         public readonly string  $zip,
 
         #[Assert\NotBlank]
-        private string $type,
+        private string          $type,
 
         public readonly ?string $addressComplement = null,
     )

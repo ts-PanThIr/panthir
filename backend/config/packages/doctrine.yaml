@@ -22,8 +22,17 @@ doctrine:
                 prefix: 'Panthir\Domain\Customer\Model'
                 alias: Customer
 
-        resolve_target_entities:
-            Panthir\Domain\Common\Model\AbstractAddress: Panthir\Domain\Customer\Model\CustomerAddress
+            Panthir\Supplier:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Domain/Supplier/Model'
+                prefix: 'Panthir\Domain\Supplier\Model'
+                alias: Supplier
+
+            Panthir\Common:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Domain/Common/Model'
+                prefix: 'Panthir\Domain\Common\Model'
+                alias: Common
 
 #when@test:
 #    doctrine:

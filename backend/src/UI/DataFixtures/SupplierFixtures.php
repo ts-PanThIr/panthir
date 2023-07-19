@@ -7,26 +7,26 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ObjectManager;
 use Panthir\Application\Common\Handler\HandlerRunner;
-use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
-use Panthir\Domain\Customer\ValueObject\AddressType;
-use Panthir\Domain\Customer\ValueObject\ContactType;
+use Panthir\Application\UseCase\Supplier\SupplierCreateHandler;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierAddressDTO;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierContactDTO;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierCreateDTO;
+use Panthir\Domain\Supplier\ValueObject\AddressType;
+use Panthir\Domain\Supplier\ValueObject\ContactType;
 use Panthir\Infrastructure\Faker\PortugalFactory;
 
-class CustomerFixtures extends Fixture implements FixtureGroupInterface
+class SupplierFixtures extends Fixture implements FixtureGroupInterface
 {
     public function __construct(
         private readonly HandlerRunner         $handlerRunner,
-        private readonly CustomerCreateHandler $customerCreateHandler
+        private readonly SupplierCreateHandler $supplierCreateHandler
     )
     {
     }
 
     public static function getGroups(): array
     {
-        return ['customer'];
+        return ['supplier'];
     }
 
     public function load(ObjectManager $manager): void
@@ -38,7 +38,7 @@ class CustomerFixtures extends Fixture implements FixtureGroupInterface
             while ($rand >= 0) {
                 $fakerAddress = PortugalFactory::build();
                 $addresses->add(
-                    new CustomerAddressDTO(
+                    new SupplierAddressDTO(
                         name: $fakerAddress->domainName(),
                         country: $fakerAddress->country(),
                         district: (method_exists($fakerAddress, 'state')) ? $fakerAddress->state() : $fakerAddress->city(),
@@ -47,7 +47,7 @@ class CustomerFixtures extends Fixture implements FixtureGroupInterface
                         number: $fakerAddress->randomNumber(4),
                         zip: $fakerAddress->postcode(),
                         type: AddressType::cases()[$rand]->value,
-                        addressComplement: $fakerAddress->domainName(),
+                        addressComplement: $fakerAddress->domainName()
                     )
                 );
                 $rand--;
@@ -58,7 +58,7 @@ class CustomerFixtures extends Fixture implements FixtureGroupInterface
             while ($rand >= 0) {
                 $fakerContact = PortugalFactory::build();
                 $contacts->add(
-                    new CustomerContactDTO(
+                    new SupplierContactDTO(
                         name: $fakerContact->domainName(),
                         email: $fakerContact->email(),
                         phone: $fakerContact->phoneNumber(),
@@ -69,9 +69,9 @@ class CustomerFixtures extends Fixture implements FixtureGroupInterface
             }
 
             $faker = PortugalFactory::build();
-            $this->handlerRunner->__invoke($this->customerCreateHandler, (new CustomerCreateDTO(
+            $this->handlerRunner->__invoke($this->supplierCreateHandler, (new SupplierCreateDTO(
                 name: $faker->firstName(),
-                surname: $faker->lastName(),
+                nickname: $faker->lastName(),
                 document: $faker->taxpayerIdentificationNumber(),
                 addresses: $addresses,
                 contacts: $contacts,

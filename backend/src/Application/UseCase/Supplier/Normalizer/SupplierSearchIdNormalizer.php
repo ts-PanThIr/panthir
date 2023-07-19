@@ -1,20 +1,20 @@
 <?php
 
-namespace Panthir\Application\UseCase\Customer\Normalizer;
+namespace Panthir\Application\UseCase\Supplier\Normalizer;
 
-use Panthir\Application\UseCase\Customer\CustomerSearchHandler;
-use Panthir\Domain\Customer\Model\Customer;
+use Panthir\Application\UseCase\Supplier\SupplierSearchHandler;
+use Panthir\Domain\Supplier\Model\Supplier;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CustomerSearchIdNormalizer implements NormalizerInterface, NormalizerAwareInterface
+class SupplierSearchIdNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
     /**
-     * @param Customer $object
+     * @param Supplier $object
      * @param string|null $format
      * @param array $context
      * @return array
@@ -35,10 +35,9 @@ class CustomerSearchIdNormalizer implements NormalizerInterface, NormalizerAware
         return [
             'id' => $object->id,
             'name' => $object->name,
-            'surname' => $object->surname,
+            'nickName' => $object->nickName,
             'document' => $object->document,
             'secondaryDocument' => $object->secondaryDocument,
-            'birthDate' => $object->getBirthDate(),
             'additionalInformation' => $object->additionalInformation,
             'addresses' => $addresses,
             'contacts' => $contacts
@@ -47,6 +46,6 @@ class CustomerSearchIdNormalizer implements NormalizerInterface, NormalizerAware
 
     public function supportsNormalization(mixed $data, string $format = null)
     {
-        return $data instanceof Customer && CustomerSearchHandler::class === $format;
+        return $data instanceof Supplier && SupplierSearchHandler::class === $format;
     }
 }
