@@ -85,10 +85,12 @@ export default {
         'Escape',
         'Backspace',
         'Delete',
+        'ArrowRight',
+        'ArrowLeft'
       ];
       const keyPressed = e.key;
-
-      if (!keysAllowed.includes(keyPressed)) {
+      
+      if (!((e.ctrlKey && ['c', 'v'].includes(keyPressed)) || keysAllowed.includes(keyPressed))) {
         e.preventDefault();
       }
     },

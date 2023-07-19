@@ -22,6 +22,9 @@ doctrine:
                 prefix: 'Panthir\Domain\Customer\Model'
                 alias: Customer
 
+        resolve_target_entities:
+            Panthir\Domain\Common\Model\AbstractAddress: Panthir\Domain\Customer\Model\CustomerAddress
+
 #when@test:
 #    doctrine:
 #        dbal:

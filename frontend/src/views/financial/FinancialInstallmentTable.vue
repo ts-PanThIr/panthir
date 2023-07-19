@@ -7,6 +7,7 @@
             <th>#</th>
             <th>Date</th>
             <th>Debt paid</th>
+            <th>Remaining debt</th>
             <th>Fees</th>
             <th>Fine</th>
             <th>Extra</th>
@@ -20,6 +21,7 @@
             <td>{{ index + 1 }}</td>
             <td>{{ item.date }}</td>
             <td>{{ formatValue(item.value) }}</td>
+            <td>{{ formatValue(item.remainingDebt) }}</td>
             <td>{{ formatValue(item.fees) }}</td>
             <td>{{ formatValue(item.fine) }}</td>
             <td>{{ formatValue(item.extra) }}</td>
@@ -30,6 +32,7 @@
             <td class="font-weight-bold">{{ (index + 1) / 12 }}</td>
             <td class="font-weight-bold"></td>
             <td class="font-weight-bold">{{ sumColumn(index, 'value') }}</td>
+            <td class="font-weight-bold">--</td>
             <td class="font-weight-bold">{{ sumColumn(index, 'fees') }}</td>
             <td class="font-weight-bold">{{ sumColumn(index, 'fine') }}</td>
             <td class="font-weight-bold">{{ sumColumn(index, 'extra') }}</td>
@@ -37,6 +40,17 @@
             <td class="font-weight-bold">{{ sumColumn(index, 'total') }}</td>
           </tr>
         </template>
+        <tr>
+          <td class="font-weight-bold">Total</td>
+          <td class="font-weight-bold"></td>
+          <td class="font-weight-bold">{{ sumColumn(installments.length -1, 'value', installments.length) }}</td>
+          <td class="font-weight-bold">--</td>
+          <td class="font-weight-bold">{{ sumColumn(installments.length -1, 'fees', installments.length) }}</td>
+          <td class="font-weight-bold">{{ sumColumn(installments.length -1, 'fine', installments.length) }}</td>
+          <td class="font-weight-bold">{{ sumColumn(installments.length -1, 'extra', installments.length) }}</td>
+          <td class="font-weight-bold">{{ sumColumn(installments.length -1, 'discount', installments.length) }}</td>
+          <td class="font-weight-bold">{{ sumColumn(installments.length -1, 'total', installments.length) }}</td>
+        </tr>
         </tbody>
       </v-table>
     </v-col>
@@ -62,9 +76,9 @@ export default defineComponent({
         currency: this.configVars.$currency,
       }).format(e);
     },
-    sumColumn(index, name): string {
+    sumColumn(index, name, limit = 12): string {
       let temp = 0;
-      for (let i = index; i > index - 12 ;i--){
+      for (let i = index; i > index - limit ;i--){
         temp += this.installments[i][name];
       }
       

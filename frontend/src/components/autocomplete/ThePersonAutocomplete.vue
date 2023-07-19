@@ -2,13 +2,15 @@
   <v-autocomplete
     v-model:search="search"
     label="Person"
-    :rules="rules"
-    clearable
+    :rules="rules as []"
+    :clearable="true"
     :items="items"
     :loading="loading"
     item-title="name"
     item-value="id"
     return-object
+    density="compact"
+    variant="underlined"
     @input="searchItems"
   />
 </template>
