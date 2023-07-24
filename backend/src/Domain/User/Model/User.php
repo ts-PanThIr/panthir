@@ -34,7 +34,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         #[ORM\Column]
         private array $roles,
 
-        #[ORM\Column(type: "text", length: 10000, nullable: true)]
+        #[ORM\Column(type: "text", length: 10000, unique: true, nullable: true)]
         private ?string $passwordResetToken,
 
         #[ORM\Column]

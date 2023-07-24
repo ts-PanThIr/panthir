@@ -8,6 +8,7 @@ use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerSearchDTO;
 use Panthir\Domain\Customer\Model\Customer;
 use Panthir\Domain\Customer\Repository\CustomerRepositoryInterface;
 use Panthir\Infrastructure\Repository\CountableTrait;
+use Panthir\Infrastructure\Repository\NotNullTrait;
 
 /**
  * @extends ServiceEntityRepository<Customer>
@@ -20,6 +21,7 @@ use Panthir\Infrastructure\Repository\CountableTrait;
 class CustomerRepository extends ServiceEntityRepository implements CustomerRepositoryInterface
 {
     use CountableTrait;
+    use NotNullTrait;
 
     public function __construct(ManagerRegistry $registry)
     {

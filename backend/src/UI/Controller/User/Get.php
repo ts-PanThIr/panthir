@@ -65,8 +65,8 @@ class Get extends APIController
         JWTTokenManagerInterface $jwtManager
     ): JsonResponse
     {
-        $decodedJwtToken = $jwtManager->decode($tokenStorageInterface->getToken());
-        $currentProfile = UserRoles::getProfileByRoles($decodedJwtToken["roles"]);
+        $roles = $tokenStorageInterface->getToken()->getUser()->getRoles();
+        $currentProfile = UserRoles::getProfileByRoles($roles);
         $list = array_slice(UserRoles::LIST_PROFILES, 0, array_search($currentProfile, UserRoles::LIST_PROFILES));
         return $this->response(items: $list);
     }

@@ -9,6 +9,8 @@ use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\Domain\Customer\Model\Customer;
+use Panthir\Domain\Customer\ValueObject\AddressType;
+use Panthir\Domain\Customer\ValueObject\ContactType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Tests\Integration\CustomKernelTestCase;
 
@@ -67,6 +69,7 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
                     address: $this->faker->streetAddress(),
                     number: $this->faker->randomNumber(4),
                     zip: $this->faker->postcode(),
+                    type: AddressType::PROFESSIONAL->value,
                     addressComplement: $this->faker->domainName()
                 ))
             ]),
@@ -74,7 +77,8 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
                 (new CustomerContactDTO(
                     name: $this->faker->domainName(),
                     email: $this->faker->email(),
-                    phone: $this->faker->phoneNumber()
+                    phone: $this->faker->phoneNumber(),
+                    type: ContactType::PROFESSIONAL->value
                 ))
             ]),
         )));

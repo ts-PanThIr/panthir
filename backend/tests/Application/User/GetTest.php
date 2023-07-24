@@ -3,6 +3,7 @@
 namespace Tests\Application\User;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Panthir\Application\UseCase\User\Normalizer\DTO\UserSearchDTO;
 use Panthir\Domain\User\Model\User;
 use Tests\Application\CustomApplicationAuthCase;
 
@@ -20,7 +21,13 @@ class GetTest extends CustomApplicationAuthCase
 
     public function testGetByTokenSuccess(): void
     {
-        static::$client->request('GET', '/api/users/token/abroba');
+        /** @var User $user */
+        $user = static::getContainer()
+            ->get(EntityManagerInterface::class)
+            ->getRepository(User::class)
+            ->findOneNotNull('passwordResetToken');
+
+        static::$client->request('GET', '/api/users/token/' . $user->getPasswordResetToken());
 
         $content = json_decode(static::$client->getResponse()->getContent(), true);
         $this->assertNotEmpty($content['data']);
@@ -30,13 +37,11 @@ class GetTest extends CustomApplicationAuthCase
 
     public function testGetProfileByUserSuccess(): void
     {
-        return;
-
         static::$client->request('GET', '/api/users/profile');
 
         $content = json_decode(static::$client->getResponse()->getContent(), true);
         $this->assertNotEmpty($content['data']);
-        $this->assertEmpty(array_diff(array_keys($content['data'][0]), ['email', 'profile', 'id']));
+        $this->assertEmpty(array_diff(array_values($content['data']), ['PROFILE_VIEWER', 'PROFILE_WRITER', 'PROFILE_ACCOUNT_MANAGER']));
         $this->assertResponseStatusCodeSame(200);
     }
 

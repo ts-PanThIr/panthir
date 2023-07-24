@@ -23,7 +23,7 @@ Class PasswordResetTokenGenerator
         $expires_at = date('Y-m-d H:i:s', $future_time);
 
         return base64_encode(
-            $this->JWTEncoder->encode(['expires_at' => $expires_at])
+            $this->JWTEncoder->encode(['expires_at' => $expires_at, md5(uniqid(rand(), true))])
         );
     }
 }

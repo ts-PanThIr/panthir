@@ -61,6 +61,12 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
         if(empty($model->password)){
             $resetToken = $this->passwordResetTokenGenerator->__invoke();
             $hashedPassword = $this->passwordHasher->__invoke(base64_encode(random_bytes(10)));
+
+            //improvable but not impossible, check if the token already exists and generate another
+            $existingToken = $this->entityManager->getRepository(User::class)->findBy(['passwordResetToken' => $resetToken]);
+            if(!empty($existingToken)) {
+                $resetToken = $this->passwordResetTokenGenerator->__invoke();
+            }
         } else{
             $hashedPassword = $this->passwordHasher->__invoke($model->password);
         }

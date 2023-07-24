@@ -4,8 +4,11 @@ namespace Panthir\UI\Controller\Customer;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
+use Panthir\Application\Common\Normalizer\CollectionNormalizer;
 use Panthir\Application\Services\SerializerHelper;
 use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,20 +26,11 @@ class Post extends APIController
         CustomerCreateHandler  $customerCreateHandler,
         Request                $request,
         EntityManagerInterface $entityManager,
-        SerializerHelper       $serializerHelper,
         HandlerRunner          $handlerRunner
     ): JsonResponse
     {
-        $defaultContext = [
-            AbstractNormalizer::CALLBACKS => [
-                'contacts' => [$serializerHelper, 'collectionCallback'],
-//                'birthDate' => [$serializerHelper, 'dateCallback'],
-                'addresses' => [$serializerHelper, 'collectionCallback']
-            ],
-        ];
-
         $serializer = new Serializer(
-            normalizers: [new ObjectNormalizer(defaultContext: $defaultContext)]
+            normalizers: [new ObjectNormalizer(), new CollectionNormalizer()],
         );
 
         /** @var CustomerCreateDTO $customer */

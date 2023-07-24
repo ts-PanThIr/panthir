@@ -8,6 +8,7 @@ use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierSearchDTO;
 use Panthir\Domain\Supplier\Model\Supplier;
 use Panthir\Domain\Supplier\Repository\SupplierRepositoryInterface;
 use Panthir\Infrastructure\Repository\CountableTrait;
+use Panthir\Infrastructure\Repository\NotNullTrait;
 
 /**
  * @extends ServiceEntityRepository<Supplier>
@@ -20,6 +21,7 @@ use Panthir\Infrastructure\Repository\CountableTrait;
 class SupplierRepository extends ServiceEntityRepository implements SupplierRepositoryInterface
 {
     use CountableTrait;
+    use NotNullTrait;
 
     public function __construct(ManagerRegistry $registry)
     {

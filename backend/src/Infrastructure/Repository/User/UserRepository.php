@@ -9,6 +9,7 @@ use Panthir\Application\UseCase\User\Normalizer\DTO\UserSearchDTO;
 use Panthir\Domain\User\Model\User;
 use Panthir\Domain\User\Repository\UserRepositoryInterface;
 use Panthir\Infrastructure\Repository\CountableTrait;
+use Panthir\Infrastructure\Repository\NotNullTrait;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
@@ -23,6 +24,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
     use CountableTrait;
+    use NotNullTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
