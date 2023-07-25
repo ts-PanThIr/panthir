@@ -15,7 +15,9 @@ import {
   RegisterView,
   FinancialEditView,
   ResetPasswordView,
-  FOHomeView
+  FOHomeView,
+  SupplierListView,
+  SupplierEditView
 } from '~/views';
 
 import { TheEmptyLayout, TheMainLayout, TheFrontOfficeLayout } from '~/components';
@@ -99,6 +101,36 @@ export const router = createRouter({
               path: 'new',
               name: 'personNew',
               component: PersonEditView,
+              meta: {
+                pageTitle: 'Create person'
+              }
+            },
+          ],
+        },
+        {
+          path: 'supplier',
+          component: TheMainLayout,
+          children: [
+            {
+              path: '',
+              name: 'supplierList',
+              component: SupplierListView,
+              meta: {
+                pageTitle: 'Supplier list'
+              }
+            },
+            {
+              path: 'edit/:id',
+              name: 'supplierEdit',
+              component: SupplierEditView,
+              meta: {
+                pageTitle: 'Edit supplier'
+              }
+            },
+            {
+              path: 'new',
+              name: 'supplierNew',
+              component: SupplierEditView,
               meta: {
                 pageTitle: 'Create person'
               }

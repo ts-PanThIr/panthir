@@ -32,7 +32,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $exception = $event->getThrowable();
         if ($exception instanceof \Exception) {
-            $message = "Undefined error";
+            $message = $exception->getMessage();
             $code = 500;
 
             if ($exception instanceof NotFoundHttpException) {

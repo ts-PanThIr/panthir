@@ -9,4 +9,6 @@ export { default as RegisterView } from '~/views/auth/RegisterView.vue';
 export { default as FinancialEditView } from '~/views/financial/FinancialEditView.vue';
 export { default as FinancialInstallmentTable } from '~/views/financial/FinancialInstallmentTable.vue';
 export { default as ResetPasswordView } from '~/views/auth/ResetPasswordView.vue';
+export { default as SupplierEditView } from '~/views/person/supplier/SupplierEditView.vue';
+export { default as SupplierListView } from '~/views/person/supplier/SupplierListView.vue';
 

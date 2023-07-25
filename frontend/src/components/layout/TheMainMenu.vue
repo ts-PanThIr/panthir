@@ -57,6 +57,10 @@ export default {
             title: 'Customer',
             routeName: 'personList',
           },
+          {
+            title: 'Supplier',
+            routeName: 'supplierList',
+          },
         ],
       },
       {

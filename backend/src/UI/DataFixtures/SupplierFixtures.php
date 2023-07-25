@@ -71,7 +71,7 @@ class SupplierFixtures extends Fixture implements FixtureGroupInterface
             $faker = PortugalFactory::build();
             $this->handlerRunner->__invoke($this->supplierCreateHandler, (new SupplierCreateDTO(
                 name: $faker->firstName(),
-                nickname: $faker->lastName(),
+                nickName: $faker->lastName(),
                 document: $faker->taxpayerIdentificationNumber(),
                 addresses: $addresses,
                 contacts: $contacts,

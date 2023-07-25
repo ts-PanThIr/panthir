@@ -1,14 +1,14 @@
 <?php
 
-namespace Panthir\UI\Controller\Customer;
+namespace Panthir\UI\Controller\Supplier;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\Services\SerializerHelper;
-use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
+use Panthir\Application\UseCase\Supplier\SupplierCreateHandler;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierAddressDTO;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierContactDTO;
+use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierCreateDTO;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,24 +17,23 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-#[Route(path: '/api/customer')]
+#[Route(path: '/api/supplier')]
 class Post extends APIController
 {
-    #[Route(path: "/", name: "app_customer_post", methods: 'POST')]
+    #[Route(path: "/", name: "app_supplier_post", methods: 'POST')]
     public function post(
-        CustomerCreateHandler  $customerCreateHandler,
+        SupplierCreateHandler  $supplierCreateHandler,
         Request                $request,
         EntityManagerInterface $entityManager,
         HandlerRunner          $handlerRunner
     ): JsonResponse
     {
-        $serializerHelperContacts = new SerializerHelper(CustomerContactDTO::class);
-        $serializerHelperAddress = new SerializerHelper(CustomerAddressDTO::class);
+        $serializerHelperContacts = new SerializerHelper(SupplierContactDTO::class);
+        $serializerHelperAddress = new SerializerHelper(SupplierAddressDTO::class);
 
         $defaultContext = [
             AbstractNormalizer::CALLBACKS => [
                 'contacts' => [$serializerHelperContacts, 'collectionCallback'],
-//                'birthDate' => [$serializerHelper, 'dateCallback'],
                 'addresses' => [$serializerHelperAddress, 'collectionCallback']
             ],
         ];
@@ -43,13 +42,13 @@ class Post extends APIController
             normalizers: [new ObjectNormalizer(defaultContext: $defaultContext)]
         );
 
-        /** @var CustomerCreateDTO $customer */
-        $customer = $serializer->denormalize(
+        /** @var SupplierCreateDTO $supplier */
+        $supplier = $serializer->denormalize(
             data: $request->request->all(),
-            type: CustomerCreateDTO::class
+            type: SupplierCreateDTO::class
         );
 
-        $return = $handlerRunner($customerCreateHandler, $customer);
+        $return = $handlerRunner($supplierCreateHandler, $supplier);
         $entityManager->flush();
         return $this->response(items: $return);
     }

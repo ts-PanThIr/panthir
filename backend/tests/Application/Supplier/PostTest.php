@@ -1,18 +1,18 @@
 <?php
 
-namespace tests\Application\Customer;
+namespace Tests\Application\Supplier;
 
-use Panthir\Domain\Customer\ValueObject\AddressType;
-use Panthir\Domain\Customer\ValueObject\ContactType;
+use Panthir\Domain\Supplier\ValueObject\AddressType;
+use Panthir\Domain\Supplier\ValueObject\ContactType;
 use Tests\Application\CustomApplicationAuthCase;
 
 class PostTest extends CustomApplicationAuthCase
 {
     public function testCreateCustomerSuccess(): void
     {
-        static::$client->request('POST', '/api/customer/', [
+        static::$client->request('POST', '/api/supplier/', [
             'name' => $this->faker->firstName(),
-            'surname' => $this->faker->lastName(),
+            'nickName' => $this->faker->company(),
             'document' => $this->faker->taxpayerIdentificationNumber(),
             'addresses' => [
                 [
@@ -35,13 +35,12 @@ class PostTest extends CustomApplicationAuthCase
                     'type' => ContactType::PROFESSIONAL->value
                 ]
             ],
-            'birthDate' => $this->faker->date(),
             'secondaryDocument' => $this->faker->randomNumber(8),
             'additionalInformation' => $this->faker->realText(400)
         ]);
 
         $content = json_decode(static::$client->getResponse()->getContent(), true);
-        $this->assertEmpty(array_diff(array_keys($content['data']), ['name', 'surname', 'id', 'document']));
+        $this->assertEmpty(array_diff(array_keys($content['data']), ['name', 'nickName', 'id', 'document']));
         $this->assertResponseStatusCodeSame(200);
     }
 }

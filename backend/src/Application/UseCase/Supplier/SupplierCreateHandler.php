@@ -63,7 +63,7 @@ class SupplierCreateHandler extends AbstractHandler implements BeforeExecutedHan
             name: $model->name,
             document: $model->document,
             uuid: Uuid::uuid4(),
-            nickName: $model->nickname,
+            nickName: $model->nickName,
             secondaryDocument: $model->secondaryDocument,
             additionalInformation: $model->additionalInformation,
         );

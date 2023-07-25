@@ -48,7 +48,6 @@ services:
         exclude:
             - '../src/Infrastructure/Kernel.php'
             - '../src/Domain/{Customer,User,Common}/{Model,ValueObject}'
-            - '../src/Application/UseCase/User/Normalizer/UserCreateNormalizer'
 
     Panthir\UI\Command\:
         resource: '../src/UI/Command/'
