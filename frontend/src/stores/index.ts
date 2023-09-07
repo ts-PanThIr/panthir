@@ -6,3 +6,4 @@ export * from './contactStore';
 export * from './interfaceStore';
 export * from './financialStore';
 export * from './notificationStore';
+export * from './locationStore';
