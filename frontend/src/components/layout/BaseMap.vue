@@ -1,8 +1,16 @@
 <template>
-  <div ref="map" style="height:800px">
-    <div class="geolocation-control">
-      <button ref="geolocateButton" class="geolocate-button" title="Geolocate" @click="geolocation.setTracking(true)"></button>
+  <div ref="map" class="mapContainer" style="height:800px">
+    <div ref="controls" class="mapControl">
+      <button
+        ref="geolocateButton"
+        class="geolocate-button"
+        title="Geolocate"
+        @click="geolocation.setTracking(true)"
+      >
+        <i class="fa-solid fa-location-dot"></i>
+      </button>
     </div>
+
   </div>
 </template>
 
@@ -10,25 +18,29 @@
 import Map from 'ol/Map';
 import View from 'ol/View';
 import {Feature, Geolocation} from 'ol';
-import {Control} from 'ol/control';
+import {Control, Zoom} from 'ol/control';
 import Point from 'ol/geom/Point';
 import {OSM, Vector as VectorSource} from 'ol/source';
-import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
+import {Fill, Stroke, Style, Text} from 'ol/style';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
-
+import "ol/ol.css"
 import {ref} from 'vue';
 import {defineComponent} from 'vue';
+import {useLocationStore} from "~/stores";
 
 export default defineComponent({
   name: 'BaseMap',
   setup() {
+    const locationStore = useLocationStore();
+    
     const data = {
       rotation: ref(0),
-      zoom: ref(8),
+      zoom: ref(3),
       projection: ref('EPSG:4326'),
-      center: ref([40, 40]),
+      center: ref([0, 0]),
       map: ref(null),
       geolocateButton: ref(null),
+      controls: ref(null),
     };
 
     const view = ref(
@@ -37,23 +49,28 @@ export default defineComponent({
         zoom: data.zoom.value,
       })
     );
-    const geolocation= ref(
+    const geolocation = ref(
       new Geolocation({
-        trackingOptions: {
-          enableHighAccuracy: true,
-        },
+
         projection: view.value.getProjection(),
       })
     );
-    return {...data, view, geolocation};
+    return {...data, view, geolocation, locationStore};
   },
-  mounted() {
+  async mounted() {
     const geolocation = this.geolocation
-    const geolocationControl = new Control({
-      element: this.geolocateButton,
-    });
 
-    geolocationControl.setProperties({geolocation});
+    const controls = [
+      new Control({
+        element: this.geolocateButton,
+        target: this.controls
+      }),
+      new Zoom({
+        target: this.controls
+      })
+    ];
+
+    controls[0].setProperties({geolocation});
 
     const map = new Map({
       target: this.map,
@@ -63,27 +80,23 @@ export default defineComponent({
         }),
       ],
       view: this.view,
-      controls: [
-        geolocationControl,
-      ],
-    });
-
-    const accuracyFeature = new Feature();
-    geolocation.on('change:accuracyGeometry', function () {
-      accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+      controls: controls,
     });
 
     const positionFeature = new Feature();
     positionFeature.setStyle(
       new Style({
-        image: new CircleStyle({
-          radius: 6,
+        text: new Text({
+          text: '\uf015',
+          scale: 1.5,
+          font: '900 18px "Font Awesome 6 Free"',
+          textBaseline: 'bottom',
           fill: new Fill({
-            color: '#3399CC',
+            color: '#505050',
           }),
           stroke: new Stroke({
             color: '#fff',
-            width: 2,
+            width: 3,
           }),
         }),
       })
@@ -97,29 +110,72 @@ export default defineComponent({
     new VectorLayer({
       map: map,
       source: new VectorSource({
-        features: [accuracyFeature, positionFeature],
+        features: [positionFeature],
       }),
     });
+
+    await this.locationStore.getData()
     
-  }
+    console.log(this.locationStore.elements)
+    
+  },
 });
 </script>
 
-<style>
-.geolocation-control {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+<style lang="scss">
+.mapContainer {
+  position: relative;
 }
 
-.geolocate-button {
-  width: 32px;
-  height: 32px;
-  background-color: black;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 24px;
-  border: none;
-  outline: none;
+.mapControl {
+  position: absolute;
+  z-index: 1;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+
+  button {
+    width: 32px;
+    height: 32px;
+    background-color: white;
+    border: none;
+
+    &:hover {
+      background: #eee;
+      outline: none;
+    }
+  }
+
+  .geolocate-button {
+    border-radius: 4px 4px 0 0;
+    background-color: white;
+
+  }
+
+  .ol-zoom {
+    top: 0;
+    left: 0;
+
+    .ol-zoom-in {
+      border-radius: 0;
+      margin: 0;
+      border-top: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .ol-zoom-out {
+      margin: 0;
+      border-radius: 0 0 4px 4px;
+
+    }
+  }
+}
+
+
+.ol-zoom {
+  position: relative;
+
 }
 </style>
