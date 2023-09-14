@@ -21,9 +21,9 @@ class CustomerCreateDTO implements DTOInterface
         #[Assert\NotBlank]
         public readonly string          $document,
 
-        public readonly ArrayCollection $addresses = new ArrayCollection(),
+        public ?ArrayCollection $addresses = null,
 
-        public readonly ArrayCollection $contacts = new ArrayCollection(),
+        public ?ArrayCollection $contacts = null,
 
         private readonly ?DateTime      $birthDate = null,
 
@@ -45,5 +45,21 @@ class CustomerCreateDTO implements DTOInterface
     public function getRawBirthDate(): ?DateTime
     {
         return $this->birthDate;
+    }
+
+    public function addAddresses(CustomerAddressDTO $addressDTO): self
+    {
+        if (!$this->addresses->contains($addressDTO)) {
+            $this->addresses->add($addressDTO);
+        }
+        return $this;
+    }
+
+    public function addContact(CustomerContactDTO $contactDTO): self
+    {
+        if (!$this->contacts->contains($contactDTO)) {
+            $this->contacts->add($contactDTO);
+        }
+        return $this;
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <v-card class="overflow-visible">
     <the-card-title
-      text="Person"
+      text="Supplier"
       icon="fas fa-person"
       bg-color="bg-success-gradient"
       text-color="white"
@@ -37,7 +37,7 @@
             <v-row>
               <v-col cols="6">
                 <v-text-field
-                  v-model="person.name"
+                  v-model="supplier.name"
                   :rules="[v => !!v || 'Item is required']"
                   label="Name"
                   required
@@ -46,34 +46,27 @@
 
               <v-col cols="6">
                 <v-text-field
-                  v-model="person.surname"
+                  v-model="supplier.nickName"
                   :rules="[v => !!v || 'Item is required']"
-                  label="Surname"
+                  label="Nickname"
                   required
                 />
               </v-col>
             </v-row>
 
             <v-row>
-              <v-col cols="4">
-                <TheDatepicker
-                  v-model="person.birthDate"
-                  hours
-                  label="Birthdate"
-                />
-              </v-col>
-              <v-col cols="4">
+              <v-col cols="6">
                 <v-text-field
-                  v-model="person.document"
+                  v-model="supplier.document"
                   v-mask="'###.###.###'"
                   :rules="[v => !!v || 'Item is required']"
                   label="NIF"
                   required
                 />
               </v-col>
-              <v-col cols="4">
+              <v-col cols="6">
                 <v-text-field
-                  v-model="person.secondaryDocument"
+                  v-model="supplier.secondaryDocument"
                   :rules="[v => !!v || 'Item is required']"
                   label="NISS"
                   required
@@ -82,7 +75,7 @@
             </v-row>
 
             <v-textarea
-              v-model="person.AdditionInformation"
+              v-model="supplier.AdditionInformation"
               label="Addition information"
             />
           </v-form>
@@ -105,14 +98,14 @@
   </v-card>
 </template>
 
-<script>
-import { usePersonStore } from '~/stores';
+<script lang="ts">
+
+import { useSupplierStore } from '~/stores';
 import { useRoute } from 'vue-router';
 import {
   TheAddressAddList,
   TheContactAddList,
   TheCardTitle,
-  TheDatepicker,
 } from '~/components';
 import { mask } from 'vue-the-mask';
 
@@ -122,17 +115,16 @@ export default {
     TheContactAddList,
     TheAddressAddList,
     TheCardTitle,
-    TheDatepicker,
   },
   directives: { mask },
   async setup() {
     const route = useRoute();
-    const personStore = usePersonStore();
-    if (route.name !== 'personNew') {
-      await personStore.getOne(route.params.id);
+    const supplierStore = useSupplierStore();
+    if (route.name === 'supplierEdit') {
+      await supplierStore.getOne(route.params.id)
     }
-    const { person, send: personSend } = personStore
-    return { person, personStore, personSend };
+    const { supplier } = supplierStore
+    return { supplier };
   },
   data: () => ({
     tab: null,

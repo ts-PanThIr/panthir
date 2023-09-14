@@ -31,8 +31,7 @@ class CustomerRepository extends ServiceEntityRepository implements CustomerRepo
     public function search(CustomerSearchDTO $search): array
     {
         $qb = $this->createQueryBuilder('p')
-//            ->select('p, addresses')
-//            ->leftJoin('p.addresses', 'addresses')
+            ->orderBy('p.createdAt', 'DESC')
         ;
 
         if (!empty($search->page) && !empty($search->limit)){

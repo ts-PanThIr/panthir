@@ -1,7 +1,7 @@
 <template>
   <v-card class="overflow-visible">
     <the-card-title
-      text="Individual person"
+      text="Customer"
       icon="fa fa-person"
       bg-color="bg-secondary-gradient"
       text-color="white"
@@ -12,7 +12,7 @@
             rounded
             icon="fas fa-plus"
             class="bg-success-gradient position-absolute mt-n5 mb-3 text-white icon-fix"
-            :to="{ name: 'personNew' }"
+            :to="{ name: 'customerNew' }"
           />
         </v-col>
       </template>
@@ -21,7 +21,7 @@
       <base-grid
         v-model:page="page"
         v-model:limit="limit"
-        :matrix="people"
+        :matrix="list"
         :header="headers"
         @update:limit="updateList()"
         @update:page="updateList()"
@@ -32,7 +32,7 @@
               color="primary"
               size="x-small"
               icon="fa fa-pencil"
-              :to="{ name: 'personEdit', params: { id: element.id } }"
+              :to="{ name: 'customerEdit', params: { id: element.id } }"
             />
           </td>
         </template>
@@ -44,11 +44,11 @@
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
 import {BaseGrid, TheCardTitle} from '~/components';
-import {usePersonStore} from '~/stores';
+import {useCustomerStore} from '~/stores';
 import {storeToRefs} from "pinia";
 
 export default defineComponent({
-  name: 'PersonListView',
+  name: 'CustomerListView',
   components: {BaseGrid, TheCardTitle},
   async setup() {
     const data = {
@@ -64,19 +64,19 @@ export default defineComponent({
       },
       search: null,
     };
-    const personStore = usePersonStore();
-    await personStore.getAll({limit: data.limit.value, page: data.page.value});
-    const {list: people} = storeToRefs(personStore);
-    return {people, ...data};
+    const customerStore = useCustomerStore();
+    await customerStore.getAll({limit: data.limit.value, page: data.page.value});
+    const {list} = storeToRefs(customerStore);
+    return {list, ...data};
   },
   unmounted() {
-    const personStore = usePersonStore();
-    personStore.$reset()
+    const customerStore = useCustomerStore();
+    customerStore.$reset()
   },
   methods: {
     updateList: async function () {
-      const personStore = usePersonStore();
-      await personStore.getAll(
+      const customerStore = useCustomerStore();
+      await customerStore.getAll(
         {limit: this.limit, page: this.page}
       );
     },

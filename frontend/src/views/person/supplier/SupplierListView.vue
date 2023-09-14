@@ -21,7 +21,7 @@
       <base-grid
         v-model:page="page"
         v-model:limit="limit"
-        :matrix="people"
+        :matrix="list"
         :header="headers"
         @update:limit="updateList()"
         @update:page="updateList()"
@@ -44,7 +44,7 @@
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
 import {BaseGrid, TheCardTitle} from '~/components';
-import {usePersonStore} from '~/stores';
+import {useSupplierStore} from '~/stores';
 import {storeToRefs} from "pinia";
 
 export default defineComponent({
@@ -58,25 +58,24 @@ export default defineComponent({
         action: '#',
         id: 'Id',
         name: 'Name',
-        surname: 'Surname',
+        nickName: 'Nickname',
         document: 'NIF',
-        birthDate: 'Birth date',
       },
       search: null,
     };
-    const personStore = usePersonStore();
-    await personStore.getAll({limit: data.limit.value, page: data.page.value});
-    const {list: people} = storeToRefs(personStore);
-    return {people, ...data};
+    const supplierStore = useSupplierStore();
+    await supplierStore.getAll({limit: data.limit.value, page: data.page.value});
+    const {list} = storeToRefs(supplierStore);
+    return {list, ...data};
   },
   unmounted() {
-    const personStore = usePersonStore();
-    personStore.$reset()
+    const supplierStore = useSupplierStore();
+    supplierStore.$reset()
   },
   methods: {
     updateList: async function () {
-      const personStore = usePersonStore();
-      await personStore.getAll(
+      const supplierStore = useSupplierStore();
+      await supplierStore.getAll(
         {limit: this.limit, page: this.page}
       );
     },

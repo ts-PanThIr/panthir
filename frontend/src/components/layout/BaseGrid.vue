@@ -62,7 +62,7 @@
             v-model="internalPage"
             density="comfortable"
             active-color="secondary"
-            :length=" (Math.ceil(matrix[0]?.totalItems / limit)) || page + 6"
+            :length=" (Math.ceil(matrix?.[0]?.totalItems / limit)) || page + 6"
             :total-visible="7"
           />
         </div>
@@ -112,16 +112,17 @@ export default defineComponent({
       },
     },
     getCleanedMatrix: function () {
-      const array = [];
+      const array: object[] = [];
       const formatter = this.formatter;
       const header = this.header;
       if (typeof this.matrix === 'undefined') {
         return [];
       }
       for (const element of this.matrix) {
+        const item: string[] = element as string[]
         const temp: object = {};
         for (const headerKey in header) {
-          temp[headerKey] = element[headerKey];
+          temp[headerKey] = item[headerKey];
         }
         // formatter
         for (const formatterKey in formatter) {

@@ -2,7 +2,7 @@
   <div class="wrapper">
     <v-form ref="form">
       <v-row class="justify-center">
-        <v-btn class="info" @click="addAddress()"> New </v-btn>
+        <v-btn class="info" @click="addAddress()"> New</v-btn>
       </v-row>
       <v-row
         v-for="(item, index) in addresses"
@@ -16,12 +16,6 @@
             icon="fa fa-times"
             color="error"
             @click="deleteAddress(index)"
-          />
-          <v-switch
-            v-model="personStore.primaryAddress"
-            label="Primary"
-            :value="index"
-            color="primary"
           />
         </v-col>
         <v-col cols="10">
@@ -100,20 +94,24 @@
   </div>
 </template>
 
-<script>
-import { mask } from 'vue-the-mask';
-import { useAddressStore, usePersonStore } from '~/stores';
+<script lang="ts">
+import {mask} from 'vue-the-mask';
+import {useAddressStore} from '~/stores';
+import {defineComponent} from 'vue';
 
-export default {
+export default defineComponent({
   name: 'TheAddressAddList',
-  directives: { mask },
+  directives: {mask},
   setup: async function () {
     const addressStore = useAddressStore();
-    const personStore = usePersonStore();
     const addresses = addressStore.list;
     const deleteAddress = addressStore.delete;
     const addAddress = addressStore.createNewItem;
-    return { addresses, deleteAddress, addAddress, personStore };
+    return {addresses, deleteAddress, addAddress};
   },
-};
+  unmounted() {
+    const store = useAddressStore()
+    store.$reset()
+  },
+});
 </script>

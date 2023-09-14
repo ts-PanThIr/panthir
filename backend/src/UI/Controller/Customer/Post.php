@@ -12,8 +12,13 @@ use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -28,19 +33,28 @@ class Post extends APIController
         HandlerRunner          $handlerRunner
     ): JsonResponse
     {
-        $serializerHelperContacts = new SerializerHelper(CustomerContactDTO::class);
-        $serializerHelperAddress = new SerializerHelper(CustomerAddressDTO::class);
 
         $defaultContext = [
             AbstractNormalizer::CALLBACKS => [
-                'contacts' => [$serializerHelperContacts, 'collectionCallback'],
+                'contacts' => [
+                    new SerializerHelper(CustomerContactDTO::class),
+                    'collectionCallback'
+                ],
 //                'birthDate' => [$serializerHelper, 'dateCallback'],
-                'addresses' => [$serializerHelperAddress, 'collectionCallback']
+                'addresses' => [
+                    new SerializerHelper(CustomerAddressDTO::class),
+                    'collectionCallback'
+                ]
             ],
         ];
 
         $serializer = new Serializer(
-            normalizers: [new ObjectNormalizer(defaultContext: $defaultContext)]
+            normalizers: [
+                new ObjectNormalizer(
+                    propertyTypeExtractor: new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]),
+                    defaultContext: $defaultContext
+                )
+            ]
         );
 
         /** @var CustomerCreateDTO $customer */

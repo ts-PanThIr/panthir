@@ -8,23 +8,24 @@
     :enable-time-picker="!hours"
   >
     <template #dp-input>
-      <v-text-field v-model="dateModel" :rules="rules" :label="label" />
+      <v-text-field v-model="dateModel" :rules="rules" :label="label"/>
     </template>
   </Datepicker>
 </template>
 
-<script>
+<script lang="ts">
 import Datepicker from '@vuepic/vue-datepicker';
-import { mask } from 'vue-the-mask';
-import { useModelWrapper } from '~/helpers';
+import {mask} from 'vue-the-mask';
+import {useModelWrapper} from '~/helpers';
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'TheDatepicker',
-  components: { Datepicker },
-  directives: { mask },
+  components: {Datepicker},
+  directives: {mask},
   props: {
     modelValue: String,
-    hours: { type: Boolean, default: false },
+    hours: {type: Boolean, default: false},
     label: String,
     rules: {
       type: Array,
@@ -32,10 +33,10 @@ export default {
     },
   },
   emits: ['update:modelValue'],
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     return {
       dateModel: useModelWrapper(props, emit, 'modelValue'),
     };
   },
-};
+});
 </script>

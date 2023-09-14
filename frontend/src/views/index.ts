@@ -1,7 +1,7 @@
 export { default as HomeView } from './HomeView.vue';
 export { default as FOHomeView } from '~/views/frontOffice/HomeView.vue';
-export { default as PersonEditView } from '~/views/person/PersonEditView.vue';
-export { default as PersonListView } from '~/views/person/PersonListView.vue';
+export { default as CustomerEditView } from '~/views/person/customer/CustomerEditView.vue';
+export { default as CustomerListView } from '~/views/person/customer/CustomerListView.vue';
 export { default as UserListView } from '~/views/user/UserListView.vue';
 export { default as UserEditView } from '~/views/user/UserEditView.vue';
 export { default as LoginView } from '~/views/auth/LoginView.vue';

@@ -6,20 +6,22 @@ import {
   type IcontactItem,
   type IAddressItem,
 } from '~/stores';
-import { FormHelper } from '~/helpers/index';
+import { FormHelper } from '~/helpers';
 import type { AxiosResponse } from 'axios';
 
-interface IPerson {
+interface ICustomer {
   addresses?: IAddressItem[];
   contacts?: IcontactItem[];
-  individual: boolean;
-  active?: boolean;
+  type?: string;
+  document?: string;
   name?: string;
-  surname?: string;
   id?: number;
+  additionalInformation?: string;
+  secondaryDocument?: string;
+  surname?: string;
+  birthDate?: string;
 }
-
-interface IPersonSearch {
+interface ICustomerSearch {
   limit?: number | null;
   page?: number | null;
 }
@@ -31,25 +33,20 @@ interface PostReturn {
   id: number;
 }
 
-interface IState {
-  list: IPerson[];
-  person: IPerson;
-  primaryAddress?: number; // must be the index~
-  primaryContact?: number;
+
+type TState = {
+  list: ICustomer[];
+  customer: ICustomer;
 }
 
-export const usePersonStore = defineStore({
-  id: 'person',
-  state: ():IState => ({
+export const useCustomerStore = defineStore({
+  id: 'customer',
+  state: () :TState => ({
     list: [],
-    person: {
-      individual: true,
-    },
-    primaryAddress: undefined,
-    primaryContact: undefined,
+    customer: {}
   }),
   actions: {
-    async getAll({limit = null, page = null}: IPersonSearch): Promise<void> {
+    async getAll({limit = null, page = null}: ICustomerSearch): Promise<void> {
       const params = {
         params: {
           limit,
@@ -64,21 +61,24 @@ export const usePersonStore = defineStore({
     },
 
     async getOne(id: number): Promise<void> {
-      const params = { individual: this.person.individual };
       const path = `${this.$apiUrl}/api/customer/${id}`;
 
-      const data = await this.$http.get(path, { params }).then(d => {
+      const data = await this.$http.get(path).then(d => {
         return d.data.data;
       });
-      this.person = { ...this.person, ...data };
+      this.customer = { ...this.customer, ...data };
       useAddressStore().list = data.addresses;
       useContactStore().list = data.contacts;
     },
 
     async send(): Promise<PostReturn> {
-      this.person.addresses = useAddressStore().list;
-      this.person.contacts = useContactStore().list;
-      const formData = FormHelper.jsonToFormData(this.person);
+      if(undefined === this.customer) {
+        throw new Error('Undefined customer.')
+      }
+      
+      this.customer.addresses = useAddressStore().list;
+      this.customer.contacts = useContactStore().list;
+      const formData = FormHelper.jsonToFormData(this.customer);
       return await this.post(formData);
     },
 

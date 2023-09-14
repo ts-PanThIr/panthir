@@ -55,7 +55,7 @@ export default {
         items: [
           {
             title: 'Customer',
-            routeName: 'personList',
+            routeName: 'customerList',
           },
           {
             title: 'Supplier',

@@ -7,8 +7,8 @@ import {
 
 import {
   HomeView,
-  PersonEditView,
-  PersonListView,
+  CustomerEditView,
+  CustomerListView,
   UserListView,
   UserEditView,
   LoginView,
@@ -78,31 +78,31 @@ export const router = createRouter({
           ],
         },
         {
-          path: 'person',
+          path: 'customer',
           component: TheMainLayout,
           children: [
             {
               path: '',
-              name: 'personList',
-              component: PersonListView,
+              name: 'customerList',
+              component: CustomerListView,
               meta: {
-                pageTitle: 'Person list'
+                pageTitle: 'Customer list'
               }
             },
             {
               path: 'edit/:id',
-              name: 'personEdit',
-              component: PersonEditView,
+              name: 'customerEdit',
+              component: CustomerEditView,
               meta: {
-                pageTitle: 'Edit person'
+                pageTitle: 'Edit customer'
               }
             },
             {
               path: 'new',
-              name: 'personNew',
-              component: PersonEditView,
+              name: 'customerNew',
+              component: CustomerEditView,
               meta: {
-                pageTitle: 'Create person'
+                pageTitle: 'Create customer'
               }
             },
           ],

@@ -2,7 +2,7 @@
   <div class="wrapper">
     <v-form ref="form">
       <v-row class="justify-center">
-        <v-btn class="info" @click="addContact()"> New </v-btn>
+        <v-btn class="info" @click="addContact()"> New</v-btn>
       </v-row>
       <v-row
         v-for="(row, index) in contacts"
@@ -16,12 +16,6 @@
             icon="fa fa-times"
             color="error"
             @click="deleteContact(index)"
-          />
-          <v-switch
-            v-model="personStore.primaryContact"
-            label="Primary"
-            :value="index"
-            color="primary"
           />
         </v-col>
         <v-col cols="10">
@@ -89,19 +83,19 @@
   </div>
 </template>
 
-<script>
-import { useContactStore, usePersonStore } from '~/stores';
+<script lang="ts">
+import {useContactStore} from '~/stores';
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'TheContactsAddList',
   setup: async function () {
     const contactStore = useContactStore();
-    const personStore = usePersonStore();
     const contacts = contactStore.list;
     const ddiList = contactStore.ddiList;
     const deleteContact = contactStore.delete;
     const addContact = contactStore.createNewItem;
-    return { contacts, deleteContact, addContact, ddiList, personStore };
+    return {contacts, deleteContact, addContact, ddiList};
   },
   data() {
     return {
@@ -116,6 +110,10 @@ export default {
       ],
     };
   },
+  unmounted() {
+    const store = useContactStore()
+    store.$reset()
+  },
   methods: {
     customFilter: function (item, queryText, itemText) {
       return (
@@ -128,5 +126,5 @@ export default {
       );
     },
   },
-};
+});
 </script>

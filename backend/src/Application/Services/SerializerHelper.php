@@ -12,7 +12,7 @@ class SerializerHelper
     {
     }
 
-    public function collectionCallback($innerObject)
+    public function collectionCallback($innerObject, $outerObject, string $attributeName, string $format = null, array $context = [])
     {
         $serializer = new Serializer(normalizers: [new ObjectNormalizer()]);
         $collection = new ArrayCollection();

@@ -42,14 +42,6 @@ class SupplierCreateHandler extends AbstractHandler implements BeforeExecutedHan
         if (count($errors) > 0) {
             throw new InvalidFieldException((string)$errors, 400);
         }
-
-//        if ($model->getId()) {
-//            $this->supplier = $this->entityManager->getRepository(Supplier::class)->find($model->getId());
-//            if (empty($this->supplier)) {
-//                throw new HandlerException("The Id to update the person register is invalid.", 400);
-//            }
-//        }
-
     }
 
     /**
@@ -99,16 +91,6 @@ class SupplierCreateHandler extends AbstractHandler implements BeforeExecutedHan
             throw new InvalidFieldException((string)$errors, 400);
         }
 
-//        if($addressDTO->getId()) {
-//            $address = $this->entityManager->getRepository(SupplierAddress::class)->find($addressDTO->getId());
-//            if (empty($address)) {
-//                throw new HandlerException("Invalid Address Id.", 400);
-//            }
-//        }
-//        else{
-//            $address = new SupplierAddress();
-//        }
-
         $address = new SupplierAddress(
             name: $model->name,
             address: $model->address,
@@ -138,16 +120,6 @@ class SupplierCreateHandler extends AbstractHandler implements BeforeExecutedHan
         if (count($errors) > 0) {
             throw new InvalidFieldException((string)$errors, 400);
         }
-
-//        if($contactDTO->getId()) {
-//            $contact = $this->entityManager->getRepository(PersonContactEntity::class)->find($contactDTO->getId());
-//            if (empty($contact)) {
-//                throw new ManagerException("Invalid Contact Id.", 400);
-//            }
-//        }
-//        else{
-//            $contact = new PersonContactEntity();
-//        }
 
         $contact = new SupplierContact(
             name: $contactDTO->name,
