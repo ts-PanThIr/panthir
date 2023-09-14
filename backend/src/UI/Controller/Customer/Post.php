@@ -2,6 +2,7 @@
 
 namespace Panthir\UI\Controller\Customer;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\Services\SerializerHelper;
@@ -13,9 +14,12 @@ use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route(path: '/api/customer')]
 class Post extends APIController
@@ -25,17 +29,14 @@ class Post extends APIController
         CustomerCreateHandler  $customerCreateHandler,
         Request                $request,
         EntityManagerInterface $entityManager,
-        HandlerRunner          $handlerRunner
+        HandlerRunner          $handlerRunner,
     ): JsonResponse
     {
-        $serializerHelperContacts = new SerializerHelper(CustomerContactDTO::class);
-        $serializerHelperAddress = new SerializerHelper(CustomerAddressDTO::class);
-
         $defaultContext = [
             AbstractNormalizer::CALLBACKS => [
-                'contacts' => [$serializerHelperContacts, 'collectionCallback'],
+                'contacts' => [new SerializerHelper(CustomerContactDTO::class), 'collectionCallback'],
 //                'birthDate' => [$serializerHelper, 'dateCallback'],
-                'addresses' => [$serializerHelperAddress, 'collectionCallback']
+                'addresses' => [new SerializerHelper(CustomerAddressDTO::class), 'collectionCallback']
             ],
         ];
 
@@ -46,7 +47,7 @@ class Post extends APIController
         /** @var CustomerCreateDTO $customer */
         $customer = $serializer->denormalize(
             data: $request->request->all(),
-            type: CustomerCreateDTO::class
+            type: CustomerCreateDTO::class,
         );
 
         $return = $handlerRunner($customerCreateHandler, $customer);
