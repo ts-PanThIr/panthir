@@ -32,6 +32,11 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
         parent::__construct(entityManager: $entityManager);
     }
 
+    public function supports(DTOInterface $object): bool
+    {
+        return $object instanceof RegisterDTO;
+    }
+
     /**
      * @param RegisterDTO $model
      * @return void

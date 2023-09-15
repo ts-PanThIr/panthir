@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import {
   useAddressStore,
   useContactStore,
@@ -6,13 +6,12 @@ import {
   type IcontactItem,
   type IAddressItem,
 } from '~/stores';
-import { FormHelper } from '~/helpers';
-import type { AxiosResponse } from 'axios';
+import {FormHelper} from '~/helpers';
+import type {AxiosResponse} from 'axios';
 
 interface ICustomer {
   addresses?: IAddressItem[];
   contacts?: IcontactItem[];
-  type?: string;
   document?: string;
   name?: string;
   id?: number;
@@ -21,6 +20,7 @@ interface ICustomer {
   surname?: string;
   birthDate?: string;
 }
+
 interface ICustomerSearch {
   limit?: number | null;
   page?: number | null;
@@ -33,7 +33,6 @@ interface PostReturn {
   id: number;
 }
 
-
 type TState = {
   list: ICustomer[];
   customer: ICustomer;
@@ -41,7 +40,7 @@ type TState = {
 
 export const useCustomerStore = defineStore({
   id: 'customer',
-  state: () :TState => ({
+  state: (): TState => ({
     list: [],
     customer: {}
   }),
@@ -66,16 +65,16 @@ export const useCustomerStore = defineStore({
       const data = await this.$http.get(path).then(d => {
         return d.data.data;
       });
-      this.customer = { ...this.customer, ...data };
+      this.customer = {...this.customer, ...data};
       useAddressStore().list = data.addresses;
       useContactStore().list = data.contacts;
     },
 
     async send(): Promise<PostReturn> {
-      if(undefined === this.customer) {
+      if (undefined === this.customer) {
         throw new Error('Undefined customer.')
       }
-      
+
       this.customer.addresses = useAddressStore().list;
       this.customer.contacts = useContactStore().list;
       const formData = FormHelper.jsonToFormData(this.customer);

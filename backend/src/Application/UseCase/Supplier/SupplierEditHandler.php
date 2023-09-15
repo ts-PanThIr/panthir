@@ -16,7 +16,7 @@ use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class SupplierCreateHandler extends AbstractHandler implements BeforeExecutedHandlerInterface
+class SupplierEditHandler extends AbstractHandler implements BeforeExecutedHandlerInterface
 {
     private ?Supplier $supplier;
 

@@ -9,6 +9,11 @@ use Panthir\Domain\User\Model\User;
 
 class UserSearchHandler extends AbstractHandler
 {
+    public function supports(DTOInterface $object): bool
+    {
+        return $object instanceof UserSearchDTO;
+    }
+
     /**
      * @param UserSearchDTO $model
      * @return mixed

@@ -2,7 +2,6 @@
 
 namespace Panthir\UI\Controller\Customer;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\Services\SerializerHelper;
@@ -17,17 +16,9 @@ use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Routing\Annotation\Route;
-<<<<<<< HEAD
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-=======
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
->>>>>>> 5ed5a497a264e41717581a939ce2d42a8971cc85
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route(path: '/api/customer')]
 class Post extends APIController
@@ -40,26 +31,11 @@ class Post extends APIController
         HandlerRunner          $handlerRunner,
     ): JsonResponse
     {
-<<<<<<< HEAD
-
-        $defaultContext = [
-            AbstractNormalizer::CALLBACKS => [
-                'contacts' => [
-                    new SerializerHelper(CustomerContactDTO::class),
-                    'collectionCallback'
-                ],
-//                'birthDate' => [$serializerHelper, 'dateCallback'],
-                'addresses' => [
-                    new SerializerHelper(CustomerAddressDTO::class),
-                    'collectionCallback'
-                ]
-=======
         $defaultContext = [
             AbstractNormalizer::CALLBACKS => [
                 'contacts' => [new SerializerHelper(CustomerContactDTO::class), 'collectionCallback'],
 //                'birthDate' => [$serializerHelper, 'dateCallback'],
                 'addresses' => [new SerializerHelper(CustomerAddressDTO::class), 'collectionCallback']
->>>>>>> 5ed5a497a264e41717581a939ce2d42a8971cc85
             ],
         ];
 

@@ -28,6 +28,11 @@ class CreatePasswordRecoveryTokenHandler extends AbstractHandler implements Befo
         parent::__construct(entityManager: $entityManager);
     }
 
+    public function supports(DTOInterface $object): bool
+    {
+        return $object instanceof PasswordRecoveryDTO;
+    }
+
     /**
      * @param PasswordRecoveryDTO $model
      * @return void

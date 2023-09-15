@@ -23,6 +23,11 @@ class UpdatePasswordHandler extends AbstractHandler implements BeforeExecutedHan
         parent::__construct(entityManager: $entityManager);
     }
 
+    public function supports(DTOInterface $object): bool
+    {
+        return $object instanceof PasswordRecoveryDTO;
+    }
+
     /**
      * @param PasswordRecoveryDTO $model
      * @return void

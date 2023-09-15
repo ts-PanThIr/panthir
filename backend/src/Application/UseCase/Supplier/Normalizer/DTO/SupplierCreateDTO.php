@@ -9,24 +9,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class SupplierCreateDTO implements DTOInterface
 {
-    public readonly Collection $addresses;
+    private Collection $addresses;
 
-    public readonly Collection $contacts;
+    private Collection $contacts;
 
     public function __construct(
 
         #[Assert\NotBlank]
-        public readonly string          $name,
+        public readonly string  $name,
 
         #[Assert\NotBlank]
-        public readonly string          $nickName,
+        public readonly string  $nickName,
 
         #[Assert\NotBlank]
-        public readonly string          $document,
+        public readonly string  $document,
 
-        public readonly ?string         $secondaryDocument = null,
+        public readonly ?string $secondaryDocument = null,
 
-        public readonly ?string         $additionalInformation = null
+        public readonly ?string $additionalInformation = null
     )
     {
         $this->addresses = new ArrayCollection();
@@ -69,5 +69,15 @@ class SupplierCreateDTO implements DTOInterface
         }
 
         return $this;
+    }
+
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
     }
 }

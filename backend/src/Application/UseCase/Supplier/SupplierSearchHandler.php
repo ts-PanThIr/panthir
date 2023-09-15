@@ -9,6 +9,12 @@ use Panthir\Domain\Supplier\Model\Supplier;
 
 class SupplierSearchHandler extends AbstractHandler
 {
+
+    public function supports(DTOInterface $object): bool
+    {
+        return $object instanceof SupplierSearchDTO;
+    }
+
     /**
      * @param SupplierSearchDTO $model
      * @return mixed

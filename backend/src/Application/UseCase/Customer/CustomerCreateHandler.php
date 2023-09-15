@@ -30,6 +30,11 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
         parent::__construct(entityManager: $entityManager);
     }
 
+    public function supports(DTOInterface $object): bool
+    {
+        return $object instanceof CustomerCreateDTO;
+    }
+
     /**
      * @param DTOInterface $model
      * @return void
@@ -70,17 +75,17 @@ class CustomerCreateHandler extends AbstractHandler implements BeforeExecutedHan
         );
         $this->entityManager->persist($this->customer);
 
-        if (!empty($model->addresses)) {
+        if (!empty($model->getAddresses())) {
             /** @var CustomerAddressDTO $address */
-            foreach ($model->addresses as $address) {
+            foreach ($model->getAddresses() as $address) {
                 $dbAddress = $this->saveAddress($address);
                 $this->customer->addAddresses($dbAddress);
             }
         }
 
-        if (!empty($model->contacts)) {
+        if (!empty($model->getContacts())) {
             /** @var CustomerContactDTO $contact */
-            foreach ($model->contacts as $contact) {
+            foreach ($model->getContacts() as $contact) {
                 $dbContact = $this->saveContact($contact);
                 $this->customer->addContacts($dbContact);
             }

@@ -15,15 +15,15 @@
             grow
           >
             <v-tab value="1">
-              <em class="fas fa-person" />
+              <em class="fas fa-person"/>
               <small class="pt-1">Who</small>
             </v-tab>
             <v-tab value="2">
-              <em class="fas fa-address-book" />
+              <em class="fas fa-address-book"/>
               <small class="pt-1">Address</small>
             </v-tab>
             <v-tab value="3">
-              <em class="fas fa-mobile-alt" />
+              <em class="fas fa-mobile-alt"/>
               <small class="pt-1">Contact</small>
             </v-tab>
           </v-tabs>
@@ -83,74 +83,89 @@
       </v-window-item>
       <v-window-item value="2" eager>
         <v-card-text>
-          <TheAddressAddList ref="address" />
+          <TheAddressAddList ref="addressForm"/>
         </v-card-text>
       </v-window-item>
       <v-window-item value="3" eager>
         <v-card-text>
-          <TheContactAddList ref="contact" />
+          <TheContactAddList ref="contactForm"/>
         </v-card-text>
       </v-window-item>
     </v-window>
     <v-container fluid class="justify-end d-flex">
-      <v-btn class="success" @click="validate"> Send </v-btn>
+      <v-btn class="success" @click="validate"> Send</v-btn>
     </v-container>
   </v-card>
 </template>
 
 <script lang="ts">
 
-import { useSupplierStore } from '~/stores';
-import { useRoute } from 'vue-router';
+import {useSupplierStore} from '~/stores';
+import {useRoute, useRouter} from 'vue-router';
 import {
   TheAddressAddList,
   TheContactAddList,
   TheCardTitle,
 } from '~/components';
-import { mask } from 'vue-the-mask';
+import {mask} from 'vue-the-mask';
+import {defineComponent, ref} from "vue";
 
-export default {
+export default defineComponent({
   name: 'SupplierEditView',
   components: {
     TheContactAddList,
     TheAddressAddList,
     TheCardTitle,
   },
-  directives: { mask },
+  directives: {mask},
   async setup() {
     const route = useRoute();
+    const router = useRouter();
     const supplierStore = useSupplierStore();
     if (route.name === 'supplierEdit') {
-      await supplierStore.getOne(route.params.id)
+      await supplierStore.getOne(route.params.id as unknown as number)
     }
-    const { supplier } = supplierStore
-    return { supplier };
-  },
-  data: () => ({
-    tab: null,
-    name: '',
-    checkbox: false,
-  }),
 
-  methods: {
-    validate: async function () {
-      if (!(await this.$refs.personForm.validate()).valid) {
-        this.tab = '1';
-        return;
-      }
-      if (!(await this.$refs.address.$refs.form.validate()).valid) {
-        this.tab = '2';
-        return;
-      }
-      if (!(await this.$refs.contact.$refs.form.validate()).valid) {
-        this.tab = '3';
-        return;
-      }
+    const data = {
+      tab: ref(0),
+      personForm: ref(null) as unknown as HTMLFormElement,
+      addressForm: ref(null) as unknown as HTMLFormElement,
+      contactForm: ref(null) as unknown as HTMLFormElement,
+    };
 
-      const person = await this.personSend();
-      this.$router.push({name: 'personEdit', params: {id: person.id}})
-      
-    },
+    const methods = {
+      validate: async function () {
+        if (!(await data.personForm.value.validate()).valid) {
+          data.tab.value = 0;
+          return;
+        }
+
+        if (true !== (await data.addressForm.value.$refs.form.validate()).valid) {
+          data.tab.value = 1;
+          return;
+        }
+        if (true !== (await data.contactForm.value.$refs.form.validate()).valid) {
+          data.tab.value = 2;
+          return;
+        }
+
+        const supplierStore = useSupplierStore();
+        let method = 'POST';
+        if (route.name === 'supplierEdit') {
+          method = 'PUT';
+        }
+        const supplier = await supplierStore.send(method);
+        await router.push({name: 'supplierEdit', params: {id: supplier.id}})
+      }
+    }
+
+
+    const {supplier} = supplierStore
+    return {supplier, ...data, ...methods};
   },
-};
+  unmounted() {
+    const store = useSupplierStore()
+    store.$reset()
+  },
+});
 </script>

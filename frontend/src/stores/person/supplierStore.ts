@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import {
   useAddressStore,
   useContactStore,
@@ -6,14 +6,13 @@ import {
   type IcontactItem,
   type IAddressItem,
 } from '~/stores';
-import { FormHelper } from '~/helpers/index';
-import type { AxiosResponse } from 'axios';
+import {FormHelper} from '~/helpers/index';
+import type {AxiosResponse} from 'axios';
 
 interface ISupplier {
-  addresses: IAddressItem[];
-  contacts: IcontactItem[];
-  type: string;
-  document: string;
+  addresses?: IAddressItem[];
+  contacts?: IcontactItem[];
+  document?: string;
   name?: string;
   id?: number;
   additionalInformation?: string;
@@ -35,14 +34,14 @@ interface PostReturn {
 
 interface IState {
   list: ISupplier[];
-  supplier: null | ISupplier;
+  supplier: ISupplier;
 }
 
 export const useSupplierStore = defineStore({
   id: 'supplier',
-  state: ():IState => ({
+  state: (): IState => ({
     list: [],
-    supplier: null
+    supplier: {}
   }),
   actions: {
     async getAll({limit = null, page = null}: ISupplierSearch): Promise<void> {
@@ -65,18 +64,33 @@ export const useSupplierStore = defineStore({
       const data = await this.$http.get(path).then(d => {
         return d.data.data;
       });
-      this.supplier = { ...this.supplier, ...data };
+      this.supplier = {...this.supplier, ...data};
       useAddressStore().list = data.addresses;
       useContactStore().list = data.contacts;
     },
 
-    async send(): Promise<PostReturn> {
+    async send(method: string): Promise<PostReturn> {
+      if (undefined === this.supplier) {
+        throw new Error('Undefined customer.')
+      }
       this.supplier.addresses = useAddressStore().list;
       this.supplier.contacts = useContactStore().list;
       const formData = FormHelper.jsonToFormData(this.supplier);
-      return await this.post(formData);
+      if (method == 'POST') {
+        return await this.post(formData);
+      }
+      return await this.put(formData);
     },
 
+    async put(formData): Promise<PostReturn> {
+      return await this.$http
+        .put(`${this.$apiUrl}/api/supplier/${this.supplier.id}/`, formData)
+        .then(d => {
+          useNotificationStore().processReturn(d.data.notify);
+          return d.data.data;
+        });
+    },
+    
     async post(formData): Promise<PostReturn> {
       return await this.$http
         .post(`${this.$apiUrl}/api/supplier/`, formData)

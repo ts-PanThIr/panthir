@@ -9,6 +9,12 @@ use Panthir\Domain\Customer\Model\Customer;
 
 class CustomerSearchHandler extends AbstractHandler
 {
+
+    public function supports(DTOInterface $object): bool
+    {
+        return $object instanceof CustomerSearchDTO;
+    }
+
     /**
      * @param CustomerSearchDTO $model
      * @return mixed
