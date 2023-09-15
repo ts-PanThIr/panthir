@@ -26,6 +26,8 @@ class SupplierCreateDTO implements DTOInterface
 
         public readonly ?string $secondaryDocument = null,
 
+        public readonly ?string $id = null,
+
         public readonly ?string $additionalInformation = null
     )
     {

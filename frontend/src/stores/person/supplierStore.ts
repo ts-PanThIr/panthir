@@ -84,7 +84,7 @@ export const useSupplierStore = defineStore({
 
     async put(formData): Promise<PostReturn> {
       return await this.$http
-        .put(`${this.$apiUrl}/api/supplier/${this.supplier.id}/`, formData)
+        .post(`${this.$apiUrl}/api/supplier/${this.supplier.id}/`, formData)
         .then(d => {
           useNotificationStore().processReturn(d.data.notify);
           return d.data.data;

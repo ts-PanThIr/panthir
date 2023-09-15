@@ -22,7 +22,14 @@ const onRequest = (
     return config;
   }
 
-  const { user } = useAuthStore();
+  // console.log(config);
+  // //fix for symfony
+  // if (config.method === "put" && config.data !== undefined) {
+  //   config.headers.Accept =  "application/json, text/plain, */*";
+  //   config.data.append('_method', 'PUT');
+  // }
+
+  const {user} = useAuthStore();
   const isLoggedIn = !!user?.token;
   const isApiUrl = config.url.startsWith(import.meta.env.VITE_API_URL);
   if (isLoggedIn && isApiUrl) {
@@ -37,7 +44,7 @@ const onRequestError = (error: AxiosError): Promise<AxiosError> => {
 
 const onResponse = async (response: AxiosResponse): Promise<AxiosResponse> => {
   if (!(response && response.status === 200 && response.statusText === 'OK')) {
-    const { user, logout } = useAuthStore();
+    const {user, logout} = useAuthStore();
     if ([401, 403].includes(response.status) && user) {
       // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
       await logout();
@@ -49,7 +56,7 @@ const onResponse = async (response: AxiosResponse): Promise<AxiosResponse> => {
   }
 
   if (response.data.notify && response.data.notify.length > 0) {
-    const { processReturn } = useNotificationStore();
+    const {processReturn} = useNotificationStore();
     processReturn(response.data.notify as IMessage[]);
   }
 
@@ -57,14 +64,14 @@ const onResponse = async (response: AxiosResponse): Promise<AxiosResponse> => {
 };
 
 const onResponseError = async (error: AxiosError): Promise<AxiosError> => {
-  const { logout } = useAuthStore();
-  const { addMessage } = useNotificationStore();
+  const {logout} = useAuthStore();
+  const {addMessage} = useNotificationStore();
   if (error.response === undefined) {
-    addMessage({ text: 'API Connection Error.', type: EMessageType.Danger });
+    addMessage({text: 'API Connection Error.', type: EMessageType.Danger});
     return Promise.reject(error);
   }
   if (error.response.status === 500) {
-    addMessage({ text: 'Error in the API.', type: EMessageType.Danger });
+    addMessage({text: 'Error in the API.', type: EMessageType.Danger});
     return Promise.reject(error);
   }
   if ([401, 403].includes(error.response.status)) {

@@ -54,14 +54,24 @@ class SupplierCreateHandler extends AbstractHandler implements BeforeExecutedHan
      */
     public function execute(DTOInterface $model): Supplier
     {
-        $this->supplier = new Supplier(
-            name: $model->name,
-            document: $model->document,
-            uuid: Uuid::uuid4(),
-            nickName: $model->nickName,
-            secondaryDocument: $model->secondaryDocument,
-            additionalInformation: $model->additionalInformation,
-        );
+        if (!empty($model->id)) {
+            $this->supplier = $this->entityManager->getRepository(Supplier::class)->find($model->id);
+            $this->supplier->name = $model->name;
+            $this->supplier->document = $model->document;
+            $this->supplier->nickName = $model->nickName;
+            $this->supplier->secondaryDocument = $model->secondaryDocument;
+            $this->supplier->additionalInformation = $model->additionalInformation;
+        } else {
+            $this->supplier = new Supplier(
+                name: $model->name,
+                document: $model->document,
+                uuid: Uuid::uuid4(),
+                nickName: $model->nickName,
+                secondaryDocument: $model->secondaryDocument,
+                additionalInformation: $model->additionalInformation,
+            );
+        }
+
         $this->entityManager->persist($this->supplier);
 
         if (!empty($model->getAddresses())) {

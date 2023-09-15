@@ -21,13 +21,15 @@
         <v-col cols="10">
           <v-row>
             <v-col cols="6" sm="3">
-              <v-text-field
-                v-model="item.name"
-                :rules="[v => !!v || 'Item is required']"
-                label="Name"
+
+              <v-select
+                v-model="item.type"
+                label="Type"
                 required
-                density="compact"
-              />
+                :rules="[v => !!v || 'Item is required']"
+                :items="types"
+              >
+              </v-select>
             </v-col>
             <v-col cols="6" sm="3">
               <v-text-field
@@ -96,18 +98,29 @@
 
 <script lang="ts">
 import {mask} from 'vue-the-mask';
-import {useAddressStore} from '~/stores';
+import {useAddressStore, useSupplierStore} from '~/stores';
 import {defineComponent} from 'vue';
+import {useRoute, useRouter} from "vue-router";
 
 export default defineComponent({
   name: 'TheAddressAddList',
   directives: {mask},
   setup: async function () {
+    const route = useRoute();
     const addressStore = useAddressStore();
-    const addresses = addressStore.list;
-    const deleteAddress = addressStore.delete;
-    const addAddress = addressStore.createNewItem;
-    return {addresses, deleteAddress, addAddress};
+
+    if (['supplierEdit', 'supplierNew'].includes(route.name as string)) {
+      addressStore.getTypes('supplier');
+    }
+
+    const {
+      delete: deleteAddress,
+      list: addresses,
+      createNewItem: addAddress,
+      types
+    } = addressStore
+
+    return {addresses, deleteAddress, addAddress, types};
   },
   unmounted() {
     const store = useAddressStore()

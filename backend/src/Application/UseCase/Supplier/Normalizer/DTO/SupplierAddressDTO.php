@@ -11,9 +11,6 @@ class SupplierAddressDTO implements DTOInterface
 {
     public function __construct(
         #[Assert\NotBlank]
-        public readonly string  $name,
-
-        #[Assert\NotBlank]
         public readonly string  $country,
 
         #[Assert\NotBlank]
@@ -47,8 +44,8 @@ class SupplierAddressDTO implements DTOInterface
     /** @throws InvalidFieldException */
     public function setType(string $type): self
     {
-        if (!in_array(AddressType::cases(), array_column(AddressType::cases(), $type))) {
-            throw new InvalidFieldException('Invalid type');
+        if (!AddressType::tryFrom($type)) {
+            throw new InvalidFieldException('Invalid Address type');
         }
 
         $this->type = $type;

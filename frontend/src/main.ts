@@ -1,11 +1,12 @@
-import { createApp, markRaw } from 'vue';
-import { createPinia } from 'pinia';
+import {createApp, markRaw} from 'vue';
+import {createPinia} from 'pinia';
 import App from './App.vue';
-import { router } from './router';
+import {router} from './router';
 import vuetify from './plugins/vuetify';
 import axios from 'axios';
-import { setupInterceptorsTo } from '~/plugins/axios';
-import { TheSpinner } from '~/components';
+import {setupInterceptorsTo} from '~/plugins/axios';
+import {TheSpinner} from '~/components';
+import resetStore from './plugins/storeReset';
 
 setupInterceptorsTo(axios);
 const app = createApp(App);
@@ -17,11 +18,13 @@ app.config.globalProperties.configVars = {
 app.provide('configVars', app.config.globalProperties.configVars);
 
 const pinia = createPinia();
-pinia.use(({ store }) => {
+pinia.use(({store}) => {
   store.$router = markRaw(router);
   store.$http = markRaw(axios);
   store.$apiUrl = import.meta.env.VITE_API_URL;
 });
+
+pinia.use(resetStore)
 
 app.component('TheSpinner', TheSpinner);
 

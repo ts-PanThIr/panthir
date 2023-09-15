@@ -19,6 +19,7 @@
     "@vuelidate/validators": "^2.0.3",
     "@vuepic/vue-datepicker": "^3.6.8",
     "axios": "^1.4.0",
+    "lodash.clonedeep": "^4.5.0",
     "ol": "^7.4.0",
     "pinia": "^2.1.4",
     "roboto-fontface": "^0.10.0",

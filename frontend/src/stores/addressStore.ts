@@ -1,7 +1,9 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
+import {computed, ref} from "vue";
+import type {Ref} from "vue";
 
 export interface IAddressItem {
-  name?: string;
+  type?: string;
   zip?: string;
   country?: string;
   district?: string;
@@ -12,7 +14,7 @@ export interface IAddressItem {
 }
 
 const newAddress: IAddressItem = {
-  name: '',
+  type: '',
   zip: '',
   country: '',
   district: '',
@@ -23,23 +25,35 @@ const newAddress: IAddressItem = {
 };
 
 interface IState {
-  list: IAddressItem[];
-  primary?: number; // must be the index
-};
+  list: Ref<IAddressItem[]>;
+  types: Ref<string[]>;
+}
 
-export const useAddressStore = defineStore({
-  id: 'address',
-  state: (): IState => ({
-    list: [],
-    primary: undefined, // must be the index
-  }),
-  actions: {
-    createNewItem(item = { ...newAddress }) {
+export const useAddressStore = defineStore('address', () => {
+  const count = ref(0)
+
+  const state: IState = {
+    list: ref([]) as Ref<IAddressItem[]>,
+    types: ref([]) as Ref<string[]>
+  }
+
+  const getters = {
+    doubleCount: computed(() => count.value * 2)
+  }
+
+  const actions = {
+    createNewItem(item = {...newAddress}): void {
       if (!item) return;
-      this.list.push(item);
+      state.list.value.push(item);
     },
-    delete(index) {
-      this.list.splice(index, 1);
+    delete(index): void {
+      state.list.value.splice(index, 1);
     },
-  },
-});
+    getTypes: async function (type: string): Promise<void> {
+      const data = await this.$http.get(`${this.$apiUrl}/api/${type}/address/types`);
+      state.types.value.push(...data.data.data)
+    }
+  }
+
+  return {...state, ...getters, ...actions}
+})

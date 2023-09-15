@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Serializer;
 #[Route(path: '/api/supplier/{id}')]
 class Put extends APIController
 {
-    #[Route(path: "/", name: "app_supplier_put", methods: 'PUT')]
+    #[Route(path: "/", name: "app_supplier_put", methods: 'POST')]
     public function put(
         SupplierCreateHandler  $supplierCreateHandler,
         Request                $request,
@@ -29,10 +29,6 @@ class Put extends APIController
         string                 $id
     ): JsonResponse
     {
-
-        $data = $request->getContent();
-//        $data = json_decode($data);
-
         $serializerHelperContacts = new SerializerHelper(SupplierContactDTO::class);
         $serializerHelperAddress = new SerializerHelper(SupplierAddressDTO::class);
 

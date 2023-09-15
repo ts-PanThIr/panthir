@@ -5,6 +5,7 @@ namespace Panthir\UI\Controller\Supplier;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\UseCase\Supplier\SupplierSearchHandler;
 use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierSearchDTO;
+use Panthir\Domain\Supplier\ValueObject\AddressType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,5 +51,11 @@ class Get extends APIController
         }
 
         return $this->response(items: $supplier);
+    }
+
+    #[Route(path: "/address/types", name: "app_address_types_get", methods: 'GET')]
+    public function getAddressTypes(): JsonResponse
+    {
+        return $this->response(items: AddressType::cases());
     }
 }
