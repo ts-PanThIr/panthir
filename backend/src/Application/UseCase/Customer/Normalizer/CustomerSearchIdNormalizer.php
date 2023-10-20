@@ -20,32 +20,32 @@ class CustomerSearchIdNormalizer implements NormalizerInterface, NormalizerAware
      * @return array
      * @throws ExceptionInterface
      */
-    public function normalize(mixed $object, string $format = null, array $context = [])
+    public function normalize(mixed $object, string $format = null, array $context = []): array
     {
         $addresses = [];
-        foreach ($object->addresses as $address) {
+        foreach ($object->getAddresses() as $address) {
             $addresses[] = $this->normalizer->normalize($address, $format, $context);
         }
 
         $contacts = [];
-        foreach ($object->contacts as $contact) {
+        foreach ($object->getContacts() as $contact) {
             $contacts[] = $this->normalizer->normalize($contact, $format, $context);
         }
 
         return [
-            'id' => $object->id,
-            'name' => $object->name,
-            'surname' => $object->surname,
-            'document' => $object->document,
-            'secondaryDocument' => $object->secondaryDocument,
+            'id' => $object->getId(),
+            'name' => $object->getName(),
+            'surname' => $object->getSurname(),
+            'document' => $object->getDocument(),
+            'secondaryDocument' => $object->getSecondaryDocument(),
             'birthDate' => $object->getBirthDate(),
-            'additionalInformation' => $object->additionalInformation,
+            'additionalInformation' => $object->getAdditionalInformation(),
             'addresses' => $addresses,
             'contacts' => $contacts
         ];
     }
 
-    public function supportsNormalization(mixed $data, string $format = null)
+    public function supportsNormalization(mixed $data, string $format = null): bool
     {
         return $data instanceof Customer && CustomerSearchHandler::class === $format;
     }

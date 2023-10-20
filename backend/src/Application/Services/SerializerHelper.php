@@ -25,6 +25,10 @@ class SerializerHelper
 
     public function dateCallback($value)
     {
+        if ($value instanceof \DateTime) {
+            return $value;
+        }
+
         if (!empty($value)) {
             return date_create_from_format("d/m/Y", $value);
         }

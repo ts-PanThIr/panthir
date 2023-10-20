@@ -3,15 +3,17 @@ import {
   useAddressStore,
   useContactStore,
   useNotificationStore,
-  type IcontactItem,
+  type IContactItem,
   type IAddressItem,
 } from '~/stores';
 import {FormHelper} from '~/helpers';
 import type {AxiosResponse} from 'axios';
+import type {Ref} from "vue";
+import {ref} from "vue";
 
 interface ICustomer {
   addresses?: IAddressItem[];
-  contacts?: IcontactItem[];
+  contacts?: IContactItem[];
   document?: string;
   name?: string;
   id?: number;
@@ -33,55 +35,58 @@ interface PostReturn {
   id: number;
 }
 
-type TState = {
-  list: ICustomer[];
-  customer: ICustomer;
+interface IState {
+  list: Ref<ICustomer[]>;
+  customer: Ref<ICustomer>;
 }
 
-export const useCustomerStore = defineStore({
-  id: 'customer',
-  state: (): TState => ({
-    list: [],
-    customer: {}
-  }),
-  actions: {
-    async getAll({limit = null, page = null}: ICustomerSearch): Promise<void> {
+export const useCustomerStore = defineStore('customer', () => {
+  const STATE: IState = {
+    list: ref([]) as Ref<ICustomer[]>,
+    customer: ref({}) as Ref<ICustomer>
+  }
+
+  const ACTIONS = {
+    getAll: async function ({limit = null, page = null}: ICustomerSearch): Promise<void> {
       const params = {
         params: {
           limit,
           page
         }
       }
-      this.list = await this.$http
+      STATE.list.value = await this.$http
         .get(`${this.$apiUrl}/api/customer/`, params)
         .then((d: AxiosResponse) => {
           return d.data.data;
         });
     },
 
-    async getOne(id: number): Promise<void> {
+    getOne: async function (id: number): Promise<void> {
       const path = `${this.$apiUrl}/api/customer/${id}`;
 
       const data = await this.$http.get(path).then(d => {
         return d.data.data;
       });
-      this.customer = {...this.customer, ...data};
+      STATE.customer.value = {...STATE.customer.value, ...data};
       useAddressStore().list = data.addresses;
       useContactStore().list = data.contacts;
     },
 
-    async send(): Promise<PostReturn> {
-      if (undefined === this.customer) {
+    send: async function (method: string): Promise<PostReturn> {
+      if (undefined === STATE.customer.value) {
         throw new Error('Undefined customer.')
       }
 
-      this.customer.addresses = useAddressStore().list;
-      this.customer.contacts = useContactStore().list;
-      const formData = FormHelper.jsonToFormData(this.customer);
-      return await this.post(formData);
+      STATE.customer.value.addresses = useAddressStore().list;
+      STATE.customer.value.contacts = useContactStore().list;
+      const formData = FormHelper.jsonToFormData(STATE.customer);
+      if (method == 'POST') {
+        return await this.post(formData);
+      }
+      return await this.put(STATE.customer);
     },
 
-    async post(formData): Promise<PostReturn> {
+    post: async function (formData): Promise<PostReturn> {
       return await this.$http
         .post(`${this.$apiUrl}/api/customer/`, formData)
         .then(d => {
@@ -89,5 +94,15 @@ export const useCustomerStore = defineStore({
           return d.data.data;
         });
     },
-  },
-});
+    put: async function (formData): Promise<PostReturn> {
+      return await this.$http
+        .put(`${this.$apiUrl}/api/customer/${STATE.customer.value.id}/`, formData)
+        .then(d => {
+          useNotificationStore().processReturn(d.data.notify);
+          return d.data.data;
+        });
+    },
+  }
+
+  return {...ACTIONS, ...STATE}
+})

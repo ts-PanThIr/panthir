@@ -5,10 +5,10 @@ namespace Panthir\UI\Controller\Supplier;
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\Services\SerializerHelper;
-use Panthir\Application\UseCase\Supplier\SupplierCreateHandler;
 use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierAddressDTO;
 use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierContactDTO;
 use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierCreateDTO;
+use Panthir\Application\UseCase\Supplier\SupplierEditHandler;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class Post extends APIController
 {
     #[Route(path: "/", name: "app_supplier_post", methods: 'POST')]
     public function post(
-        SupplierCreateHandler  $supplierCreateHandler,
+        SupplierEditHandler  $supplierCreateHandler,
         Request                $request,
         EntityManagerInterface $entityManager,
         HandlerRunner          $handlerRunner

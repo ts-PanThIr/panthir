@@ -67,15 +67,13 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="supplier.secondaryDocument"
-                  :rules="[v => !!v || 'Item is required']"
                   label="NISS"
-                  required
                 />
               </v-col>
             </v-row>
 
             <v-textarea
-              v-model="supplier.AdditionInformation"
+              v-model="supplier.additionalInformation"
               label="Addition information"
             />
           </v-form>
@@ -108,7 +106,7 @@ import {
   TheCardTitle,
 } from '~/components';
 import {mask} from 'vue-the-mask';
-import {defineComponent, ref} from "vue";
+import {defineComponent, getCurrentInstance, ref} from "vue";
 
 export default defineComponent({
   name: 'SupplierEditView',
@@ -123,10 +121,11 @@ export default defineComponent({
     const router = useRouter();
     const supplierStore = useSupplierStore();
     if (route.name === 'supplierEdit') {
-      await supplierStore.getOne(route.params.id as unknown as number)
+      await supplierStore.getOne(route.params.id as string)
     }
 
     const data = {
+
       tab: ref(0),
       personForm: ref(null) as unknown as HTMLFormElement,
       addressForm: ref(null) as unknown as HTMLFormElement,
@@ -154,8 +153,9 @@ export default defineComponent({
         if (route.name === 'supplierEdit') {
           method = 'PUT';
         }
-        const supplier = await supplierStore.send(method);
-        await router.push({name: 'supplierEdit', params: {id: supplier.id}})
+        
+        await supplierStore.send(method);
+        await router.push({name: 'supplierList'})
       }
     }
 

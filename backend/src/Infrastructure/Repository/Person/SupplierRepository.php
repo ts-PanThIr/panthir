@@ -31,6 +31,7 @@ class SupplierRepository extends ServiceEntityRepository implements SupplierRepo
     public function search(SupplierSearchDTO $search): array
     {
         $qb = $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
 //            ->select('p, addresses')
 //            ->leftJoin('p.addresses', 'addresses')
         ;

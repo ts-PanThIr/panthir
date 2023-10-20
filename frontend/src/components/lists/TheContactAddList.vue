@@ -12,6 +12,22 @@
       >
         <v-col cols="2" class="d-flex justify-center align-center flex-column">
           <v-btn
+            v-if="row.id && !row.delete"
+            size="small"
+            icon="fa fa-minus"
+            color="warning"
+            @click="deleteContact(index)"
+          />
+          <v-btn
+            v-else-if="row.id && row.delete"
+            title="keep"
+            size="small"
+            icon="fa fa-plus"
+            color="success"
+            @click="deleteContact(index)"
+          />
+          <v-btn
+            v-else
             size="small"
             icon="fa fa-times"
             color="error"
@@ -20,7 +36,17 @@
         </v-col>
         <v-col cols="10">
           <v-row>
-            <v-col cols="4" sm="4">
+            <v-col cols="6">
+              <v-select
+                v-model="row.type"
+                label="Type"
+                required
+                :rules="[v => !!v || 'Item is required']"
+                :items="types"
+              >
+              </v-select>
+            </v-col>
+            <v-col cols="6">
               <v-text-field
                 v-model="row.name"
                 :rules="[v => !!v || 'Item is required']"
@@ -29,7 +55,7 @@
                 density="compact"
               />
             </v-col>
-            <v-col cols="4" sm="4">
+            <v-col cols="6">
               <v-text-field
                 v-model="row.email"
                 :rules="emailRules"
@@ -67,7 +93,7 @@
                 </template>
               </v-autocomplete>
             </v-col>
-            <v-col cols="4" sm="4">
+            <v-col cols="6">
               <v-text-field
                 v-model="row.phone"
                 :rules="[v => !!v || 'Item is required']"
@@ -86,19 +112,31 @@
 <script lang="ts">
 import {useContactStore} from '~/stores';
 import {defineComponent} from "vue";
+import {useRoute} from "vue-router";
 
 export default defineComponent({
   name: 'TheContactsAddList',
   setup: async function () {
+    const route = useRoute();
     const contactStore = useContactStore();
-    const contacts = contactStore.list;
-    const ddiList = contactStore.ddiList;
-    const deleteContact = contactStore.delete;
-    const addContact = contactStore.createNewItem;
-    return {contacts, deleteContact, addContact, ddiList};
-  },
-  data() {
-    return {
+
+    if (['supplierEdit', 'supplierNew'].includes(route.name as string)) {
+      contactStore.getTypes('supplier');
+    }
+
+    if (['customerEdit', 'customerNew'].includes(route.name as string)) {
+      contactStore.getTypes('customer');
+    }
+
+    const {
+      list: contacts,
+      ddiList,
+      delete: deleteContact,
+      createNewItem: addContact,
+      types
+    } = contactStore;
+
+    const DATA = {
       currentCountry: false,
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -108,23 +146,26 @@ export default defineComponent({
             v,
           ) || 'E-mail must be valid',
       ],
-    };
+    }
+
+    const METHODS = {
+      customFilter: function (item, queryText, itemText) {
+        return (
+          itemText.title
+            .toLocaleLowerCase()
+            .includes(queryText.toLocaleLowerCase()) ||
+          itemText.value
+            .toLocaleLowerCase()
+            .includes(queryText.toLocaleLowerCase())
+        );
+      },
+    }
+
+    return {contacts, deleteContact, addContact, types, ddiList, ...DATA, ...METHODS};
   },
   unmounted() {
     const store = useContactStore()
     store.$reset()
-  },
-  methods: {
-    customFilter: function (item, queryText, itemText) {
-      return (
-        itemText.title
-          .toLocaleLowerCase()
-          .includes(queryText.toLocaleLowerCase()) ||
-        itemText.value
-          .toLocaleLowerCase()
-          .includes(queryText.toLocaleLowerCase())
-      );
-    },
   },
 });
 </script>

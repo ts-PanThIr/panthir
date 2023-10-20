@@ -1,40 +1,60 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import ddiList from '~/assets/data/ddi.json';
+import type {Ref} from "vue";
+import {ref} from "vue";
 
-export interface IcontactItem {
+export interface IContactItem {
+  type?: string;
   name: string;
   phone?: string;
   email?: string;
   ddi?: string;
+  id?: string;
+  delete?: boolean;
 }
 
-type State = {
-  list: IcontactItem[];
-  primary?: number;
-  ddiList: { name: string; dial_code: string; code: string }[];
-};
+interface IState {
+  list: Ref<IContactItem[]>;
+  types: Ref<string[]>;
+  ddiList: {
+    name: string;
+    dial_code: string;
+    code: string
+  }[];
+}
 
-const newContact: IcontactItem = {
+const newContact: IContactItem = {
   name: '',
   phone: '',
   email: '',
   ddi: '',
+  type: '',
 };
 
-export const useContactStore = defineStore({
-  id: 'contact',
-  state: (): State => ({
-    list: [],
-    primary: undefined,
+export const useContactStore = defineStore('contact', () => {
+  const state: IState = {
     ddiList: ddiList,
-  }),
-  actions: {
-    createNewItem(item = { ...newContact }) {
+    list: ref([]) as Ref<IContactItem[]>,
+    types: ref([]) as Ref<string[]>
+  }
+
+  const actions = {
+    createNewItem(item = {...newContact}) {
       if (!item) return;
-      this.list.push(item);
+      state.list.value.push(item);
     },
     delete(index: number) {
-      this.list.splice(index, 1);
+      if (state.list.value[index].id) {
+        state.list.value[index].delete = !state.list.value[index].delete;
+        return;
+      }
+      state.list.value.splice(index, 1);
     },
-  },
-});
+    getTypes: async function (type: string): Promise<void> {
+      const data = await this.$http.get(`${this.$apiUrl}/api/${type}/contact/types`);
+      state.types.value.push(...data.data.data)
+    }
+  }
+
+  return {...state, ...actions}
+})

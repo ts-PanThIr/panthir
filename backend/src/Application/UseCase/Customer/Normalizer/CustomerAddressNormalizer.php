@@ -6,7 +6,7 @@ use Panthir\Application\UseCase\Customer\CustomerSearchHandler;
 use Panthir\Domain\Customer\Model\CustomerAddress;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CustomerAddressNormalizer  implements NormalizerInterface
+class CustomerAddressNormalizer implements NormalizerInterface
 {
 
     /**
@@ -15,23 +15,22 @@ class CustomerAddressNormalizer  implements NormalizerInterface
      * @param array $context
      * @return array
      */
-    public function normalize(mixed $object, string $format = null, array $context = [])
+    public function normalize(mixed $object, string $format = null, array $context = []): array
     {
         return [
-            'id' => $object->id,
-            'name' => $object->name,
-            'city' => $object->city,
-            'addressComplement' => $object->addressComplement,
-            'address' => $object->address,
-            'country' => $object->country,
-            'district' => $object->district,
-            'number' => $object->number,
-            'zip' => $object->zip,
+            'id' => $object->getId(),
+            'city' => $object->getCity(),
+            'addressComplement' => $object->getAddressComplement(),
+            'address' => $object->getAddress(),
+            'country' => $object->getCountry(),
+            'district' => $object->getDistrict(),
+            'number' => $object->getNumber(),
+            'zip' => $object->getZip(),
             'type' => $object->getType()
         ];
     }
 
-    public function supportsNormalization(mixed $data, string $format = null)
+    public function supportsNormalization(mixed $data, string $format = null): bool
     {
         return $data instanceof CustomerAddress && CustomerSearchHandler::class === $format;
     }

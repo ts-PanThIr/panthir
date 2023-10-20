@@ -18,10 +18,10 @@ class SupplierContactNormalizer  implements NormalizerInterface
     public function normalize(mixed $object, string $format = null, array $context = [])
     {
         return [
-            'id' => $object->id,
-            'name' => $object->name,
-            'email' => $object->email,
-            'phone' => $object->phone,
+            'id' => $object->getId(),
+            'name' => $object->getName(),
+            'email' => $object->getEmail(),
+            'phone' => $object->getPhone(),
             'type' => $object->getType()
         ];
     }

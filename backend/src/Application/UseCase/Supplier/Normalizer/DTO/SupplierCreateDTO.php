@@ -13,32 +13,96 @@ class SupplierCreateDTO implements DTOInterface
 
     private Collection $contacts;
 
-    public function __construct(
+    #[Assert\NotBlank]
+    private string $name;
 
-        #[Assert\NotBlank]
-        public readonly string  $name,
+    #[Assert\NotBlank]
+    private string $nickName;
 
-        #[Assert\NotBlank]
-        public readonly string  $nickName,
+    #[Assert\NotBlank]
+    private string $document;
 
-        #[Assert\NotBlank]
-        public readonly string  $document,
+    private ?string $secondaryDocument = null;
 
-        public readonly ?string $secondaryDocument = null,
+    private ?string $id = null;
 
-        public readonly ?string $id = null,
+    private ?string $additionalInformation = null;
 
-        public readonly ?string $additionalInformation = null
-    )
+    public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->contacts = new ArrayCollection();
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): SupplierCreateDTO
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getNickName(): string
+    {
+        return $this->nickName;
+    }
+
+    public function setNickName(string $nickName): SupplierCreateDTO
+    {
+        $this->nickName = $nickName;
+        return $this;
+    }
+
+    public function getDocument(): string
+    {
+        return $this->document;
+    }
+
+    public function setDocument(string $document): SupplierCreateDTO
+    {
+        $this->document = $document;
+        return $this;
+    }
+
+    public function getSecondaryDocument(): ?string
+    {
+        return $this->secondaryDocument;
+    }
+
+    public function setSecondaryDocument(?string $secondaryDocument): SupplierCreateDTO
+    {
+        $this->secondaryDocument = $secondaryDocument;
+        return $this;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function setId(?string $id): SupplierCreateDTO
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getAdditionalInformation(): ?string
+    {
+        return $this->additionalInformation;
+    }
+
+    public function setAdditionalInformation(?string $additionalInformation): SupplierCreateDTO
+    {
+        $this->additionalInformation = $additionalInformation;
+        return $this;
+    }
+
     public function addContacts(SupplierContactDTO $contact): self
     {
         if (!$this->contacts->contains($contact)) {
-//            $contact->person = $this;
             $this->contacts->add($contact);
         }
 
@@ -57,7 +121,6 @@ class SupplierCreateDTO implements DTOInterface
     public function addAddresses(SupplierAddressDTO $address): self
     {
         if (!$this->addresses->contains($address)) {
-//            $address->person = $this;
             $this->addresses->add($address);
         }
 
@@ -81,5 +144,17 @@ class SupplierCreateDTO implements DTOInterface
     public function getContacts(): Collection
     {
         return $this->contacts;
+    }
+
+    public function setAddresses(ArrayCollection $addresses): self
+    {
+        $this->addresses = $addresses;
+        return $this;
+    }
+
+    public function setContacts(ArrayCollection $contacts): self
+    {
+        $this->contacts = $contacts;
+        return $this;
     }
 }

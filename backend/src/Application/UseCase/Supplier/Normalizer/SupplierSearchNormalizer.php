@@ -16,7 +16,7 @@ class SupplierSearchNormalizer implements NormalizerInterface
      */
     public function normalize(mixed $object, string $format = null, array $context = [])
     {
-        if(empty($object)) return [];
+        if (empty($object)) return [];
 
         /**
          * @var $r Supplier
@@ -24,11 +24,11 @@ class SupplierSearchNormalizer implements NormalizerInterface
         $arr = [];
         foreach ($object as $r) {
             $arr[] = [
-                'name' => $r->name,
-                'id' => $r->id,
-                'nickName' => $r->nickName,
-                'document' => $r->document,
-                'secondaryDocument' => $r->secondaryDocument,
+                'name' => $r->getName(),
+                'id' => $r->getId(),
+                'nickName' => $r->getNickName(),
+                'document' => $r->getDocument(),
+                'secondaryDocument' => $r->getSecondaryDocument(),
             ];
         }
 

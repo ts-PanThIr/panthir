@@ -13,7 +13,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Panthir\Domain\Common\Model\AbstractPerson;
 use Panthir\Domain\Common\Model\CountableTrait;
 use Panthir\Infrastructure\Repository\Person\CustomerRepository;
-use Ramsey\Uuid\UuidInterface;
 
 #[Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\Table(name: 'person')]
@@ -23,42 +22,55 @@ final class Customer extends AbstractPerson
     use BlameableEntity;
     use TimestampableEntity;
 
-    public function __construct(
-        string                        $name,
-        string                        $document,
-        public readonly UuidInterface $uuid,
+    #[ORM\Column(name: 'surname')]
+    private string $surname;
 
-        #[ORM\Column(name: 'surname')]
-        public string                 $surname,
+    #[ORM\OneToMany(mappedBy: "person", targetEntity: CustomerAddress::class, cascade: ["persist"])]
+    private Collection $addresses;
 
-        #[ORM\OneToMany(mappedBy: "person", targetEntity: CustomerAddress::class, cascade: ["persist"])]
-        public Collection             $addresses = new ArrayCollection(),
+    #[ORM\OneToMany(mappedBy: "person", targetEntity: CustomerContact::class, cascade: ["persist"])]
+    private Collection $contacts;
 
-        #[ORM\OneToMany(mappedBy: "person", targetEntity: CustomerContact::class, cascade: ["persist"])]
-        public Collection             $contacts = new ArrayCollection(),
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?DateTimeInterface $birthDate = null;
 
-        #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-        private ?DateTimeInterface    $birthDate = null,
-
-        string                        $secondaryDocument = null,
-        string                        $additionalInformation = null,
-    )
+    public function __construct()
     {
-        parent::__construct(
-            id: $uuid->__toString(),
-            document: $document,
-            name: $name,
-            secondaryDocument: $secondaryDocument,
-            additionalInformation: $additionalInformation
-        );
+        $this->addresses = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
+    public function getSurname(): string
+    {
+        return $this->surname;
+    }
+
+    /**
+     * @param string $surname
+     * @return $this
+     */
+    public function setSurname(string $surname): Customer
+    {
+        $this->surname = $surname;
+        return $this;
+    }
+
+    /**
+     * @param DateTimeInterface|null $birthDate
+     * @return $this
+     */
     public function setBirthDate(?DateTimeInterface $birthDate): Customer
     {
         $this->birthDate = $birthDate;
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getBirthDate(): ?string
     {
         if (empty($this->birthDate)) {
@@ -67,21 +79,32 @@ final class Customer extends AbstractPerson
         return date_format($this->birthDate, 'd/m/Y');
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getRawBirthDate(): ?DateTimeInterface
     {
         return $this->birthDate;
     }
 
+    /**
+     * @param CustomerAddress $address
+     * @return $this
+     */
     public function addAddresses(CustomerAddress $address): self
     {
         if (!$this->addresses->contains($address)) {
-            $address->person = $this;
+            $address->setPerson($this);
             $this->addresses->add($address);
         }
 
         return $this;
     }
 
+    /**
+     * @param CustomerAddress $address
+     * @return $this
+     */
     public function removeAddresses(CustomerAddress $address): self
     {
         if ($this->addresses->contains($address)) {
@@ -91,16 +114,32 @@ final class Customer extends AbstractPerson
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    /**
+     * @param CustomerContact $contact
+     * @return $this
+     */
     public function addContacts(CustomerContact $contact): self
     {
         if (!$this->contacts->contains($contact)) {
-            $contact->person = $this;
+            $contact->setPerson($this);
             $this->contacts->add($contact);
         }
 
         return $this;
     }
 
+    /**
+     * @param CustomerContact $contact
+     * @return $this
+     */
     public function removeContacts(CustomerContact $contact): self
     {
         if ($this->contacts->contains($contact)) {
@@ -108,5 +147,13 @@ final class Customer extends AbstractPerson
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
     }
 }

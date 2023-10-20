@@ -31,30 +31,29 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
-        if ($exception instanceof \Exception) {
+
+        if ($exception instanceof NotFoundHttpException) {
             $message = $exception->getMessage();
-            $code = 500;
-
-            if ($exception instanceof NotFoundHttpException) {
-                $message = $exception->getMessage();
-                $code = 404;
-            }
-
-            if ($exception instanceof CustomExceptionInterface) {
-                $message = $exception->getMessage();
-                $code = $exception->getCode();
-            }
-
-            $this->logger->error($message);
-            $this->notify->addMessage($this->notify::ERROR,$message);
-            $returnable = $this->notify->newReturn($message);
-
-            $customResponse = JsonResponse::fromJsonString(
-                $returnable, $code, array('Symfony-Debug-Toolbar-Replace' => 1)
-            );
-
-            $event->allowCustomResponseCode();
-            $event->setResponse($customResponse);
+            $code = 404;
         }
+
+        else if($exception instanceof CustomExceptionInterface) {
+            $message = $exception->getMessage();
+            $code = $exception->getCode();
+        }
+        else {
+           return;
+        }
+
+        $this->logger->error($message);
+        $this->notify->addMessage($this->notify::ERROR,$message);
+        $returnable = $this->notify->newReturn($message);
+
+        $customResponse = JsonResponse::fromJsonString(
+            $returnable, $code, array('Symfony-Debug-Toolbar-Replace' => 1)
+        );
+
+        $event->allowCustomResponseCode();
+        $event->setResponse($customResponse);
     }
 }

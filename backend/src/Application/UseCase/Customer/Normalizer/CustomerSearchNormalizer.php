@@ -14,9 +14,9 @@ class CustomerSearchNormalizer implements NormalizerInterface
      * @param array $context
      * @return array
      */
-    public function normalize(mixed $object, string $format = null, array $context = [])
+    public function normalize(mixed $object, string $format = null, array $context = []): array
     {
-        if(empty($object)) return [];
+        if (empty($object)) return [];
 
         /**
          * @var $r Customer
@@ -24,11 +24,11 @@ class CustomerSearchNormalizer implements NormalizerInterface
         $arr = [];
         foreach ($object as $r) {
             $arr[] = [
-                'name' => $r->name,
-                'id' => $r->id,
-                'surname' => $r->surname,
-                'document' => $r->document,
-                'secondaryDocument' => $r->secondaryDocument,
+                'name' => $r->getName(),
+                'id' => $r->getId(),
+                'surname' => $r->getSurname(),
+                'document' => $r->getDocument(),
+                'secondaryDocument' => $r->getSecondaryDocument(),
                 'birthDate' => $r->getBirthDate()
             ];
         }
@@ -36,7 +36,7 @@ class CustomerSearchNormalizer implements NormalizerInterface
         return $arr;
     }
 
-    public function supportsNormalization(mixed $data, string $format = null)
+    public function supportsNormalization(mixed $data, string $format = null): bool
     {
         return is_array($data) && CustomerSearchHandler::class === $format;
     }

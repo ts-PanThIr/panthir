@@ -4,7 +4,7 @@ namespace Tests\Integration\Application\UseCase\Customer;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Panthir\Application\Common\Handler\HandlerRunner;
-use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
+use Panthir\Application\UseCase\Customer\CustomerEditHandler;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
@@ -24,8 +24,8 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var CustomerCreateHandler $userHandler */
-        $userHandler = $container->get(CustomerCreateHandler::class);
+        /** @var CustomerEditHandler $userHandler */
+        $userHandler = $container->get(CustomerEditHandler::class);
         $runner = $container->get(HandlerRunner::class);
         $runner->__invoke($userHandler, (new CustomerCreateDTO('','', '')));
     }
@@ -35,8 +35,8 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var CustomerCreateHandler $userHandler */
-        $userHandler = $container->get(CustomerCreateHandler::class);
+        /** @var CustomerEditHandler $userHandler */
+        $userHandler = $container->get(CustomerEditHandler::class);
         $runner = $container->get(HandlerRunner::class);
         $return = $runner->__invoke($userHandler, (new CustomerCreateDTO(
             name: $this->faker->firstName(),
@@ -53,8 +53,8 @@ class CustomerCreateHandlerTest extends CustomKernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var CustomerCreateHandler $userHandler */
-        $userHandler = $container->get(CustomerCreateHandler::class);
+        /** @var CustomerEditHandler $userHandler */
+        $userHandler = $container->get(CustomerEditHandler::class);
         $runner = $container->get(HandlerRunner::class);
         $return = $runner->__invoke($userHandler, (new CustomerCreateDTO(
             name: $this->faker->firstName(),

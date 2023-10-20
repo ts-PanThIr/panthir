@@ -2,7 +2,7 @@
 
 namespace Panthir\Application\UseCase\Supplier\Normalizer;
 
-use Panthir\Application\UseCase\Supplier\SupplierCreateHandler;
+use Panthir\Application\UseCase\Supplier\SupplierEditHandler;
 use Panthir\Domain\Supplier\Model\Supplier;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -17,15 +17,15 @@ class SupplierCreateNormalizer implements NormalizerInterface
     public function normalize(mixed $object, string $format = null, array $context = []): array
     {
         return [
-            'name' => $object->name,
-            'nickName' => $object->nickName,
-            'id' => $object->id,
-            'document' => $object->document
+            'name' => $object->getName(),
+            'nickName' => $object->getNickName(),
+            'id' => $object->getId(),
+            'document' => $object->getDocument()
         ];
     }
 
     public function supportsNormalization(mixed $data, string $format = null): bool
     {
-        return $data instanceof Supplier && SupplierCreateHandler::class === $format;
+        return $data instanceof Supplier && $format == SupplierEditHandler::class;
     }
 }

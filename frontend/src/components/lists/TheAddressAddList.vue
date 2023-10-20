@@ -12,6 +12,23 @@
       >
         <v-col cols="2" class="d-flex justify-center align-center flex-column">
           <v-btn
+            v-if="item.id && !item.delete"
+            title="Delete"
+            size="small"
+            icon="fa fa-minus"
+            color="warning"
+            @click="deleteAddress(index)"
+          />
+          <v-btn
+            v-else-if="item.id && item.delete"
+            title="keep"
+            size="small"
+            icon="fa fa-plus"
+            color="success"
+            @click="deleteAddress(index)"
+          />
+          <v-btn
+            v-else
             size="small"
             icon="fa fa-times"
             color="error"
@@ -111,6 +128,10 @@ export default defineComponent({
 
     if (['supplierEdit', 'supplierNew'].includes(route.name as string)) {
       addressStore.getTypes('supplier');
+    }
+
+    if (['customerEdit', 'customerNew'].includes(route.name as string)) {
+      addressStore.getTypes('customer');
     }
 
     const {

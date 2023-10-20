@@ -2,7 +2,7 @@
 
 namespace Panthir\Application\UseCase\Customer\Normalizer;
 
-use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
+use Panthir\Application\UseCase\Customer\CustomerEditHandler;
 use Panthir\Domain\Customer\Model\Customer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -17,15 +17,15 @@ class CustomerCreateNormalizer implements NormalizerInterface
     public function normalize(mixed $object, string $format = null, array $context = []): array
     {
         return [
-            'name' => $object->name,
-            'surname' => $object->surname,
-            'id' => $object->id,
-            'document' => $object->document
+            'name' => $object->getName(),
+            'surname' => $object->getSurname(),
+            'id' => $object->getId(),
+            'document' => $object->getDocument()
         ];
     }
 
     public function supportsNormalization(mixed $data, string $format = null): bool
     {
-        return $data instanceof Customer && CustomerCreateHandler::class === $format;
+        return $data instanceof Customer && CustomerEditHandler::class === $format;
     }
 }

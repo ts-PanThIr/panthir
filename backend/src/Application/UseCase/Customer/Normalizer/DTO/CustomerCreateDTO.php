@@ -10,27 +10,39 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CustomerCreateDTO implements DTOInterface
 {
+    private ?string $id = null;
+
     private Collection $addresses;
 
     private Collection $contacts;
 
-    public function __construct(
+    #[Assert\NotBlank]
+    private string $name;
 
-        #[Assert\NotBlank]
-        public readonly string     $name,
+    #[Assert\NotBlank]
+    private string $surname;
 
-        #[Assert\NotBlank]
-        public readonly string     $surname,
+    #[Assert\NotBlank]
+    private string $document;
 
-        #[Assert\NotBlank]
-        public readonly string     $document,
+    private ?DateTime $birthDate = null;
 
-        private readonly ?DateTime $birthDate = null,
+    private ?string $secondaryDocument = null;
 
-        public readonly ?string    $secondaryDocument = null,
+    private ?string $additionalInformation = null;
 
-        public readonly ?string    $additionalInformation = null
-    )
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function setId(?string $id): CustomerCreateDTO
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->contacts = new ArrayCollection();
@@ -105,5 +117,66 @@ class CustomerCreateDTO implements DTOInterface
     public function getRawBirthDate(): ?DateTime
     {
         return $this->birthDate;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getSurname(): string
+    {
+        return $this->surname;
+    }
+
+    public function getDocument(): string
+    {
+        return $this->document;
+    }
+
+    public function getSecondaryDocument(): ?string
+    {
+        return $this->secondaryDocument;
+    }
+
+    public function getAdditionalInformation(): ?string
+    {
+        return $this->additionalInformation;
+    }
+
+    public function setName(string $name): CustomerCreateDTO
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setSurname(string $surname): CustomerCreateDTO
+    {
+        $this->surname = $surname;
+        return $this;
+    }
+
+    public function setDocument(string $document): CustomerCreateDTO
+    {
+        $this->document = $document;
+        return $this;
+    }
+
+    public function setBirthDate(?DateTime $birthDate): CustomerCreateDTO
+    {
+        $this->birthDate = $birthDate;
+        return $this;
+    }
+
+    public function setSecondaryDocument(?string $secondaryDocument): CustomerCreateDTO
+    {
+        $this->secondaryDocument = $secondaryDocument;
+        return $this;
+    }
+
+    public function setAdditionalInformation(?string $additionalInformation): CustomerCreateDTO
+    {
+        $this->additionalInformation = $additionalInformation;
+        return $this;
     }
 }

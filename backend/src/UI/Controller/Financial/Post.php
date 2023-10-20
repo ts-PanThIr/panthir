@@ -5,7 +5,7 @@ namespace Panthir\UI\Controller\Financial;
 use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\Services\SerializerHelper;
-use Panthir\Application\UseCase\Customer\CustomerCreateHandler;
+use Panthir\Application\UseCase\Customer\CustomerEditHandler;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +20,7 @@ class Post extends APIController
 {
     #[Route(path: "/", name: "app_financial_post", methods: 'POST')]
     public function post(
-        CustomerCreateHandler  $customerCreateHandler,
+        CustomerEditHandler    $customerCreateHandler,
         Request                $request,
         EntityManagerInterface $entityManager,
         SerializerHelper       $serializerHelper,

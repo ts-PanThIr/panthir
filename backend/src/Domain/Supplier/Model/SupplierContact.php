@@ -8,47 +8,57 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Panthir\Domain\Common\Model\AbstractContact;
 use Panthir\Domain\Supplier\ValueObject\ContactType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
-use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'person_contact')]
 final class SupplierContact extends AbstractContact
 {
-    public function __construct(
-        string                        $name,
-        string                        $email,
-        string                        $phone,
-        public readonly UuidInterface $uuid,
+    #[ORM\Column(name: 'type')]
+    private string $type;
 
-        #[ORM\Column(name: 'type')]
-        private string                $type,
+    #[ManyToOne(targetEntity: Supplier::class, inversedBy: "contacts")]
+    #[JoinColumn(name: "person_id", referencedColumnName: "id")]
+    private Supplier $person;
 
-        #[ManyToOne(targetEntity: Supplier::class, inversedBy: "contacts")]
-        #[JoinColumn(name: "person_id", referencedColumnName: "id")]
-        public Supplier               $person,
-    )
-    {
-        parent::__construct(
-            id: $uuid->__toString(),
-            name: $name,
-            phone: $phone,
-            email: $email
-        );
-    }
-
+    /**
+     * @return string
+     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /** @throws InvalidFieldException */
+    /**
+     * @param string $type
+     * @return $this
+     * @throws InvalidFieldException
+     */
     public function setType(string $type): SupplierContact
     {
-        if (!in_array(ContactType::cases(), array_column(ContactType::cases(), $type))) {
-            throw new InvalidFieldException('Invalid type');
+        $enum = ContactType::tryFrom($type);
+        if (!$enum) {
+            throw new InvalidFieldException("Invalid type from supplier's contact", 400);
         }
 
-        $this->type = $type;
+        $this->type = $enum->value;
+        return $this;
+    }
+
+    /**
+     * @return Supplier
+     */
+    public function getPerson(): Supplier
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param Supplier $person
+     * @return $this
+     */
+    public function setPerson(Supplier $person): self
+    {
+        $this->person = $person;
         return $this;
     }
 }

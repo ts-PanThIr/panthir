@@ -8,48 +8,57 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Panthir\Domain\Common\Model\AbstractContact;
 use Panthir\Domain\Customer\ValueObject\ContactType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
-use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'person_contact')]
 final class CustomerContact extends AbstractContact
 {
-    public function __construct(
-        string                        $name,
-        string                        $email,
-        string                        $phone,
-        public readonly UuidInterface $uuid,
+    #[ORM\Column(name: 'type')]
+    private string $type;
 
-        #[ORM\Column(name: 'type')]
-        private string                $type,
+    #[ManyToOne(targetEntity: Customer::class, inversedBy: "contacts")]
+    #[JoinColumn(name: "person_id", referencedColumnName: "id")]
+    private Customer $person;
 
-        #[ManyToOne(targetEntity: Customer::class, inversedBy: "contacts")]
-        #[JoinColumn(name: "person_id", referencedColumnName: "id")]
-        public Customer               $person,
-    )
+    /**
+     * @return Customer
+     */
+    public function getPerson(): Customer
     {
-        parent::__construct(
-            id: $uuid->__toString(),
-            name: $name,
-            phone: $phone,
-            email: $email
-        );
+        return $this->person;
     }
 
+    /**
+     * @param Customer $person
+     * @return CustomerContact
+     */
+    public function setPerson(Customer $person): CustomerContact
+    {
+        $this->person = $person;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /** @throws InvalidFieldException */
-    public function setType(string $type): CustomerContact
+    /**
+     * @param string $type
+     * @return $this
+     * @throws InvalidFieldException
+     */
+    public function setType(string $type): self
     {
-        $teste = array_column(ContactType::cases(), $type);
-        if (!in_array(ContactType::cases(), array_column(ContactType::cases(), $type))) {
-            throw new InvalidFieldException('Invalid type');
+        $enum = ContactType::tryFrom($type);
+        if (!$enum) {
+            throw new InvalidFieldException("Invalid type from customer's contact", 400);
         }
 
-        $this->type = $type;
+        $this->type = $enum->value;
         return $this;
     }
 }

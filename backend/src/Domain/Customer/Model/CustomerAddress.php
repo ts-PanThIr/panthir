@@ -8,45 +8,39 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Panthir\Domain\Common\Model\AbstractAddress;
 use Panthir\Domain\Customer\ValueObject\AddressType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
-use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'person_address')]
 final class CustomerAddress extends AbstractAddress
 {
-    public function __construct(
-        string                        $name,
-        string                        $address,
-        string                        $addressComplement,
-        string                        $city,
-        string                        $country,
-        string                        $district,
-        string                        $number,
-        string                        $zip,
+    #[ORM\Column(name: 'type')]
+    private string $type;
 
-        public readonly UuidInterface $uuid,
+    #[ManyToOne(targetEntity: Customer::class, inversedBy: "addresses")]
+    #[JoinColumn(name: "person_id", referencedColumnName: "id")]
+    private Customer $person;
 
-        #[ORM\Column(name: 'type')]
-        private string                $type,
-
-        #[ManyToOne(targetEntity: Customer::class, inversedBy: "addresses")]
-        #[JoinColumn(name: "person_id", referencedColumnName: "id")]
-        public Customer               $person,
-    )
+    /**
+     * @return Customer
+     */
+    public function getPerson(): Customer
     {
-        parent::__construct(
-            id: $uuid->__toString(),
-            name: $name,
-            country: $country,
-            district: $district,
-            city: $city,
-            address: $address,
-            number: $number,
-            zip: $zip,
-            addressComplement: $addressComplement
-        );
+        return $this->person;
     }
 
+    /**
+     * @param Customer $person
+     * @return CustomerAddress
+     */
+    public function setPerson(Customer $person): CustomerAddress
+    {
+        $this->person = $person;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getType(): string
     {
         return $this->type;
@@ -55,11 +49,12 @@ final class CustomerAddress extends AbstractAddress
     /** @throws InvalidFieldException */
     public function setType(string $type): self
     {
-        if (!in_array(AddressType::cases(), array_column(AddressType::cases(), $type))) {
-            throw new InvalidFieldException('Invalid type');
+        $enum = AddressType::tryFrom($type);
+        if (!$enum) {
+            throw new InvalidFieldException("Invalid type from customer's address", 400);
         }
 
-        $this->type = $type;
+        $this->type = $enum->value;
         return $this;
     }
 }

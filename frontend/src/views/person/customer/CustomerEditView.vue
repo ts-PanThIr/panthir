@@ -157,8 +157,12 @@ export default defineComponent({
         }
 
         const customerStore = useCustomerStore();
-        const customer = await customerStore.send();
-        await router.push({name: 'customerEdit', params: {id: customer.id}})
+        let method = 'POST';
+        if (route.name === 'customerEdit') {
+          method = 'PUT';
+        }
+        await customerStore.send(method);
+        await router.push({name: 'customerList'})
       }
     }
 

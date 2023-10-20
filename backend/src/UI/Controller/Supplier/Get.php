@@ -6,17 +6,24 @@ use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\UseCase\Supplier\SupplierSearchHandler;
 use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierSearchDTO;
 use Panthir\Domain\Supplier\ValueObject\AddressType;
+use Panthir\Domain\Supplier\ValueObject\ContactType;
+use Panthir\Infrastructure\CommonBundle\Exception\HandlerException;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 #[Route(path: '/api/supplier')]
 class Get extends APIController
 {
+    /**
+     * @throws ExceptionInterface
+     * @throws HandlerException
+     */
     #[Route(path: "/", name: "app_supplier_get_all", methods: 'GET')]
     public function getAll(
         HandlerRunner         $runner,
@@ -36,6 +43,10 @@ class Get extends APIController
         return $this->response(items: $users);
     }
 
+    /**
+     * @throws InvalidFieldException
+     * @throws HandlerException
+     */
     #[Route(path: "/{id}", name: "app_supplier_get", methods: 'GET')]
     public function get(
         string                $id,
@@ -53,9 +64,15 @@ class Get extends APIController
         return $this->response(items: $supplier);
     }
 
-    #[Route(path: "/address/types", name: "app_address_types_get", methods: 'GET')]
+    #[Route(path: "/address/types", name: "app_supplier_address_types_get", methods: 'GET')]
     public function getAddressTypes(): JsonResponse
     {
         return $this->response(items: AddressType::cases());
+    }
+
+    #[Route(path: "/contact/types", name: "app_supplier_contact_types_get", methods: 'GET')]
+    public function getContactTypes(): JsonResponse
+    {
+        return $this->response(items: ContactType::cases());
     }
 }

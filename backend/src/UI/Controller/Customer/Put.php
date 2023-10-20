@@ -1,39 +1,44 @@
 <?php
 
-namespace Panthir\UI\Controller\Supplier;
+namespace Panthir\UI\Controller\Customer;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\Services\SerializerHelper;
-use Panthir\Application\UseCase\Supplier\SupplierCreateHandler;
-use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierAddressDTO;
-use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierContactDTO;
-use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierCreateDTO;
-use Panthir\Application\UseCase\Supplier\SupplierEditHandler;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerContactDTO;
+use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
+use Panthir\Application\UseCase\Customer\CustomerEditHandler;
+use Panthir\Infrastructure\CommonBundle\Exception\HandlerException;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-#[Route(path: '/api/supplier/{id}')]
+#[Route(path: '/api/customer/{id}')]
 class Put extends APIController
 {
-    #[Route(path: "/", name: "app_supplier_put", methods: 'PUT')]
+    /**
+     * @throws ExceptionInterface
+     * @throws HandlerException
+     */
+    #[Route(path: "/", name: "app_customer_put", methods: 'PUT')]
     public function put(
-        SupplierEditHandler $supplierCreateHandler,
+        CustomerEditHandler $customerCreateHandler,
         Request             $request,
         HandlerRunner       $handlerRunner
     ): JsonResponse
     {
-        $serializerHelperContacts = new SerializerHelper(SupplierContactDTO::class);
-        $serializerHelperAddress = new SerializerHelper(SupplierAddressDTO::class);
+        $serializerHelperContacts = new SerializerHelper(CustomerContactDTO::class);
+        $serializerHelperAddress = new SerializerHelper(CustomerAddressDTO::class);
 
         $defaultContext = [
             AbstractNormalizer::CALLBACKS => [
                 'contacts' => [$serializerHelperContacts, 'collectionCallback'],
+                'birthDate' => [new SerializerHelper(), 'dateCallback'],
                 'addresses' => [$serializerHelperAddress, 'collectionCallback']
             ],
         ];
@@ -42,13 +47,13 @@ class Put extends APIController
             normalizers: [new ObjectNormalizer(defaultContext: $defaultContext)]
         );
 
-        /** @var SupplierCreateDTO $supplier */
-        $supplier = $serializer->denormalize(
+        /** @var CustomerCreateDTO $customer */
+        $customer = $serializer->denormalize(
             data: $this->getData($request),
-            type: SupplierCreateDTO::class
+            type: CustomerCreateDTO::class
         );
 
-        $return = $handlerRunner($supplierCreateHandler, $supplier);
+        $return = $handlerRunner($customerCreateHandler, $customer);
         return $this->response(items: $return);
     }
 }

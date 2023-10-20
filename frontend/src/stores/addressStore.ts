@@ -11,6 +11,8 @@ export interface IAddressItem {
   address?: string;
   addressComplement?: string;
   number?: string;
+  id?: string;
+  delete?: boolean;
 }
 
 const newAddress: IAddressItem = {
@@ -47,6 +49,10 @@ export const useAddressStore = defineStore('address', () => {
       state.list.value.push(item);
     },
     delete(index): void {
+      if(state.list.value[index].id){
+        state.list.value[index].delete = !state.list.value[index].delete;
+        return;
+      }
       state.list.value.splice(index, 1);
     },
     getTypes: async function (type: string): Promise<void> {
