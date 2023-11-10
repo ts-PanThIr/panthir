@@ -8,8 +8,9 @@ import {
 } from '~/stores';
 import {FormHelper} from '~/helpers/index';
 import type {AxiosResponse} from 'axios';
-import {ref} from "vue";
+import {inject, ref} from "vue";
 import type {Ref} from "vue";
+import type {IConfigVars} from "~/@types/vue";
 
 interface ISupplier {
   addresses?: IAddressItem[];
@@ -40,6 +41,8 @@ interface IState {
 }
 
 export const useSupplierStore = defineStore('supplier', () => {
+  const configVars = inject('configVars') as IConfigVars;
+
   const STATE: IState = {
     list: ref([]) as Ref<ISupplier[]>,
     supplier: ref({}) as Ref<ISupplier>
@@ -53,17 +56,17 @@ export const useSupplierStore = defineStore('supplier', () => {
           page
         }
       }
-      STATE.list.value = await this.$http
-        .get(`${this.$apiUrl}/api/supplier/`, params)
+      STATE.list.value = await configVars.$http
+        .get(`${configVars.$apiUrl}/api/supplier/`, params)
         .then((d: AxiosResponse) => {
           return d.data.data;
         });
     },
 
     getOne: async function (id: string): Promise<void> {
-      const path = `${this.$apiUrl}/api/supplier/${id}`;
+      const path = `${configVars.$apiUrl}/api/supplier/${id}`;
 
-      const data = await this.$http.get(path).then(d => {
+      const data = await configVars.$http.get(path).then(d => {
         return d.data.data;
       });
       STATE.supplier.value = {...STATE.supplier.value, ...data};
@@ -85,8 +88,8 @@ export const useSupplierStore = defineStore('supplier', () => {
     },
 
     put: async function (formData): Promise<PostReturn> {
-      return await this.$http
-        .put(`${this.$apiUrl}/api/supplier/${this.supplier.id}/`, formData)
+      return await configVars.$http
+        .put(`${configVars.$apiUrl}/api/supplier/${STATE.supplier.value.id}/`, formData)
         .then(d => {
           useNotificationStore().processReturn(d.data.notify);
           return d.data.data;
@@ -94,8 +97,8 @@ export const useSupplierStore = defineStore('supplier', () => {
     },
 
     post: async function (formData): Promise<PostReturn> {
-      return await this.$http
-        .post(`${this.$apiUrl}/api/supplier/`, formData)
+      return await configVars.$http
+        .post(`${configVars.$apiUrl}/api/supplier/`, formData)
         .then(d => {
           useNotificationStore().processReturn(d.data.notify);
           return d.data.data;

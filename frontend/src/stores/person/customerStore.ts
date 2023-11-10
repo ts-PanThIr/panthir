@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia';
+import {createPinia, defineStore} from 'pinia';
 import {
   useAddressStore,
   useContactStore,
@@ -9,7 +9,9 @@ import {
 import {FormHelper} from '~/helpers';
 import type {AxiosResponse} from 'axios';
 import type {Ref} from "vue";
-import {ref} from "vue";
+import {ref, inject} from "vue";
+import type {IConfigVars} from "~/@types/vue";
+import storeReset from "~/plugins/storeReset";
 
 interface ICustomer {
   addresses?: IAddressItem[];
@@ -41,6 +43,8 @@ interface IState {
 }
 
 export const useCustomerStore = defineStore('customer', () => {
+  const configVars = inject('configVars') as IConfigVars;
+
   const STATE: IState = {
     list: ref([]) as Ref<ICustomer[]>,
     customer: ref({}) as Ref<ICustomer>
@@ -54,17 +58,17 @@ export const useCustomerStore = defineStore('customer', () => {
           page
         }
       }
-      STATE.list.value = await this.$http
-        .get(`${this.$apiUrl}/api/customer/`, params)
+      STATE.list.value = await configVars.$http
+        .get(`${configVars.$apiUrl}/api/customer/`, params)
         .then((d: AxiosResponse) => {
           return d.data.data;
         });
     },
 
     getOne: async function (id: number): Promise<void> {
-      const path = `${this.$apiUrl}/api/customer/${id}`;
+      const path = `${configVars.$apiUrl}/api/customer/${id}`;
 
-      const data = await this.$http.get(path).then(d => {
+      const data = await configVars.$http.get(path).then(d => {
         return d.data.data;
       });
       STATE.customer.value = {...STATE.customer.value, ...data};
@@ -83,20 +87,20 @@ export const useCustomerStore = defineStore('customer', () => {
       if (method == 'POST') {
         return await this.post(formData);
       }
-      return await this.put(STATE.customer);
+      return await this.put();
     },
 
     post: async function (formData): Promise<PostReturn> {
-      return await this.$http
-        .post(`${this.$apiUrl}/api/customer/`, formData)
+      return await configVars.$http
+        .post(`${configVars.$apiUrl}/api/customer/`, formData)
         .then(d => {
           useNotificationStore().processReturn(d.data.notify);
           return d.data.data;
         });
     },
-    put: async function (formData): Promise<PostReturn> {
-      return await this.$http
-        .put(`${this.$apiUrl}/api/customer/${STATE.customer.value.id}/`, formData)
+    put: async function (): Promise<PostReturn> {
+      return await configVars.$http
+        .put(`${configVars.$apiUrl}/api/customer/${STATE.customer.value.id}/`, STATE.customer.value)
         .then(d => {
           useNotificationStore().processReturn(d.data.notify);
           return d.data.data;

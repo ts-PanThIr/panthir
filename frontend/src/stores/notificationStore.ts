@@ -1,4 +1,6 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
+import {ref} from "vue";
+import type {Ref} from "vue";
 
 export enum EMessageType {
   Danger = 'error',
@@ -15,37 +17,39 @@ export interface IMessage {
 }
 
 interface IState {
-  lastId: number;
-  messages: IMessage[];
+  lastId: Ref<number>;
+  messages: Ref<IMessage[]>;
 }
 
-export const useNotificationStore = defineStore('notification', {
-  state: (): IState => ({
-    lastId: 0,
-    messages: [],
-  }),
-  actions: {
-    // time = -1 to keep open
-    addMessage({ text, type, time = 5000 }: IMessage): void {
-      this.lastId++;
+export const useNotificationStore = defineStore('notification', () => {
+  const STATE: IState = {
+    lastId: ref(0) as Ref<number>,
+    messages: ref([]) as Ref<IMessage[]>
+  }
+
+  const ACTIONS = {
+    addMessage: function ({text, type, time = 5000}: IMessage): void {
+      STATE.lastId.value++;
       const message = {
         text,
         type,
         time,
-        id: this.lastId,
+        id: STATE.lastId.value,
       };
-      this.messages.unshift(message);
+      STATE.messages.value.unshift(message);
     },
-    removeMessage(id: number) {
-      const indexToDelete = this.messages.findIndex(n => n.id === id);
+    removeMessage: function (id: number) {
+      const indexToDelete = STATE.messages.value.findIndex(n => n.id === id);
       if (indexToDelete !== -1) {
-        this.messages.splice(indexToDelete, 1);
+        STATE.messages.value.splice(indexToDelete, 1);
       }
     },
-    processReturn(arr: IMessage[]) {
+    processReturn: function (arr: IMessage[]) {
       for (const r in arr) {
-        this.addMessage({ text: arr[r].text, type: arr[r].type } as IMessage);
+        this.addMessage({text: arr[r].text, type: arr[r].type} as IMessage);
       }
     },
-  },
-});
+  }
+
+  return {...STATE, ...ACTIONS}
+})

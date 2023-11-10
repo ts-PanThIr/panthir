@@ -10,7 +10,12 @@
       <v-form ref="titleForm">
         <v-row>
           <v-col cols="8">
-            <the-person-autocomplete :rules="[v => !!v || 'Item is required']"/>
+            <the-person-autocomplete
+              v-model="title.person"
+              :rules="[v => !!v || 'Item is required']"
+              end-point="customer"
+              label="Customer"
+            />
           </v-col>
           <v-col cols="4">
             <TheDatepicker
@@ -141,10 +146,9 @@ import {
   TheCardTitle,
 } from '~/components';
 import {useFinancialStore} from '~/stores';
-import {storeToRefs} from 'pinia';
 import {mask} from 'vue-the-mask';
 import FinancialInstallmentTable from '~/views/financial/FinancialInstallmentTable.vue';
-import { defineComponent, ref } from 'vue';
+import {defineComponent, ref} from 'vue';
 
 export default defineComponent({
   name: 'FinancialTitleForm',
@@ -155,41 +159,43 @@ export default defineComponent({
     FinancialInstallmentTable,
     TheCardTitle,
   },
-  directives: { mask },
+  directives: {mask},
   async setup() {
     const financialStore = useFinancialStore();
-    const {title, totalValue, installments, quantityInstallments} = storeToRefs(financialStore);
+    const {title, totalValue, installments, quantityInstallments, updateExtra} = financialStore;
 
-    const data = {
+    const DATA = {
       titleForm: ref(null) as unknown as HTMLFormElement,
     };
-    
+
+    const METHODS = {
+      process: async function (): Promise<void> {
+        if (await METHODS.validate()) {
+          const store = useFinancialStore();
+          await store.createInstallments();
+        }
+      },
+      send: async function (): Promise<void> {
+        if (await METHODS.validate()) {
+          return financialStore.send();
+        }
+      },
+
+      validate: async function (): Promise<boolean> {
+        return (await DATA.titleForm.value.validate()).valid;
+      },
+    };
+
+
     return {
       installments,
       title,
       totalValue,
       quantityInstallments,
-      updateExtra: financialStore.updateExtra,
-      ...data
+      updateExtra,
+      ...DATA,
+      ...METHODS
     };
-  },
-  methods: {
-    async process(): Promise<void> {
-      if(await this.validate()) {
-        const store = useFinancialStore();
-        await store.createInstallments();
-      }
-    },
-    async send(): Promise<void> {
-      if(await this.validate()) {
-        const financialStore = useFinancialStore();
-        return financialStore.send();
-      }
-    },
-    
-    async validate(): Promise<boolean> {
-      return (await this.titleForm.validate()).valid;
-    },
   },
 });
 </script>

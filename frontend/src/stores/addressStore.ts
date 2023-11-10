@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia';
-import {computed, ref} from "vue";
+import {inject, ref} from "vue";
 import type {Ref} from "vue";
+import type {IConfigVars} from "~/@types/vue";
 
 export interface IAddressItem {
   type?: string;
@@ -32,34 +33,30 @@ interface IState {
 }
 
 export const useAddressStore = defineStore('address', () => {
-  const count = ref(0)
+  const configVars = inject('configVars') as IConfigVars;
 
-  const state: IState = {
+  const STATE: IState = {
     list: ref([]) as Ref<IAddressItem[]>,
     types: ref([]) as Ref<string[]>
   }
 
-  const getters = {
-    doubleCount: computed(() => count.value * 2)
-  }
-
-  const actions = {
+  const ACTIONS = {
     createNewItem(item = {...newAddress}): void {
       if (!item) return;
-      state.list.value.push(item);
+      STATE.list.value.push(item);
     },
     delete(index): void {
-      if(state.list.value[index].id){
-        state.list.value[index].delete = !state.list.value[index].delete;
+      if (STATE.list.value[index].id) {
+        STATE.list.value[index].delete = !STATE.list.value[index].delete;
         return;
       }
-      state.list.value.splice(index, 1);
+      STATE.list.value.splice(index, 1);
     },
     getTypes: async function (type: string): Promise<void> {
-      const data = await this.$http.get(`${this.$apiUrl}/api/${type}/address/types`);
-      state.types.value.push(...data.data.data)
+      const data = await configVars.$http.get(`${configVars.$apiUrl}/api/${type}/address/types`);
+      STATE.types.value.push(...data.data.data)
     }
   }
 
-  return {...state, ...getters, ...actions}
+  return {...STATE, ...ACTIONS}
 })

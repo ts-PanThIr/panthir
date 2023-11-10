@@ -14,16 +14,13 @@ app.config.globalProperties.configVars = {
   $locale: 'pt-PT',
   $currency: 'EUR',
   $apiUrl: import.meta.env.VITE_API_URL,
+  $http: markRaw(axios),
+  $router: markRaw(router)
 };
+
 app.provide('configVars', app.config.globalProperties.configVars);
 
 const pinia = createPinia();
-pinia.use(({store}) => {
-  store.$router = markRaw(router);
-  store.$http = markRaw(axios);
-  store.$apiUrl = import.meta.env.VITE_API_URL;
-});
-
 pinia.use(resetStore)
 
 app.component('TheSpinner', TheSpinner);

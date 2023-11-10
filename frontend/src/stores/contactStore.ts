@@ -1,7 +1,8 @@
 import {defineStore} from 'pinia';
 import ddiList from '~/assets/data/ddi.json';
 import type {Ref} from "vue";
-import {ref} from "vue";
+import {inject, ref} from "vue";
+import type {IConfigVars} from "~/@types/vue";
 
 export interface IContactItem {
   type?: string;
@@ -32,29 +33,31 @@ const newContact: IContactItem = {
 };
 
 export const useContactStore = defineStore('contact', () => {
-  const state: IState = {
+  const configVars = inject('configVars') as IConfigVars;
+
+  const STATE: IState = {
     ddiList: ddiList,
     list: ref([]) as Ref<IContactItem[]>,
     types: ref([]) as Ref<string[]>
   }
 
-  const actions = {
+  const ACTIONS = {
     createNewItem(item = {...newContact}) {
       if (!item) return;
-      state.list.value.push(item);
+      STATE.list.value.push(item);
     },
     delete(index: number) {
-      if (state.list.value[index].id) {
-        state.list.value[index].delete = !state.list.value[index].delete;
+      if (STATE.list.value[index].id) {
+        STATE.list.value[index].delete = !STATE.list.value[index].delete;
         return;
       }
-      state.list.value.splice(index, 1);
+      STATE.list.value.splice(index, 1);
     },
     getTypes: async function (type: string): Promise<void> {
-      const data = await this.$http.get(`${this.$apiUrl}/api/${type}/contact/types`);
-      state.types.value.push(...data.data.data)
+      const data = await configVars.$http.get(`${configVars.$apiUrl}/api/${type}/contact/types`);
+      STATE.types.value.push(...data.data.data)
     }
   }
 
-  return {...state, ...actions}
+  return {...STATE, ...ACTIONS}
 })

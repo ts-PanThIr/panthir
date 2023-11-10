@@ -1,19 +1,27 @@
-import { defineStore } from 'pinia';
-import { useLocalStorage } from '~/helpers';
+import {defineStore} from 'pinia';
+import {useLocalStorage} from '~/helpers';
+import {ref} from "vue";
+import type {Ref} from "vue";
+
 
 interface IState {
-  menuOpen: unknown;
-  pageTitle?: string;
+  menuOpen: Ref<boolean>;
+  pageTitle: Ref<string>;
 }
-export const useInterfaceStore = defineStore({
-  id: 'interface',
-  state: (): IState => ({
-    menuOpen: useLocalStorage('menuOpen', 'false'),
-    pageTitle: undefined
-  }),
-  actions: {
-    switchMenu() {
-      this.menuOpen = !this.menuOpen;
+
+export const useInterfaceStore = defineStore('interface', () => {
+  const STATE: IState = {
+    menuOpen: ref(useLocalStorage('menuOpen', 'false')) as Ref<boolean>,
+    pageTitle: ref('') as Ref<string>
+  }
+
+  const ACTIONS = {
+    switchMenu: function () {
+      STATE.menuOpen.value = !STATE.menuOpen.value;
     },
-  },
-});
+  }
+
+  return {...STATE, ...ACTIONS}
+})
+
+

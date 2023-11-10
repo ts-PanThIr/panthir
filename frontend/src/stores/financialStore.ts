@@ -2,6 +2,14 @@ import {defineStore} from 'pinia';
 import moment from 'moment';
 import {EMessageType, useNotificationStore} from "~/stores/notificationStore";
 import {FormHelper} from "~/helpers";
+import {computed, inject, ref} from "vue";
+import type {Ref} from "vue";
+import type {IConfigVars} from "~/@types/vue";
+
+interface IPerson {
+  name: string;
+  id: string;
+}
 
 interface ITitle {
   discount: number;
@@ -11,6 +19,11 @@ interface ITitle {
   fine: number;
   quantityInstallments: number;
   entryAt: string;
+  title: string;
+  account: string;
+  counterpartAccount: string;
+  description: string;
+  person: IPerson;
 }
 
 export interface IInstallment {
@@ -25,87 +38,91 @@ export interface IInstallment {
 }
 
 interface IState {
-  list: ITitle[];
-  title: ITitle;
-  installments: IInstallment[]; // must be the index~
-  quantityInstallments: number[];
+  list: Ref<ITitle[]>;
+  title: Ref<ITitle>;
+  installments: Ref<IInstallment[]>;
+  quantityInstallments: Ref<number[]>;
 }
 
-export const useFinancialStore = defineStore({
-  id: 'financial',
-  state: (): IState => ({
-    title: {
+export const useFinancialStore = defineStore('financial', () => {
+  const configVars = inject('configVars') as IConfigVars;
+
+  const STATE: IState = {
+    title: ref({
       discount: 0,
-      extra: 0,
+      extra: ref(0),
       fees: 6.65,
       value: 20000,
       fine: 7.46,
       quantityInstallments: 60,
       entryAt: moment(new Date()).format("DD/MM/YYYY")
-    },
-    list: [],
-    installments: [],
-    quantityInstallments: [...Array(60).keys()],
-  }),
-  getters: {
-    totalFees (state): number {      
+    }) as Ref<ITitle>,
+    list: ref([]) as Ref<ITitle[]>,
+    installments: ref([]) as Ref<IInstallment[]>,
+    quantityInstallments: ref([...Array(60).keys()]) as Ref<number[]>,
+  }
+
+  const GETTERS = {
+    totalFees: computed(() => {
       let totalFees = 0;
-      if (state.title.fees && state.title.value && state.title.quantityInstallments) {
-        const fees = Number((state.title.fees / 100 / 12));        
-        const installment = state.title.value * fees * 
-          (Math.pow((1 + fees), state.title.quantityInstallments)) /
-          ((Math.pow((1 + fees), state.title.quantityInstallments)) - 1);
-        
-        totalFees = Number(((installment * state.title.quantityInstallments) - ( state.title.value )).toFixed(2));
+      if (STATE.title.value.fees && STATE.title.value.value && STATE.title.value.quantityInstallments) {
+        const fees = Number((STATE.title.value.fees / 100 / 12));
+        const installment = STATE.title.value.value * fees *
+          (Math.pow((1 + fees), STATE.title.value.quantityInstallments)) /
+          ((Math.pow((1 + fees), STATE.title.value.quantityInstallments)) - 1);
+
+        totalFees = Number(((installment * STATE.title.value.quantityInstallments) - (STATE.title.value.value)).toFixed(2));
       }
       return totalFees;
-    },
-    totalValue (state): number {
+    }),
+    totalValue: computed(() => {
       const value =
-        state.title.value +
-        this.totalFees +
-        state.title.fine +
-        state.title.extra -
-        state.title.discount;
+        STATE.title.value.value +
+        GETTERS.totalFees.value +
+        STATE.title.value.fine +
+        STATE.title.value.extra -
+        STATE.title.value.discount;
 
       return Number(value.toFixed(3)) || 0;
-    },
-  },
-  actions: {
-    async createInstallments(): Promise<void> {
-      if (!(
-        this.title.value > 0 &&
-        this.title.quantityInstallments > 0
-      )) {
-        useNotificationStore().addMessage({text: 'Check gross or quantity installments values.', type: EMessageType.Danger})
+    })
+  }
+
+  const ACTIONS = {
+    createInstallments: async function (): Promise<void> {
+      debugger
+      if (!(STATE.title.value.value > 0 && STATE.title.value.quantityInstallments > 0)) {
+        useNotificationStore().addMessage({
+          text: 'Check gross or quantity installments values.',
+          type: EMessageType.Danger
+        })
         return
       }
-      this.installments = [];
-      
-      if(this.title.extra === 0) {
+      STATE.installments.value = [];
+
+      if (STATE.title.value.extra === 0) {
         this.updateExtra()
       }
 
       //get base date based on skipped time
-      const baseDate = moment(this.title.entryAt, 'DD/MM/YYYY').add(1, 'month');
-      
+      const baseDate = moment(STATE.title.value.entryAt, 'DD/MM/YYYY').add(1, 'month');
+
       // split values
-      const quantityInstallments = this.title.quantityInstallments;
-      const partialValue = Number((this.totalValue / this.title.quantityInstallments).toFixed(2));
-      const partialFine = Number((this.title.fine / quantityInstallments).toFixed(2));
-      const partialExtra = Number((this.title.extra / quantityInstallments).toFixed(2));
-      const partialDiscount = Number((this.title.discount / quantityInstallments).toFixed(2));
-      
-      const monthlyFeesRate = Number((this.title.fees / 100 / 12));
-      let openDebit = this.title.value;
-            
-      for (let temp = 0; temp < quantityInstallments -1; temp++) {
+      const quantityInstallments = STATE.title.value.quantityInstallments;
+      const partialValue = Number((GETTERS.totalValue.value / STATE.title.value.quantityInstallments).toFixed(2));
+      const partialFine = Number((STATE.title.value.fine / quantityInstallments).toFixed(2));
+      const partialExtra = Number((STATE.title.value.extra / quantityInstallments).toFixed(2));
+      const partialDiscount = Number((STATE.title.value.discount / quantityInstallments).toFixed(2));
+
+      const monthlyFeesRate = Number((STATE.title.value.fees / 100 / 12));
+      let openDebit = STATE.title.value.value;
+
+      for (let temp = 0; temp < quantityInstallments - 1; temp++) {
         const monthlyFees = Number((openDebit * monthlyFeesRate).toFixed(2));
         const monthlyExtra = monthlyFees * import.meta.env.VITE_APP_TAX_SELO
         openDebit -= (partialValue - monthlyFees - monthlyExtra)
-        
+
         baseDate.add(1, 'months');
-        this.installments.push({
+        STATE.installments.value.push({
           value: (partialValue - monthlyFees - monthlyExtra),
           fees: monthlyFees,
           fine: partialFine,
@@ -119,14 +136,14 @@ export const useFinancialStore = defineStore({
 
       // not beautiful, but better for performance
       const monthlyFees = (openDebit * monthlyFeesRate);
-      const diffValue = this.totalValue - (partialValue * quantityInstallments);
-      const diffFine = this.title.fine - (partialFine * quantityInstallments);
-      const diffExtra = this.title.extra - (partialExtra * quantityInstallments);
-      const diffDiscount = this.title.discount - (partialDiscount * quantityInstallments);
+      const diffValue = GETTERS.totalValue.value - (partialValue * quantityInstallments);
+      const diffFine = STATE.title.value.fine - (partialFine * quantityInstallments);
+      const diffExtra = STATE.title.value.extra - (partialExtra * quantityInstallments);
+      const diffDiscount = STATE.title.value.discount - (partialDiscount * quantityInstallments);
       openDebit -= (partialValue - monthlyFees + diffValue - partialExtra + diffExtra)
-      
+
       baseDate.add(1, 'months');
-      this.installments.push({
+      STATE.installments.value.push({
         value: partialValue - monthlyFees + diffValue,
         fees: monthlyFees,
         fine: partialFine + diffFine,
@@ -137,27 +154,26 @@ export const useFinancialStore = defineStore({
         remainingDebt: openDebit
       });
     },
-    updateExtra(): void
-    {
-      const selo_tax = Number((this.totalFees * import.meta.env.VITE_APP_TAX_SELO).toFixed(2));
-      if(selo_tax != this.title.extra) {
-        this.title.extra += selo_tax
+    updateExtra: function (): void {
+      const selo_tax = Number((GETTERS.totalFees.value * import.meta.env.VITE_APP_TAX_SELO).toFixed(2));
+      if (selo_tax != STATE.title.value.extra) {
+        STATE.title.value.extra += selo_tax
       }
     },
-
-    async send(): Promise<void> {
+    send: async function (): Promise<void> {
       const form = {
-        title: this.title,
-        installments: this.installments
+        title: STATE.title.value,
+        installments: STATE.installments
       }
-      
+
       const formData = FormHelper.jsonToFormData(form);
-      return await this.$http
-        .post(`${this.$apiUrl}/api/financial/`, formData)
+      return await configVars.$http.post(`${configVars.$apiUrl}/api/financial/`, formData)
         .then(d => {
           useNotificationStore().processReturn(d.data.notify);
           return d.data.data;
         });
     },
-  },
-});
+  }
+
+  return {...STATE, ...GETTERS, ...ACTIONS}
+})

@@ -1,15 +1,11 @@
-import { defineStore } from 'pinia';
-import { useLocalStorage } from '~/helpers/localStorage';
+import {defineStore} from 'pinia';
+import {useLocalStorage} from '~/helpers/localStorage';
 import {EMessageType, useNotificationStore} from "~/stores/notificationStore";
-import type {AxiosError} from "axios/index";
+import {inject, ref} from "vue";
+import type {Ref} from "vue";
+import type {IConfigVars} from "~/@types/vue";
 
-interface State {
-  user: User | null;
-  returnUrl?: string;
-  list: User[];
-}
-
-interface User {
+interface IUser {
   id: string;
   token: string;
   roles: string[];
@@ -18,41 +14,60 @@ interface User {
   username: string;
 }
 
-export const useAuthStore = defineStore('auth', {
-  state: (): State => ({
-    user: useLocalStorage('user', '') as User,
-    returnUrl: undefined,
-    list: []
-  }),
-  actions: {
-    async login(username: string, password: string): Promise<void> {
+interface IState {
+  user: Ref<IUser>;
+  returnUrl?: Ref<string>;
+  list: Ref<IUser[]>;
+}
+
+export const useAuthStore = defineStore('auth', () => {
+  const configVars = inject('configVars') as IConfigVars;
+
+  const emptyUser: IUser = {
+    id: '',
+    token: '',
+    roles: [],
+    exp: 0,
+    iat: 0,
+    username: ''
+  }
+  const STATE: IState = {
+    user: ref(useLocalStorage('user', '') || emptyUser as IUser) as Ref<IUser>,
+    returnUrl: ref('') as Ref<string>,
+    list: ref([]) as Ref<IUser[]>
+  }
+
+  const ACTIONS = {
+    login: async function (username: string, password: string): Promise<void> {
       try {
         const data = {
           username: username,
           password: password,
         };
         // { headers: { "Content-Type": "application/json" }
-        const returned = await this.$http.post(
-          `${this.$apiUrl}/api/login_check`,
+        const returned = await configVars.$http.post(
+          `${configVars.$apiUrl}/api/login_check`,
           JSON.stringify(data),
-          { headers: { 'Content-Type': 'application/json' } },
+          {headers: {'Content-Type': 'application/json'}},
         );
-        this.user = {
+        STATE.user.value = {
           ...JSON.parse(atob(returned.data.token.split('.')[1])),
           token: returned.data.token
-        } as User;
+        } as IUser;
 
-        localStorage.setItem('user', JSON.stringify(this.user));
-        await this.$router.push({name: 'BOHome'});
+        localStorage.setItem('user', JSON.stringify(STATE.user.value));
+        await configVars.$router.push({name: 'BOHome'});
       } catch (e) {
-        const { addMessage } = useNotificationStore();
+        const {addMessage} = useNotificationStore();
         addMessage({text: 'Invalid credentials.', type: EMessageType.Danger})
       }
     },
-    async logout(): Promise<void> {
-      this.user = null;
+    logout: async function (): Promise<void> {
+      STATE.user.value = emptyUser;
       localStorage.removeItem('user');
-      await this.$router.push({name: 'login'});
+      await configVars.$router.push({name: 'login'});
     },
-  },
-});
+  }
+
+  return {...STATE, ...ACTIONS}
+})
