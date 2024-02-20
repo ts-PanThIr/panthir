@@ -6,7 +6,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Panthir\Application\Common\Handler\HandlerRunner;
 use Panthir\Application\Services\SerializerHelper;
 use Panthir\Application\UseCase\Customer\CustomerEditHandler;
-use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
+use Panthir\Application\UseCase\Financial\Normalizer\DTO\InstallmentDTO;
+use Panthir\Application\UseCase\Financial\Normalizer\DTO\TitleCreateDTO;
 use Panthir\UI\Controller\APIController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,32 +24,28 @@ class Post extends APIController
         CustomerEditHandler    $customerCreateHandler,
         Request                $request,
         EntityManagerInterface $entityManager,
-        SerializerHelper       $serializerHelper,
         HandlerRunner          $handlerRunner
     ): JsonResponse
     {
-
-
-
-        $defaultContext = [
+        $callbacks = [];
+        $callbacks = [
             AbstractNormalizer::CALLBACKS => [
-                'contacts' => [$serializerHelper, 'collectionCallback'],
-//                'birthDate' => [$serializerHelper, 'dateCallback'],
-                'addresses' => [$serializerHelper, 'collectionCallback']
-            ],
+                'installments' => [new SerializerHelper(InstallmentDTO::class, $callbacks), 'collectionCallback'],
+                'date' => [new SerializerHelper(InstallmentDTO::class, $callbacks), 'dateCallback']
+            ]
         ];
 
         $serializer = new Serializer(
-            normalizers: [new ObjectNormalizer(defaultContext: $defaultContext)]
+            normalizers: [new ObjectNormalizer(defaultContext: $callbacks)]
         );
 
-        /** @var CustomerCreateDTO $customer */
-        $customer = $serializer->denormalize(
+        /** @var TitleCreateDTO $title */
+        $title = $serializer->denormalize(
             data: $request->request->all(),
-            type: CustomerCreateDTO::class
+            type: TitleCreateDTO::class
         );
 
-        $return = $handlerRunner($customerCreateHandler, $customer);
+        $return = $handlerRunner($customerCreateHandler, $title);
         $entityManager->flush();
         return $this->response(items: $return);
     }

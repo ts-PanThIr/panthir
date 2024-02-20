@@ -7,8 +7,7 @@
         em
         (-0.5+ (random()) * 3) +
         em
-        7px
-        hsla(169, 100%, 50%, 0.9);
+        7px hsla(175, 35%, 7%, 0.9);
   }
 
   text-shadow: $text-shadow;
@@ -74,7 +73,7 @@ head::after {
 }
 
 .v-application {
-  background: rgba(255, 255, 255, 0.7);
+  background: #1f1f1f;
 }
 
 .v-navigation-drawer--left {

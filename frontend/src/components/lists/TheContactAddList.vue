@@ -41,7 +41,7 @@
                 v-model="row.type"
                 label="Type"
                 required
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 :items="types"
               >
               </v-select>
@@ -49,7 +49,7 @@
             <v-col cols="6">
               <v-text-field
                 v-model="row.name"
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 label="Name"
                 required
                 density="compact"
@@ -68,7 +68,7 @@
                 v-model="row.ddi"
                 :items="ddiList"
                 :menu-props="{ maxHeight: 300 }"
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 label="Country"
                 density="compact"
                 autocomplete="nope"
@@ -96,7 +96,7 @@
             <v-col cols="6">
               <v-text-field
                 v-model="row.phone"
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 label="Phone"
                 required
                 density="compact"
@@ -109,23 +109,23 @@
   </div>
 </template>
 
-<script lang="ts">
-import {useContactStore} from '~/stores';
-import {defineComponent} from "vue";
-import {useRoute} from "vue-router";
+<script>
+import { useContactStore } from "~/stores";
+import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
-  name: 'TheContactsAddList',
+  name: "TheContactsAddList",
   setup: async function () {
     const route = useRoute();
     const contactStore = useContactStore();
 
-    if (['supplierEdit', 'supplierNew'].includes(route.name as string)) {
-      contactStore.getTypes('supplier');
+    if (["supplierEdit", "supplierNew"].includes(route.name)) {
+      contactStore.getTypes("supplier");
     }
 
-    if (['customerEdit', 'customerNew'].includes(route.name as string)) {
-      contactStore.getTypes('customer');
+    if (["customerEdit", "customerNew"].includes(route.name)) {
+      contactStore.getTypes("customer");
     }
 
     const {
@@ -133,20 +133,20 @@ export default defineComponent({
       ddiList,
       delete: deleteContact,
       createNewItem: addContact,
-      types
+      types,
     } = contactStore;
 
     const DATA = {
       currentCountry: false,
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v =>
+        (v) => !!v || "E-mail is required",
+        (v) =>
           // eslint-disable-next-line max-len
           /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-            v,
-          ) || 'E-mail must be valid',
+            v
+          ) || "E-mail must be valid",
       ],
-    }
+    };
 
     const METHODS = {
       customFilter: function (item, queryText, itemText) {
@@ -159,13 +159,21 @@ export default defineComponent({
             .includes(queryText.toLocaleLowerCase())
         );
       },
-    }
+    };
 
-    return {contacts, deleteContact, addContact, types, ddiList, ...DATA, ...METHODS};
+    return {
+      contacts,
+      deleteContact,
+      addContact,
+      types,
+      ddiList,
+      ...DATA,
+      ...METHODS,
+    };
   },
   unmounted() {
-    const store = useContactStore()
-    store.$reset()
+    const store = useContactStore();
+    store.$reset();
   },
 });
 </script>

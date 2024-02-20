@@ -4,7 +4,7 @@ namespace Panthir\Application\Services\Notify;
 
 class Notify implements NotifyInterface
 {
-    const ERROR = "danger";
+    const ERROR = "error";
     const WARNING = "warning";
     const INFO = "info";
     const SUCCESS = "success";

@@ -2,15 +2,13 @@
   <div class="fast-gradient" />
 </template>
 
-<script setup lang="ts">
-withDefaults(
-  defineProps<{
-    height?: string;
-  }>(),
-  {
-    height: '100px',
+<script setup>
+defineProps({
+  height: {
+    type: String,
+    default: "100px",
   },
-);
+});
 </script>
 
 <style lang="sass">

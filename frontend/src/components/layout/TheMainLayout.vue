@@ -8,7 +8,7 @@
       <router-view v-slot="{ Component, route }" name="default">
         <transition
           :key="route.path"
-          :name="route.meta.transition as string"
+          :name="route.meta.transition"
           mode="out-in"
           :duration="300"
         >
@@ -29,14 +29,13 @@
   </v-main>
 </template>
 
-<script lang="ts">
-import { TheMainAppBar, TheMainMenu } from '~/components';
-import TheNotifications from './TheNotifications.vue';
-import { ref, defineComponent } from 'vue';
-import type { VContainer } from 'vuetify/components';
+<script>
+import { TheMainAppBar, TheMainMenu } from "~/components";
+import TheNotifications from "./TheNotifications.vue";
+import { ref, defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'TheMainLayout',
+  name: "TheMainLayout",
   components: { TheMainAppBar, TheMainMenu, TheNotifications },
   setup() {
     const data = {
@@ -46,9 +45,7 @@ export default defineComponent({
     return { ...data };
   },
   mounted() {
-    this.containerHeight =
-      (this.mainContainer as unknown as typeof VContainer).$vuetify.display
-        .height - 152;
+    this.containerHeight = this.mainContainer.$vuetify.display.height - 152;
   },
 });
 </script>

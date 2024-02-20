@@ -77,45 +77,6 @@ services:
     networks:
       - redis
 
-#  mysql:
-#    image: mysql:8.0
-#    container_name: ${COMPOSE_PROJECT_NAME}_mysql
-#    ports:
-#      - "3306:3306"
-#    volumes:
-#      - mysql:/var/lib/mysql/
-#    environment:
-#      MYSQL_DATABASE: ${DB_NAME}
-#      MYSQL_USER: ${DB_USER}
-#      MYSQL_PASSWORD: ${DB_PASS}
-#      MYSQL_ROOT_PASSWORD: ${DB_PASS}
-#    networks:
-#      - symfony
-
-#  phpmyadmin:
-#    container_name: ${COMPOSE_PROJECT_NAME}_phpmyadmin
-#    image: phpmyadmin/phpmyadmin:latest
-#    ports:
-#      - 8081:80
-#    environment:
-#      - PMA_ARBITRARY=1
-#    depends_on:
-#      - mysql
-#    networks:
-#      - symfony
-  rediscommander:
-    image: rediscommander/redis-commander:latest
-    restart: always
-    ports:
-      - '8081:8081'
-    #    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
-    volumes:
-      - cache:/data
-    networks:
-      - redis
-    environment:
-      REDIS_HOSTS: local:redis:6379
-
 volumes:
   db_data:
 #  backend:

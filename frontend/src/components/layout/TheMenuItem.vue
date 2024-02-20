@@ -9,11 +9,11 @@
   </v-list-item>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script>
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'TheMenuItem',
+  name: "TheMenuItem",
   props: {
     item: {
       type: Object,

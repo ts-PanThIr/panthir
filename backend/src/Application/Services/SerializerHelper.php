@@ -8,17 +8,20 @@ use Symfony\Component\Serializer\Serializer;
 
 class SerializerHelper
 {
-    public function __construct(private readonly ?string $modelName = null)
+    public function __construct(
+        private readonly ?string $modelName = null,
+        private readonly ?array  $callbacks = null
+    )
     {
     }
 
     public function collectionCallback($innerObject)
     {
-        $serializer = new Serializer(normalizers: [new ObjectNormalizer()]);
+        $serializer = new Serializer(normalizers: [new ObjectNormalizer(defaultContext: $this->callbacks)]);
         $collection = new ArrayCollection();
 
         foreach ($innerObject as $row) {
-            $collection->add($serializer->denormalize($row, $this->modelName));
+            $collection->add($serializer->denormalize(data: $row, type: $this->modelName));
         }
         return $collection;
     }

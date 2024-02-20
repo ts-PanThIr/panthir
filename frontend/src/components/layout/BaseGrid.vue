@@ -9,7 +9,7 @@
           item-value="value"
           required
           :items="profiles"
-          :rules="[v => !!v || 'Le type doit être renseignée']"
+          :rules="[(v) => !!v || 'Le type doit être renseignée']"
           @input="$emit('update:limit', $event)"
         />
       </v-col>
@@ -37,13 +37,12 @@
               >
                 <td :key="i" :title="r">
                   <span v-if="i === 'id'">
-                    {{ r ? r.substring(0,4)+" .." : '-' }}
+                    {{ r ? r.substring(0, 4) + " .." : "-" }}
                   </span>
                   <span v-else>
-                    {{ r ? r : '-' }}
+                    {{ r ? r : "-" }}
                   </span>
                 </td>
-                
               </slot>
             </template>
           </tr>
@@ -62,7 +61,7 @@
             v-model="internalPage"
             density="comfortable"
             active-color="secondary"
-            :length=" (Math.ceil(matrix?.[0]?.totalItems / limit)) || page + 6"
+            :length="Math.ceil(matrix?.[0]?.totalItems / limit) || page + 6"
             :total-visible="7"
           />
         </div>
@@ -71,24 +70,24 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script>
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'BaseGrid',
+  name: "BaseGrid",
   props: {
     matrix: Array,
     // this order the columns in the table, you can switch with the given array
     header: Object,
     formatter: Object,
     page: {
-      type: Number, 
+      type: Number,
     },
     limit: {
-      type: Number, 
+      type: Number,
     },
   },
-  emits: ['update:page', 'updateSearch', 'update:limit'],
+  emits: ["update:page", "updateSearch", "update:limit"],
   data: () => ({
     profiles: [10, 50, 100, 500],
   }),
@@ -97,30 +96,30 @@ export default defineComponent({
       get() {
         return this.page;
       },
-      set(e: number) {
-        this.$emit('update:page', e);
-        this.$emit('updateSearch');
+      set(e) {
+        this.$emit("update:page", e);
+        this.$emit("updateSearch");
       },
     },
     internalLimit: {
       get() {
         return this.limit;
       },
-      set(e: number) {
-        this.$emit('update:limit', e);
-        this.$emit('updateSearch');
+      set(e) {
+        this.$emit("update:limit", e);
+        this.$emit("updateSearch");
       },
     },
     getCleanedMatrix: function () {
-      const array: object[] = [];
+      const array = [];
       const formatter = this.formatter;
       const header = this.header;
-      if (typeof this.matrix === 'undefined') {
+      if (typeof this.matrix === "undefined") {
         return [];
       }
       for (const element of this.matrix) {
-        const item: string[] = element as string[]
-        const temp: object = {};
+        const item = element;
+        const temp = {};
         for (const headerKey in header) {
           temp[headerKey] = item[headerKey];
         }
@@ -128,7 +127,7 @@ export default defineComponent({
         for (const formatterKey in formatter) {
           temp[formatterKey] = this.doFormat(
             formatter[formatterKey],
-            temp[formatterKey],
+            temp[formatterKey]
           );
         }
         array.push(temp);
@@ -139,21 +138,21 @@ export default defineComponent({
       if (this.header) {
         return this.header;
       }
-      if (typeof this.matrix !== 'undefined' && this.matrix.length) {
-        return Object.keys(this.matrix[0] as object);
+      if (typeof this.matrix !== "undefined" && this.matrix.length) {
+        return Object.keys(this.matrix[0]);
       }
       return 0;
     },
   },
   methods: {
-    doFormat: function (type: string, value: unknown): unknown {
+    doFormat: function (type, value) {
       if (!value) {
         return value;
       }
 
       switch (type) {
-        case 'date':
-          return Date.formatDate(value as string);
+        case "date":
+          return Date.formatDate(value);
         default:
           return value;
       }

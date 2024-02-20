@@ -36,43 +36,36 @@
   </v-navigation-drawer>
 </template>
 
-<script lang="ts">
-import { useInterfaceStore } from '~/stores';
-import TheMenuItem from '~/components/layout/TheMenuItem.vue';
-import type { IMainMenuItems } from '~/@types/app/app';
+<script>
+import { useInterfaceStore } from "~/stores";
+import TheMenuItem from "~/components/layout/TheMenuItem.vue";
 
 export default {
-  name: 'TheMainMenu',
+  name: "TheMainMenu",
   components: { TheMenuItem },
   setup() {
     const interfaceStore = useInterfaceStore();
     const mini = true;
-    const items: IMainMenuItems[] = [
+    const items = [
       {
         group: true,
-        icon: 'fa fa-person',
-        title: 'People',
+        icon: "fa fa-person",
+        title: "People",
         items: [
           {
-            title: 'Customer',
-            routeName: 'customerList',
+            title: "Customer",
+            routeName: "customerList",
           },
           {
-            title: 'Supplier',
-            routeName: 'supplierList',
+            title: "Supplier",
+            routeName: "supplierList",
           },
         ],
       },
       {
-        group: true,
-        icon: 'fas fa-money-bill-wave-alt',
-        title: 'Financial',
-        items: [{ title: 'Titles', routeName: 'financialEdit' }],
-      },
-      {
-        title: 'Users',
-        icon: 'fa fa-user',
-        routeName: 'usersList',
+        title: "Users",
+        icon: "fa fa-user",
+        routeName: "usersList",
       },
     ];
 
