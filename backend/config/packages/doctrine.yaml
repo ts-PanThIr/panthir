@@ -34,6 +34,12 @@ doctrine:
                 prefix: 'Panthir\Domain\Common\Model'
                 alias: Common
 
+            Panthir\Product:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Domain/Product/Model'
+                prefix: 'Panthir\Domain\Product\Model'
+                alias: Product
+
 #when@test:
 #    doctrine:
 #        dbal:

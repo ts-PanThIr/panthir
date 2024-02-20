@@ -17,21 +17,21 @@
   </v-card-title>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script>
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'TheCardTitle',
+  name: "TheCardTitle",
   props: {
     icon: String,
     text: String,
     bgColor: {
       type: String,
-      default: 'bg-primary'
+      default: "bg-primary",
     },
     textColor: {
       type: String,
-      default: 'grey-darken-4',
+      default: "grey-darken-4",
     },
   },
 });

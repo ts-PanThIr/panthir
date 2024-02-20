@@ -38,12 +38,11 @@
         <v-col cols="10">
           <v-row>
             <v-col cols="6" sm="3">
-
               <v-select
                 v-model="item.type"
                 label="Type"
                 required
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 :items="types"
               >
               </v-select>
@@ -59,7 +58,7 @@
             <v-col cols="6" sm="3">
               <v-text-field
                 v-model="item.country"
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 label="Country"
                 density="compact"
                 required
@@ -68,7 +67,7 @@
             <v-col cols="6" sm="3">
               <v-text-field
                 v-model="item.district"
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 label="District"
                 required
                 density="compact"
@@ -77,7 +76,7 @@
             <v-col cols="6" sm="3">
               <v-text-field
                 v-model="item.city"
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 label="City"
                 required
                 density="compact"
@@ -86,7 +85,7 @@
             <v-col cols="6" sm="3">
               <v-text-field
                 v-model="item.address"
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 label="Address"
                 required
                 density="compact"
@@ -113,39 +112,39 @@
   </div>
 </template>
 
-<script lang="ts">
-import {mask} from 'vue-the-mask';
-import {useAddressStore, useSupplierStore} from '~/stores';
-import {defineComponent} from 'vue';
-import {useRoute, useRouter} from "vue-router";
+<script>
+import { mask } from "vue-the-mask";
+import { useAddressStore } from "~/stores";
+import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
-  name: 'TheAddressAddList',
-  directives: {mask},
+  name: "TheAddressAddList",
+  directives: { mask },
   setup: async function () {
     const route = useRoute();
     const addressStore = useAddressStore();
 
-    if (['supplierEdit', 'supplierNew'].includes(route.name as string)) {
-      addressStore.getTypes('supplier');
+    if (["supplierEdit", "supplierNew"].includes(route.name)) {
+      addressStore.getTypes("supplier");
     }
 
-    if (['customerEdit', 'customerNew'].includes(route.name as string)) {
-      addressStore.getTypes('customer');
+    if (["customerEdit", "customerNew"].includes(route.name)) {
+      addressStore.getTypes("customer");
     }
 
     const {
       delete: deleteAddress,
       list: addresses,
       createNewItem: addAddress,
-      types
-    } = addressStore
+      types,
+    } = addressStore;
 
-    return {addresses, deleteAddress, addAddress, types};
+    return { addresses, deleteAddress, addAddress, types };
   },
   unmounted() {
-    const store = useAddressStore()
-    store.$reset()
+    const store = useAddressStore();
+    store.$reset();
   },
 });
 </script>

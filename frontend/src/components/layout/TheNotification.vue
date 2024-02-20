@@ -20,12 +20,12 @@
   </v-snackbar>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import {EMessageType, useNotificationStore} from '~/stores';
+<script>
+import { defineComponent } from "vue";
+import { EMessageType, useNotificationStore } from "~/stores";
 
 export default defineComponent({
-  name: 'TheNotification',
+  name: "TheNotification",
   props: {
     text: {
       type: String,
@@ -33,7 +33,7 @@ export default defineComponent({
     },
     title: {
       type: String,
-      default: '',
+      default: "",
     },
     lastId: {
       type: Number,
@@ -41,9 +41,9 @@ export default defineComponent({
     },
     type: {
       type: String,
-      default: 'info',
-      validator: (value: string) => {
-        const acceptedValues: string[] = Object.values(EMessageType);
+      default: "info",
+      validator: (value) => {
+        const acceptedValues = Object.values(EMessageType);
         return acceptedValues.indexOf(value) !== -1;
       },
     },
@@ -58,7 +58,7 @@ export default defineComponent({
     };
   },
   watch: {
-    snackbar(e: boolean) {
+    snackbar(e) {
       if (!e) {
         const { removeMessage } = useNotificationStore();
         removeMessage(this.lastId);

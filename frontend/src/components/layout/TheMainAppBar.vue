@@ -1,9 +1,6 @@
 <template>
   <v-app-bar class="bg-secondary-gradient">
-    <img
-      :width="150"
-      :src="imgUrl"
-    />
+    <img :width="150" :src="imgUrl" />
     <v-btn
       class="fa fa-bars"
       icon
@@ -20,14 +17,13 @@
   </v-app-bar>
 </template>
 
-<script lang="ts">
-import { useInterfaceStore } from '~/stores';
-import { useAuthStore } from '~/stores';
+<script>
+import { useInterfaceStore, useAuthStore } from "~/stores";
 
 export default {
-  name: 'TheMainAppBar',
+  name: "TheMainAppBar",
   setup() {
-    const imgUrl = new URL('/logo.png', import.meta.url).href
+    const imgUrl = new URL("/logo.png", import.meta.url).href;
     const authStore = useAuthStore();
     const switchMenu = useInterfaceStore().switchMenu;
     return { switchMenu, authStore, imgUrl };

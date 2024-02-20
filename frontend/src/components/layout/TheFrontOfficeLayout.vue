@@ -25,13 +25,12 @@
   </v-main>
 </template>
 
-<script lang="ts">
-import TheNotifications from './TheNotifications.vue';
-import { ref, defineComponent } from 'vue';
-import type { VContainer } from 'vuetify/components';
+<script>
+import TheNotifications from "./TheNotifications.vue";
+import { ref, defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'TheFrontOfficeLayout',
+  name: "TheFrontOfficeLayout",
   components: { TheNotifications },
   setup() {
     const data = {
@@ -41,9 +40,7 @@ export default defineComponent({
     return { ...data };
   },
   mounted() {
-    this.containerHeight =
-      (this.mainContainer as unknown as typeof VContainer).$vuetify.display
-        .height - 152;
+    this.containerHeight = this.mainContainer.$vuetify.display.height - 152;
   },
 });
 </script>

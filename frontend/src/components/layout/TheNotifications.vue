@@ -11,10 +11,10 @@
     </the-notification>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
-import TheNotification from './TheNotification.vue';
-import { useNotificationStore } from '~/stores';
+<script>
+import { defineComponent } from "vue";
+import TheNotification from "./TheNotification.vue";
+import { useNotificationStore } from "~/stores/";
 
 export default defineComponent({
   components: { TheNotification },

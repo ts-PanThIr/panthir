@@ -13,27 +13,29 @@
 </template>
 
 <script>
-import { nextTick } from 'vue'
+import { nextTick } from "vue";
 export default {
-  name: 'TheCurrencyInput',
+  name: "TheCurrencyInput",
   props: {
     modelValue: Number,
     label: String,
     color: String,
-    readonly: {type: Boolean, default: false},
+    readonly: { type: Boolean, default: false },
     rules: {
       type: Array,
       required: false,
     },
     format: {
       type: Object,
-      default: {
-        style: 'currency',
-        currency: 'EUR',
-      }
-    }
+      default() {
+        return {
+          style: "currency",
+          currency: "EUR",
+        };
+      },
+    },
   },
-  emits: ['update:modelValue'],
+  emits: ["update:modelValue"],
   data() {
     return {
       focused: false,
@@ -41,21 +43,29 @@ export default {
   },
   computed: {
     dateModel: {
-      get: function() {
+      get: function () {
         if (this.focused) {
           return this.modelValue;
         }
-        if (this.format.style === 'percent') {
-          return Intl.NumberFormat('pt-PT', this.format).format(Number(this.modelValue / 100));
+        if (this.format.style === "percent") {
+          return Intl.NumberFormat("pt-PT", this.format).format(
+            Number(this.modelValue / 100)
+          );
         }
-        return Intl.NumberFormat('pt-PT', this.format).format(this.modelValue);
+        return Intl.NumberFormat("pt-PT", this.format).format(this.modelValue);
       },
-      set: function(e) {
-        const thousandSeparator = Intl.NumberFormat('pt-PT').format(11111).replace(/\p{Number}/gu, '');
-        const decimalSeparator = Intl.NumberFormat('pt-PT').format(1.1).replace(/\p{Number}/gu, '');
+      set: function (e) {
+        const thousandSeparator = Intl.NumberFormat("pt-PT")
+          .format(11111)
+          .replace(/\p{Number}/gu, "");
+        const decimalSeparator = Intl.NumberFormat("pt-PT")
+          .format(1.1)
+          .replace(/\p{Number}/gu, "");
 
         let decimal = parseFloat(
-          e.replace(new RegExp('\\' + thousandSeparator, 'g'), '').replace(new RegExp('\\' + decimalSeparator), '.'),
+          e
+            .replace(new RegExp("\\" + thousandSeparator, "g"), "")
+            .replace(new RegExp("\\" + decimalSeparator), ".")
         );
         if (isNaN(decimal)) decimal = 0;
         this.$emit(`update:modelValue`, Number(decimal.toFixed(2)));
@@ -63,34 +73,39 @@ export default {
     },
   },
   methods: {
-    doFocus: async function(e) {
-      this.focused = true
+    doFocus: async function (e) {
+      this.focused = true;
       await nextTick();
-      e.target.select()
+      e.target.select();
     },
-    isNumber: function(e) {
+    isNumber: function (e) {
       const keysAllowed = [
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '.',
-        'Tab',
-        'Escape',
-        'Backspace',
-        'Delete',
-        'ArrowRight',
-        'ArrowLeft'
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        ".",
+        "Tab",
+        "Escape",
+        "Backspace",
+        "Delete",
+        "ArrowRight",
+        "ArrowLeft",
       ];
       const keyPressed = e.key;
-      
-      if (!((e.ctrlKey && ['c', 'v'].includes(keyPressed)) || keysAllowed.includes(keyPressed))) {
+
+      if (
+        !(
+          (e.ctrlKey && ["c", "v"].includes(keyPressed)) ||
+          keysAllowed.includes(keyPressed)
+        )
+      ) {
         e.preventDefault();
       }
     },
