@@ -2,9 +2,7 @@
 
 namespace Panthir\Application\UseCase\Supplier\Normalizer\DTO;
 
-use Panthir\Application\Common\DTO\DTOInterface;
-
-class SupplierSearchDTO implements DTOInterface
+class SupplierSearchDTO
 {
     public function __construct(
         public readonly ?string $id = null,

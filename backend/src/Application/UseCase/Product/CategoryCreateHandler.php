@@ -4,23 +4,22 @@ namespace Panthir\Application\UseCase\Product;
 
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\UseCase\Product\Normalizer\DTO\CategoryCreateDTO;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Domain\Product\Model\Category;
 use Ramsey\Uuid\Uuid;
 
 class CategoryCreateHandler extends AbstractHandler
 {
 
-    public function supports(DTOInterface $model): bool
+    public function supports($model): bool
     {
         return $model instanceof CategoryCreateDTO;
     }
 
     /**
-     * @param DTOInterface|CategoryCreateDTO $model
+     * @param CategoryCreateDTO $model
      * @return Category
      */
-    public function execute(DTOInterface|CategoryCreateDTO $model): Category
+    public function execute($model): Category
     {
         $parent = null;
         if(!empty($model->parentId)) {

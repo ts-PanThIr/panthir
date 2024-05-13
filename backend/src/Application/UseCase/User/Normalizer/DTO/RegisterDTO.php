@@ -2,9 +2,7 @@
 
 namespace Panthir\Application\UseCase\User\Normalizer\DTO;
 
-use Panthir\Application\Common\DTO\DTOInterface;
-
-class RegisterDTO implements DTOInterface
+class RegisterDTO
 {
     public function __construct(
         public readonly string  $email,

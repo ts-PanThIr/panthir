@@ -2,10 +2,9 @@
 
 namespace Panthir\Application\UseCase\Product\Normalizer\DTO;
 
-use Panthir\Application\Common\DTO\DTOInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CategoryCreateDTO implements DTOInterface
+class CategoryCreateDTO
 {
     public function __construct(
         #[Assert\NotBlank]

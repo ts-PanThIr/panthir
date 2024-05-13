@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/FO/category')]
-class FOCategoryController extends APIController
+class FOCategoryGet extends APIController
 {
     /**
      * @throws HandlerException

@@ -15,14 +15,10 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-#[Route(path: '/FO/product')]
-class FOProductController extends APIController
+#[Route(path: '/api/product')]
+class Get extends APIController
 {
-    /**
-     * @throws ExceptionInterface
-     * @throws HandlerException
-     */
-    #[Route(path: "/", name: "app_fo_product_get_all", methods: 'GET')]
+    #[Route(path: "/", name: "app_product_get_all", methods: 'GET')]
     public function getAll(
         Request              $request,
         ProductSearchHandler $productSearchHandler,
@@ -41,10 +37,18 @@ class FOProductController extends APIController
         return $this->response(items: $products);
     }
 
-    /**
-     * @throws HandlerException
-     */
-    #[Route(path: "/brands", name: "app_fo_product_brand_get_all", methods: 'GET')]
+    #[Route(path: "/{id}", name: "app_product_get", methods: 'GET')]
+    public function get(
+        ProductSearchHandler $productSearchHandler,
+        HandlerRunner        $runner,
+        string               $id
+    ): JsonResponse
+    {
+        $products = $runner($productSearchHandler, (new ProductSearchDTO(id: $id)));
+        return $this->response(items: $products);
+    }
+
+    #[Route(path: "/brands", name: "app_product_brand_get_all", methods: 'GET')]
     public function getBrands(
         ProductGetBrandsHandler $productGetBrandsHandler,
         HandlerRunner           $runner,

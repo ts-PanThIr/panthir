@@ -2,9 +2,8 @@
 
 namespace Panthir\Application\UseCase\User\Normalizer\DTO;
 
-use Panthir\Application\Common\DTO\DTOInterface;
 
-class PasswordUpdateDTO implements DTOInterface
+class PasswordUpdateDTO
 {
     public function __construct(
         public readonly string $email,

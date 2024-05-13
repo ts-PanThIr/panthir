@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Panthir\Domain\Common\Model\CountableTrait;
 use Panthir\Infrastructure\Repository\Product\ProductRepository;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'product')]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -19,25 +18,21 @@ class Product
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue('NONE')]
-    #[Groups(['product'])]
     private string $id;
 
     #[ORM\Column]
-    #[Groups(['product'])]
     private string $name;
+
+    #[ORM\Column]
+    private float $value;
 
     #[ManyToOne(targetEntity: Category::class)]
     #[JoinColumn(name: 'category_id', referencedColumnName: 'id')]
-    #[Groups(['product'])]
     private Category $category;
 
-    #[ORM\Column]
-    #[Groups(['product'])]
-    private string $brand;
-
-    #[ORM\Column]
-    #[Groups(['product'])]
-    private float $value;
+    #[ManyToOne(targetEntity: Brand::class, inversedBy: "products")]
+    #[JoinColumn(name: "brand_id", referencedColumnName: "id")]
+    private Brand $brand;
 
     public function __construct(
         protected UuidInterface $uuid
@@ -91,18 +86,18 @@ class Product
     }
 
     /**
-     * @return string
+     * @return Brand
      */
-    public function getBrand(): string
+    public function getBrand(): Brand
     {
         return $this->brand;
     }
 
     /**
-     * @param string $brand
+     * @param Brand $brand
      * @return Product
      */
-    public function setBrand(string $brand): Product
+    public function setBrand(Brand $brand): Product
     {
         $this->brand = $brand;
         return $this;
