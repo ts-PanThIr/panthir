@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-buster
+FROM php:8.3.4-fpm-bullseye
 
 ARG COMPOSE_PROJECT_NAME
 ARG INSTALL_XDEBUG
@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -y \
 ARG INSTALL_XDEBUG=false
 RUN if [ ${INSTALL_XDEBUG} = true ]; \
     then \
-      pecl install xdebug && docker-php-ext-enable xdebug; \
+      pecl install xdebug-3.3.2 && docker-php-ext-enable xdebug; \
     fi;
 
 RUN pecl install -o -f redis \
