@@ -4,7 +4,6 @@ namespace Panthir\Application\UseCase\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\AfterExecutedHandlerInterface;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
@@ -28,7 +27,7 @@ class CreatePasswordRecoveryTokenHandler extends AbstractHandler implements Befo
         parent::__construct(entityManager: $entityManager);
     }
 
-    public function supports(DTOInterface $object): bool
+    public function supports($object): bool
     {
         return $object instanceof PasswordRecoveryDTO;
     }
@@ -38,7 +37,7 @@ class CreatePasswordRecoveryTokenHandler extends AbstractHandler implements Befo
      * @return void
      * @throws HandlerException
      */
-    public function beforeExecuted(DTOInterface $model): void
+    public function beforeExecuted($model): void
     {
         /** @var User $user */
         $user = $this->entityManager->getRepository(User::class)->findOneBy(["email" => $model->email]);
@@ -54,7 +53,7 @@ class CreatePasswordRecoveryTokenHandler extends AbstractHandler implements Befo
      * @return User
      * @throws JWTEncodeFailureException
      */
-    public function execute(DTOInterface $userDTO): User
+    public function execute($userDTO): User
     {
         $this->user->setPasswordResetToken($this->passwordResetTokenGenerator->__invoke());
 
@@ -67,7 +66,7 @@ class CreatePasswordRecoveryTokenHandler extends AbstractHandler implements Befo
      * @param PasswordRecoveryDTO $model
      * @return void
      */
-    public function afterExecuted(DTOInterface $model): void
+    public function afterExecuted($model): void
     {
         $this->bus->dispatch(new EmailNotification(
             userEmail: $this->user->getEmail(),

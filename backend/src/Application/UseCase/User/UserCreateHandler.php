@@ -4,7 +4,6 @@ namespace Panthir\Application\UseCase\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\AfterExecutedHandlerInterface;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
@@ -32,7 +31,7 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
         parent::__construct(entityManager: $entityManager);
     }
 
-    public function supports(DTOInterface $object): bool
+    public function supports($object): bool
     {
         return $object instanceof RegisterDTO;
     }
@@ -42,7 +41,7 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
      * @return void
      * @throws HandlerException
      */
-    public function beforeExecuted(DTOInterface $model): void
+    public function beforeExecuted($model): void
     {
         if (!filter_var($model->email, FILTER_VALIDATE_EMAIL)) {
             throw new HandlerException("The given e-mail is not valid.", 400);
@@ -60,7 +59,7 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
      * @return User
      * @throws JWTEncodeFailureException
      */
-    public function execute(DTOInterface $model): User
+    public function execute($model): User
     {
         $resetToken = null;
         if(empty($model->password)){
@@ -93,7 +92,7 @@ class UserCreateHandler extends AbstractHandler implements BeforeExecutedHandler
      * @param RegisterDTO $model
      * @return void
      */
-    public function afterExecuted(DTOInterface $model): void
+    public function afterExecuted($model): void
     {
         if(empty($this->user->getPasswordResetToken())){
             return;

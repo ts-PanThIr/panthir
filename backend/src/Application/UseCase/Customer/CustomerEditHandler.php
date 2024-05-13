@@ -3,7 +3,6 @@
 namespace Panthir\Application\UseCase\Customer;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerAddressDTO;
@@ -30,17 +29,17 @@ class CustomerEditHandler extends AbstractHandler implements BeforeExecutedHandl
         parent::__construct(entityManager: $entityManager);
     }
 
-    public function supports(DTOInterface $object): bool
+    public function supports($object): bool
     {
         return $object instanceof CustomerCreateDTO;
     }
 
     /**
-     * @param DTOInterface $model
+     * @param $model
      * @return void
      * @throws InvalidFieldException
      */
-    public function beforeExecuted(DTOInterface $model): void
+    public function beforeExecuted($model): void
     {
         $errors = $this->validator->validate($model);
 
@@ -62,7 +61,7 @@ class CustomerEditHandler extends AbstractHandler implements BeforeExecutedHandl
      * @return Customer
      * @throws InvalidFieldException
      */
-    public function execute(DTOInterface $model): Customer
+    public function execute($model): Customer
     {
         $this->customer
             ->setName($model->getName())

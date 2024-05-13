@@ -4,14 +4,13 @@ namespace Panthir\Application\UseCase\Financial\Normalizer\DTO;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierAddressDTO;
 use Panthir\Domain\Common\Model\AbstractPerson;
 use Panthir\Domain\Supplier\ValueObject\ContactType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class TitleCreateDTO implements DTOInterface
+class TitleCreateDTO
 {
     private ?string $id = null;
 

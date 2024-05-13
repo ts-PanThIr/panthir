@@ -4,10 +4,9 @@ namespace Panthir\Application\UseCase\Supplier\Normalizer\DTO;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class SupplierCreateDTO implements DTOInterface
+class SupplierCreateDTO
 {
     private Collection $addresses;
 

@@ -5,10 +5,9 @@ namespace Panthir\Application\UseCase\Customer\Normalizer\DTO;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CustomerCreateDTO implements DTOInterface
+class CustomerCreateDTO
 {
     private ?string $id = null;
 

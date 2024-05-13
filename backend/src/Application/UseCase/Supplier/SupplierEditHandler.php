@@ -3,7 +3,6 @@
 namespace Panthir\Application\UseCase\Supplier;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
 use Panthir\Application\UseCase\Supplier\Normalizer\DTO\SupplierAddressDTO;
@@ -28,17 +27,17 @@ class SupplierEditHandler extends AbstractHandler implements BeforeExecutedHandl
         parent::__construct(entityManager: $entityManager);
     }
 
-    public function supports(DTOInterface $object): bool
+    public function supports($object): bool
     {
         return $object instanceof SupplierCreateDTO;
     }
 
     /**
-     * @param DTOInterface|SupplierCreateDTO $model
+     * @param SupplierCreateDTO $model
      * @return void
      * @throws InvalidFieldException
      */
-    public function beforeExecuted(DTOInterface $model): void
+    public function beforeExecuted($model): void
     {
         $errors = $this->validator->validate($model);
 
@@ -55,11 +54,11 @@ class SupplierEditHandler extends AbstractHandler implements BeforeExecutedHandl
     }
 
     /**
-     * @param DTOInterface|SupplierCreateDTO $model
+     * @param SupplierCreateDTO $model
      * @return Supplier
      * @throws InvalidFieldException
      */
-    public function execute(DTOInterface $model): Supplier
+    public function execute($model): Supplier
     {
         $this->supplier->setName($model->getName());
         $this->supplier->setDocument($model->getDocument());

@@ -4,12 +4,11 @@ namespace Panthir\Application\UseCase\User;
 
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\UseCase\User\Normalizer\DTO\UserSearchDTO;
-use \Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Domain\User\Model\User;
 
 class UserSearchHandler extends AbstractHandler
 {
-    public function supports(DTOInterface $object): bool
+    public function supports($object): bool
     {
         return $object instanceof UserSearchDTO;
     }
@@ -18,7 +17,7 @@ class UserSearchHandler extends AbstractHandler
      * @param UserSearchDTO $model
      * @return mixed
      */
-    public function execute(DTOInterface $model): mixed
+    public function execute($model): mixed
     {
         if($model->id) {
             $user = $this->entityManager->getRepository(User::class)->find($model->id);

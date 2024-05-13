@@ -2,9 +2,7 @@
 
 namespace Panthir\Application\UseCase\User\Normalizer\DTO;
 
-use Panthir\Application\Common\DTO\DTOInterface;
-
-class PasswordRecoveryDTO implements DTOInterface
+class PasswordRecoveryDTO
 {
     public function __construct(
         public readonly string  $email,

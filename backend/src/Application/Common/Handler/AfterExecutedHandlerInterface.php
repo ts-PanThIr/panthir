@@ -2,9 +2,7 @@
 
 namespace Panthir\Application\Common\Handler;
 
-use Panthir\Application\Common\DTO\DTOInterface;
-
 interface AfterExecutedHandlerInterface
 {
-    function afterExecuted(DTOInterface $model): void;
+    function afterExecuted($model): void;
 }

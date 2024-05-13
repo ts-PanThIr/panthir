@@ -3,7 +3,6 @@
 namespace Panthir\Application\UseCase\User;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
 use Panthir\Application\UseCase\User\Normalizer\DTO\PasswordRecoveryDTO;
@@ -23,7 +22,7 @@ class UpdatePasswordHandler extends AbstractHandler implements BeforeExecutedHan
         parent::__construct(entityManager: $entityManager);
     }
 
-    public function supports(DTOInterface $object): bool
+    public function supports($object): bool
     {
         return $object instanceof PasswordRecoveryDTO;
     }
@@ -33,7 +32,7 @@ class UpdatePasswordHandler extends AbstractHandler implements BeforeExecutedHan
      * @return void
      * @throws HandlerException
      */
-    public function beforeExecuted(DTOInterface $model): void
+    public function beforeExecuted($model): void
     {
         /** @var User $user */
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
@@ -51,7 +50,7 @@ class UpdatePasswordHandler extends AbstractHandler implements BeforeExecutedHan
      * @param PasswordRecoveryDTO $model
      * @return User
      */
-    public function execute(DTOInterface $model): User
+    public function execute($model): User
     {
 //        $this->user->setPasswordResetToken($this->passwordResetTokenGenerator->__invoke()); null
 

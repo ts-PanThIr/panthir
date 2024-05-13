@@ -2,12 +2,11 @@
 
 namespace Panthir\Application\UseCase\Supplier\Normalizer\DTO;
 
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Domain\Supplier\ValueObject\ContactType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class SupplierContactDTO implements DTOInterface
+class SupplierContactDTO
 {
     private ?string $id = null;
 

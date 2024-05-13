@@ -4,23 +4,23 @@ namespace Panthir\Application\UseCase\Product;
 
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\UseCase\Product\Normalizer\DTO\ProductSearchDTO;
-use \Panthir\Application\Common\DTO\DTOInterface;
+use Panthir\Domain\Product\Model\Brand;
 use Panthir\Domain\Product\Model\Product;
 
 class ProductGetBrandsHandler extends AbstractHandler
 {
 
-    public function supports(DTOInterface $object): bool
+    public function supports($object): bool
     {
-        return $object instanceof ProductSearchDTO;
+        return is_array($object);
     }
 
     /**
      * @param ProductSearchDTO $model
      * @return mixed
      */
-    public function execute(DTOInterface $model): mixed
+    public function execute($model): mixed
     {
-        return $this->entityManager->getRepository(Product::class)->getBrands();
+        return $this->entityManager->getRepository(Brand::class)->findAll();
     }
 }

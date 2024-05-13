@@ -2,10 +2,9 @@
 
 namespace Panthir\Application\UseCase\Financial\Normalizer\DTO;
 
-use Panthir\Application\Common\DTO\DTOInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class InstallmentDTO implements DTOInterface
+class InstallmentDTO
 {
     #[Assert\NotBlank]
     private float $value;

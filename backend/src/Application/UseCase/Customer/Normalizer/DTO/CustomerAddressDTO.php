@@ -2,12 +2,11 @@
 
 namespace Panthir\Application\UseCase\Customer\Normalizer\DTO;
 
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Domain\Customer\ValueObject\AddressType;
 use Panthir\Infrastructure\CommonBundle\Exception\InvalidFieldException;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CustomerAddressDTO implements DTOInterface
+class CustomerAddressDTO
 {
     private ?string $id = null;
 

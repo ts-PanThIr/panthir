@@ -3,7 +3,6 @@
 namespace Panthir\Application\UseCase\Financial;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Panthir\Application\Common\DTO\DTOInterface;
 use Panthir\Application\Common\Handler\AbstractHandler;
 use Panthir\Application\Common\Handler\BeforeExecutedHandlerInterface;
 use Panthir\Application\UseCase\Customer\Normalizer\DTO\CustomerCreateDTO;
@@ -26,17 +25,17 @@ class TitleEditHandler extends AbstractHandler implements BeforeExecutedHandlerI
         parent::__construct(entityManager: $entityManager);
     }
 
-    public function supports(DTOInterface $object): bool
+    public function supports($object): bool
     {
         return $object instanceof CustomerCreateDTO;
     }
 
     /**
-     * @param DTOInterface $model
+     * @param $model
      * @return void
      * @throws InvalidFieldException
      */
-    public function beforeExecuted(DTOInterface $model): void
+    public function beforeExecuted($model): void
     {
         $errors = $this->validator->validate($model);
 
@@ -58,7 +57,7 @@ class TitleEditHandler extends AbstractHandler implements BeforeExecutedHandlerI
      * @return Customer
      * @throws InvalidFieldException
      */
-    public function execute(DTOInterface $model): Customer
+    public function execute($model): Customer
     {
         $this->title
             ->setName($model->getName())
