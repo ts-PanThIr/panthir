@@ -53,7 +53,7 @@
 import { defineComponent, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useProductStore } from "~/stores/";
+import { useProductFOStore } from "~/stores";
 
 export default defineComponent({
   name: "TheSidebar",
@@ -70,7 +70,7 @@ export default defineComponent({
       selectedCategories = ref(JSON.parse(route.query.categories));
     }
 
-    const productStore = useProductStore();
+    const productStore = useProductFOStore();
     await productStore.getCategories();
     await productStore.getBrands();
     const { categoriesList: categories, brandsList: brands } =
@@ -102,7 +102,7 @@ export default defineComponent({
       if (value !== before) return;
 
       //there's a bug with router query, so it need to force the reload
-      const productStore = useProductStore();
+      const productStore = useProductFOStore();
       await productStore.getProducts({
         brands: this.selectedBrands,
         categories: this.selectedCategories,

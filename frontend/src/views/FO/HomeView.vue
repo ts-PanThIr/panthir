@@ -75,7 +75,7 @@
 </template>
 <script>
 import { useRouter } from "vue-router";
-import { useProductStore } from "../../stores/productStore";
+import { useProductFOStore } from "~/stores";
 import { storeToRefs } from "pinia";
 
 export default {
@@ -83,7 +83,7 @@ export default {
   async setup() {
     const router = useRouter();
 
-    const productStore = useProductStore();
+    const productStore = useProductFOStore();
     await productStore.getCategories();
     await productStore.getBrands();
     const { categoriesList: categories, brandsList: brands } =

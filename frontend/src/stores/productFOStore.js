@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { inject, ref } from "vue";
 
-export const useProductStore = defineStore("product", () => {
+export const useProductFOStore = defineStore("productFO", () => {
   const configVars = inject("configVars");
 
   const STATE = {

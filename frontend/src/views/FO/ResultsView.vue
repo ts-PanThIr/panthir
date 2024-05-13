@@ -108,7 +108,7 @@
 </template>
 <script>
 import { useRoute, useRouter } from "vue-router";
-import { useProductStore } from "@/stores/productStore";
+import { useProductFOStore } from "~/stores";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { TheSidebar } from "@/components/";
@@ -132,7 +132,7 @@ export default {
       selectedCategories = ref(JSON.parse(route.query.categories));
     }
 
-    const productStore = useProductStore();
+    const productStore = useProductFOStore();
     await productStore.getProducts({
       brands: selectedBrands.value,
       categories: selectedCategories.value,
