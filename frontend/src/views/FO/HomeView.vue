@@ -59,11 +59,11 @@
                   :to="{
                     name: 'results',
                     query: {
-                      brands: JSON.stringify([brand.brand]),
+                      brands: JSON.stringify([brand.name]),
                     },
                   }"
                 >
-                  {{ brand.brand }}
+                  {{ brand.name }}
                 </router-link>
               </v-list-item>
             </v-list>

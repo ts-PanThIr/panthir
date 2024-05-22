@@ -26,8 +26,10 @@ class ProductSearchNormalizer implements NormalizerInterface
             $arr[] = [
                 'name' => $r->getName(),
                 'id' => $r->getId(),
-                'brand' => $r->getBrand(),
-                'category' => $r->getCategory(),
+                'brand' => $r->getBrand()->getName(),
+                'brandId' => $r->getBrand()->getId(),
+                'category' => $r->getCategory()->getName(),
+                'categoryId' => $r->getCategory()->getId(),
                 'value' => $r->getValue(),
             ];
         }

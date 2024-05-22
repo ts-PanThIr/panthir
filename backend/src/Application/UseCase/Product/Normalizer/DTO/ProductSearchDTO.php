@@ -8,6 +8,7 @@ class ProductSearchDTO
         public readonly ?string $id = null,
         public readonly ?int $limit = null,
         public readonly ?int $page = null,
+        public array $brands = []
     )
     {
     }

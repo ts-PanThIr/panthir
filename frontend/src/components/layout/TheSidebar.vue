@@ -36,8 +36,8 @@
       hide-details
       :key="brand"
       v-for="brand in brands"
-      :label="brand.brand"
-      :value="brand.brand"
+      :label="brand.name"
+      :value="brand.name"
       @change="prepareBrand"
       color="info"
       :value-comparator="

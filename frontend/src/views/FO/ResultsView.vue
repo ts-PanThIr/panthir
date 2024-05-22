@@ -132,6 +132,7 @@ export default {
       selectedCategories = ref(JSON.parse(route.query.categories));
     }
 
+    console.log(selectedBrands.value)
     const productStore = useProductFOStore();
     await productStore.getProducts({
       brands: selectedBrands.value,
