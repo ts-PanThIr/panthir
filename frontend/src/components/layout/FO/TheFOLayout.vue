@@ -1,6 +1,8 @@
 <template>
+  <TheFOAppBar />
+
   <v-main ref="mainView">
-    <v-container ref="mainContainer" fluid>
+    <v-container ref="mainContainer">
       <router-view v-slot="{ Component, route }" name="default">
         <transition
           :key="route.path"
@@ -25,22 +27,11 @@
   </v-main>
 </template>
 
-<script>
-import TheNotifications from "./TheNotifications.vue";
-import { ref, defineComponent } from "vue";
+<script setup>
+import { TheNotifications } from "~/components";
+import { ref } from "vue";
+import TheFOAppBar from "@/components/layout/FO/TheFOAppBar.vue";
 
-export default defineComponent({
-  name: "TheFrontOfficeLayout",
-  components: { TheNotifications },
-  setup() {
-    const data = {
-      mainContainer: ref(null),
-      containerHeight: ref(0),
-    };
-    return { ...data };
-  },
-  mounted() {
-    this.containerHeight = this.mainContainer.$vuetify.display.height - 152;
-  },
-});
+const mainContainer = ref(null);
+let containerHeight = ref(0);
 </script>

@@ -1,9 +1,14 @@
-import { TheFrontOfficeLayout } from "@/components/index.js";
-import { FOHomeView, ResetPasswordView, ResultsView } from "@/views/index.js";
+import { TheFOLayout } from "@/components/index.js";
+import {
+  FOHomeView,
+  ResetPasswordView,
+  ResultsView,
+  CreatePostView,
+} from "@/views/index.js";
 
 export const FORoutes = {
   path: "/",
-  component: TheFrontOfficeLayout,
+  component: TheFOLayout,
   meta: {
     middleware: { requiresAuth: false },
   },
@@ -12,6 +17,11 @@ export const FORoutes = {
       path: "",
       name: "FOHome",
       component: FOHomeView,
+    },
+    {
+      path: "create",
+      name: "FOCreatePost",
+      component: CreatePostView,
     },
     {
       path: "resetPassword/:token",

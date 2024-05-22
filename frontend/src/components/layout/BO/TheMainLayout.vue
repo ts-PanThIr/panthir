@@ -30,8 +30,7 @@
 </template>
 
 <script>
-import { TheMainAppBar, TheMainMenu } from "~/components";
-import TheNotifications from "./TheNotifications.vue";
+import { TheMainAppBar, TheMainMenu, TheNotifications } from "~/components";
 import { ref, defineComponent } from "vue";
 
 export default defineComponent({
